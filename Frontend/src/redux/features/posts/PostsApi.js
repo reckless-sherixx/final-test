@@ -5,7 +5,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const postApi = createApi({
     reducerPath: 'postsApi',
     baseQuery: fetchBaseQuery({ 
-        baseUrl: 'http://localhost:5000/api/',
+        baseUrl: 'https://school-web-test.onrender.com/api/',
         credentials: 'include'
      }),
      tagTypes: ['Posts'],
