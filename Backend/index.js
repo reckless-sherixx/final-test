@@ -14,7 +14,7 @@ app.use(cookieParser());
 app.use(bodyParser.json({limit: '10mb'}));
 app.use(bodyParser.urlencoded({limit: '10mb', extended: true}));
 app.use(cors({
-    origin: 'https://school-web-test-front.onrender.com/',
+    origin: ['https://school-web-test-front.onrender.com', 'http://localhost:5000'],
     credentials: true, 
 }));
 
