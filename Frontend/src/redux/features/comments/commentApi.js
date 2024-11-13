@@ -3,7 +3,7 @@ import { createApi,fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const commentApi = createApi({
     reducerPath: 'commentApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'https://school-web-test.onrender.com/api/comments',
+        baseUrl: 'https://backend-school-web.onrender.com/api/comments',
         credentials: "include",
     }),
     tagTypes: ['Comments'],
