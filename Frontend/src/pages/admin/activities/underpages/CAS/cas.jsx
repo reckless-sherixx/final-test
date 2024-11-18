@@ -1,29 +1,29 @@
 import React, { useState } from 'react'
-import SearchPost from './SearchPost'
-import { useFetchPostsQuery } from '../../redux/features/posts/PostsApi';
+import SearchCAS from '../../searchCas'
+import { useFetchCasQuery } from '../../../../../redux/features/activities/casApi';
 import { Link } from 'react-router-dom';
-import AddButton from '../../components/AddButton/AddButton';
-import Modal from '../../components/Modal/Modal';
-import AddPost from './AddPost';
+import AddButton from '../../../../../components/AddButton/AddButton';
+import Modal from '../../../../../components/Modal/Modal';
+import AddCAS from './AddCAS';
 
-const Posts = () => {
+const Activities = () => {
     const [search, setSearch]= useState('');
     const [category, setCategory]= useState('');
     const [query, setQuery]= useState({search: "", category: ""});
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Get data using redux
-    const {data: posts = [], error, isLoading} = useFetchPostsQuery(query);
+    const {data: cas = [], error, isLoading} = useFetchCasQuery(query);
     const handleSearchChange = (e) => setSearch(e.target.value);
     const handleSearch =  () => setQuery({search, category});
-    
+
     //Open close Modal handler
     const closeModal = () => setIsModalOpen(false);
     const openModal = () => setIsModalOpen(true);
 
-  return (
+    return(
     <div className='mt-16 container mx-auto'>
-        <SearchPost 
+         <SearchCAS 
         search={search} 
         handleSearchChange={handleSearchChange} 
         handleSearch={handleSearch} 
@@ -31,37 +31,39 @@ const Posts = () => {
 
         {isLoading && <div>Loading....</div>}
         {error && <div>{error.toString()}</div>}
-
-        <div className='mt-8 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8'>
+        
+        <div style={{display:'flex',justifyContent:'center', alignItems:'center', gap: '20px'}}>
+        <div className='mt-4 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8'>
+       
           {
-            posts.map(post => (
+            cas.map(cas => (
               <Link 
-              to={`/posts/${post._id}`}
-              key={post._id} 
+              to={`/cas/${cas._id}`} //TOCHANGE Link
+              key={cas._id} 
               className='group block overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300'
               >
                 <div className='relative'>
-                  <img src={post?.coverImg}  className='h-72 w-full object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105' />
+                  <img src={cas?.coverImg}  className='h-72 w-full object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105' />
                   <div className='p-5 bg-white'>
                     <h2 className='text-lg font-semibold text-gray-800 group-hover:text-[#1E73BE] transition-colors duration-300'>
-                      {post?.title}
+                      {cas?.title}
                     </h2>
                     <p className='text-sm text-gray-500 mt-2'>
-                      {post?.description.substring(0, 60)}...
+                      {cas?.description?.substring(0, 60)}...
                     </p>
                   </div>
                 </div>
               </Link>
             ))
           }
+          
         </div>
         <AddButton onClick={openModal}/>
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-          <h2 className='text-2xl font-semibold'>Create a new Post</h2>
-          <AddPost closeModalOnSubmit={closeModal}/>
+          <h2 className='text-2xl font-semibold'>Create a new CAS</h2>
+          <AddCAS closeModalOnSubmit={closeModal}/>
         </Modal>
-    </div>
-  )
+        </div>
+    </div>) 
 }
-
-export default Posts;
+export default Activities;

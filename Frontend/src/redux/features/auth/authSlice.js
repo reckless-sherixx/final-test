@@ -26,7 +26,9 @@ const initialState = loadUserFromLocalStorage();
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState,
+  initialState :{
+    token:null,
+  },
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload.user;

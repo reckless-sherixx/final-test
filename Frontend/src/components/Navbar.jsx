@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoClose, IoMenu } from 'react-icons/io5';
 
-import avatarImg from "../assets/commentor2.jpg";
 import { useLogoutUserMutation } from '../redux/features/auth/authapi';
 import { logout } from '../redux/features/auth/authSlice';
+import "./Dropdown.css";
+import Avatar from './Avatar/Avatar';
+
 const navLists = [
   { name: 'Home', path: '/' },
   { name: 'Posts', path: '/Posts' },
@@ -32,6 +34,30 @@ const Navbar = () => {
       
     }
   };
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const dropdownRef = useRef(null);
+
+  // Fonction pour ouvrir/fermer le dropdown
+  const toggleDropdown = () => {
+    setIsOpen((prev) => !prev);
+  };
+
+  // Gestion du clic extérieur
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false); // Fermer le dropdown si on clique à l'extérieur
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Handle scrolling and navbar visibility
   const handleScroll = () => {
@@ -64,7 +90,9 @@ const Navbar = () => {
         {/* Desktop Nav Menu */}
         <ul className='hidden sm:flex items-center gap-10'>
           {navLists.map((list, index) => (
-            <li key={index}>
+            
+              <li key={index}>
+          
               <NavLink
                 to={`${list.path}`}
                 className={({ isActive }) =>
@@ -75,17 +103,56 @@ const Navbar = () => {
               >
                 {list.name}
               </NavLink>
-            </li>
+           
+            </li> 
+           
+            
           ))}
+          <li ref={dropdownRef}>
+          <button
+              onClick={toggleDropdown}
+              
+              className={({ isActive }) =>
+                isActive
+                  ? 'text-blue-600 border-b-2 border-blue-600 pb-1 font-medium'
+                  : 'text-gray-600 hover:text-blue-600 transition-all'
+              }
+              style={{display:'inline-block', position:'relative'}}
+            >
+              Activities
+              {isOpen && (
+                <div className="dropdown-content">
+                <NavLink
+                to={`/Cas`}
+                className='text-gray-600 hover:text-blue-600 transition-all'
+              >
+                CAS
+              </NavLink>
+              <NavLink
+                to={`/`}
+                className='text-gray-600 hover:text-blue-600 transition-all'
+              >
+                Tutoring
+              </NavLink>
+              <NavLink
+                to={`/`}
+                className='text-gray-600 hover:text-blue-600 transition-all'
+              >
+                Club
+              </NavLink>
+              </div>
+              )}
+            </button>
+          </li>
 
           {/* Render button based on user login action */}
 
           {
-            user && user.role === "user" ? (<li className='flex items-center gap-3'>
-              <img src={avatarImg} alt="" className='size-8'/>
+            user ? (<li className='flex items-center gap-3'>
+              
               <button
                onClick={handleLogout}
-               className='bg-[#1E73BE] px-4 py-1.5 text-white rounded-sm'>Logout</button>
+               className='text-gray-600 hover:text-blue-600 transition-all font-medium'>Logout</button>
             </li>) : (          <li>
               <NavLink
                 to='/login'
@@ -98,12 +165,17 @@ const Navbar = () => {
 
           {
             user && user.role === "admin" && (<li className='flex items-center gap-3'>
-              <img src={avatarImg} alt="" className='size-8'/>
               <Link to="/dashboard"><button className='bg-[#1E73BE] px-4 py-1.5 text-white rounded-sm'>Dashboard</button></Link>
             </li>) 
           }
-
-
+  {user ? (
+    <li>
+    <Avatar username={user.username}/>
+    </li>
+  ) : (
+""
+  )}
+          
         </ul>
 
         {/* Mobile Menu Toggle Button */}

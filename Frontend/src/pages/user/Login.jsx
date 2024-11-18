@@ -4,6 +4,7 @@ import { useLoginUserMutation, useLogoutUserMutation } from '../../redux/feature
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/features/auth/authSlice';
+import "./customCheckbox.css"
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -24,14 +25,14 @@ const Login = () => {
     
     try {
       const response= await loginUser(data).unwrap();
-      console.log(response)
+      //console.log(response)
       const { token, user } = response;
       dispatch(setUser({ user }));
       alert('Login successful');
       navigate('/');
       
     } catch (err) {
-      setMessage("Please provide a valid email and password!");
+      setMessage(`Please provide a valid email and password! ${JSON.stringify(err)}`);
     }
   };
 
@@ -55,11 +56,15 @@ const Login = () => {
         <button type="submit" disabled={loginLoading}
          className='w-full mt-5 bg-primary hover:bg-indigo-500 text-white font-medium py-3 rounded-md'
         >Login</button>
+        <label class="custom-checkbox">
+          <input type="checkbox" required/>
+          <span></span>
+          <p className='my-5 text-center' >I accept the use of cookies (it is only to stay logged in, even after closing your browser).</p>
+        </label>
+       
       </form>
      
-        {/* <p className='my-5 text-center'>Don't have an account? 
-          <Link to="/register" className='text-red-700 italic'> Register </Link> here.
-        </p> */}
+       
     </div>
   );
 };

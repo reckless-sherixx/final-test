@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import './footer.css'
 import { Outlet } from 'react-router-dom'
 import Navbar from './components/Navbar'
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -15,7 +15,12 @@ function App() {
       <div  className='flex-grow'>
         <Outlet/>
       </div>
-      <footer className='mt-auto'>Footer</footer>
+      <footer class="footer">
+        <p>
+          All rights reserved to The School of Milan © 
+          <a href="/GeneralConditionsofUsefortheInternationalSchoolofMilanWebsite.pdf" download class="footer-link">Download CGU</a>
+        </p>
+      </footer>
     </div>
     </>
   )

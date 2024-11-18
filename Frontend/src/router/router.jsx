@@ -2,16 +2,19 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import Home from "../pages/home/Home";
 import SinglePost from "../pages/postss/singlePost/SinglePost";
-import { Announcements } from "../pages/miniPage/Announcements";
+import Announcements from "../pages/miniPage/Announcements"
 import  Posts  from "../pages/postss/Posts";
 import Login from "../pages/user/Login";
+//import Register from "../pages/user/Register";
 import AdminLayout from "../pages/admin/AdminLayout";
 import Dashboard from "../pages/admin/dashboard/Dashboard";
-import AddPost from "../pages/admin/post/AddPost";
 import ManageItems from "../pages/admin/post/ManageItems";
 import ManageUsers from "../pages/admin/user/ManageUsers";
 import PrivateRouter from "./PrivateRouter";
 import UpdatePost from "../pages/admin/post/UpdatePost";
+import Cas from "../pages/admin/activities/underpages/CAS/cas";
+import SingleCAS from "../pages/admin/activities/underpages/CAS/singleCAS/singleCas";
+
 
 const router = createBrowserRouter([
     {
@@ -20,30 +23,36 @@ const router = createBrowserRouter([
       children: [
         {
             path: "/",
-            element: <Home/>
+            element: <PrivateRouter><Home/></PrivateRouter>
         }, 
-
         {
           path: "/Announcements",
-          element: <Announcements/>
+          element: <PrivateRouter><Announcements/></PrivateRouter>
         },
-
+        {
+          path: "/Cas",
+          element: <PrivateRouter><Cas/></PrivateRouter>
+        },
+        {
+          path: "/Cas/:id",
+          element: <PrivateRouter><SingleCAS/></PrivateRouter>
+        },
         {
           path: "/Posts",
-          element: <Posts/>
+          element: <PrivateRouter><Posts/></PrivateRouter>
         },
         {
           path: "/Posts/:id",
-          element: <SinglePost/>
+          element: <PrivateRouter><SinglePost/></PrivateRouter>
         },
         {
           path: "/login",
           element: <Login/>
         },
-        // {
-        //   path: "/register",
-        //   element: <Register/>
-        // },
+        /*{
+          path: "/register",
+          element: <Register/>
+        },*/
         {
           path: "dashboard",
           element: <PrivateRouter><AdminLayout></AdminLayout></PrivateRouter>,
@@ -51,10 +60,6 @@ const router = createBrowserRouter([
             {
               path: '',
               element: <Dashboard/>
-            },
-            {
-              path: 'add-new-post',
-              element: <AddPost/>
             },
             {
               path: 'manage-items',

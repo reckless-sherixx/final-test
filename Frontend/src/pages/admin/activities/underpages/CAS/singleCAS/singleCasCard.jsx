@@ -1,10 +1,10 @@
 import React from 'react'
-import { formatDate } from '../../../utility/formatDate';
+import { formatDate } from '../../../../../../utility/formatDate';
 import EditorJSHTML from "editorjs-html"
 
 const editorJSHTML = EditorJSHTML();
 
-const singlePostCard = ({post}) => {
+const SingleCASCard = ({post}) => {
   const {title,description,content,coverImg,category,author,rating,createdAt} = post || {};
   const htmlContent = editorJSHTML.parse(content).join('');
 
@@ -20,9 +20,7 @@ const singlePostCard = ({post}) => {
         </p>
       </div>
       {/* Blog cover image */}
-      <div className='relative'>
-        <img src={coverImg} alt="cover Image" className='w-full md:h-[520px] object-cover rounded-md hover:opacity-90 transition-opacity duration-300'/>
-      </div>
+      
       {/* Blog content */}
       <div className='mt-8 space-y-6'>
         <div dangerouslySetInnerHTML={{__html: htmlContent}} className='space-y-4 leading-relaxed text-gray-700 editorjsdiv' />
@@ -32,4 +30,4 @@ const singlePostCard = ({post}) => {
   )
 }
 
-export default singlePostCard;
+export default SingleCASCard;

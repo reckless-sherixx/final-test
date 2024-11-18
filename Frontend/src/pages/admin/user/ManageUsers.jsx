@@ -3,6 +3,8 @@ import { useDeleteUserMutation, useGetUserProfileQuery } from '../../../redux/fe
 import { MdEdit } from "react-icons/md";
 import { Link, useNavigate } from 'react-router-dom';
 import UpdateUserModel from './UpdateUserModel';
+import Modal from '../../../components/Modal/Modal';
+import "./CreateUser.css";
 
 const ManageUsers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -10,7 +12,12 @@ const ManageUsers = () => {
   const {data, error, isLoading, refetch} = useGetUserProfileQuery();
   const [deleteUser] = useDeleteUserMutation();
   const navigate = useNavigate();
-  // console.log(data?.users)
+
+  const [users, setUsers] = useState([{ username: '', creator: '' }]); // Liste des utilisateurs à créer
+  const [showModal, setShowModal] = useState(false); // Pour contrôler l'affichage de la modal
+  const [creatorName, setCreatorName] = useState('Admin'); // Nom du créateur
+
+  console.log(data?.users)
   const handleDelete =  async (id) => {
     try {
       const response = await deleteUser(id).unwrap();
@@ -32,6 +39,36 @@ const ManageUsers = () => {
     setSelectedUser(null);
   };
 
+
+  const handleAddUserField = () => {
+    setUsers([...users, { username: '', creator: creatorName }]); // Ajouter un champ utilisateur
+  };
+
+  const handleUserChange = (index, field, value) => {
+    const newUsers = [...users];
+    newUsers[index][field] = value;
+    setUsers(newUsers); // Mettre à jour l'utilisateur dans la liste
+  };
+
+  const handleCreateUsers = () => {
+    // Crée tous les utilisateurs, en ajoutant le mot de passe généré
+    const createdUsers = users.map(user => ({
+      username: user.username,
+      password: `${user.username}${user.creator}`, // Mot de passe généré
+    }));
+
+    // Affiche ou envoie les utilisateurs créés (par exemple vers une API)
+    console.log('Utilisateurs créés : ', createdUsers);
+    // Reset des champs après création
+    setUsers([{ username: '', creator: '' }]);
+    setShowModal(false); // Ferme la modal après création
+  };
+
+  const closemodal = () => {
+    setShowModal(false);
+    setUsers([{ username: '', creator: creatorName }]);
+  }
+
   return (
     <>
     {
@@ -48,6 +85,13 @@ const ManageUsers = () => {
         <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
           <button className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">See all</button>
         </div>
+        <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
+          <button 
+            className="bg-[#1E73EE] text-white active:bg-[#1E73BE] text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+            type="button"
+            onClick={() => setShowModal(true)}
+          >Create users</button>
+        </div>
       </div>
     </div>
 
@@ -59,7 +103,7 @@ const ManageUsers = () => {
                            Sl No.
                         </th>
           <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                          User Email
+                          User Name
                         </th>
            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                           User Role
@@ -80,7 +124,7 @@ const ManageUsers = () => {
                 {index + 1}
               </th>
               <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
-                {user?.email}
+                {user?.username}
               </td>
               <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                 {user?.role}
@@ -109,6 +153,32 @@ const ManageUsers = () => {
     </div>
   </div>
 </div>
+
+<Modal isOpen={showModal} onClose={() => closemodal()}>
+<h2>Create Users</h2>
+          <div>
+            {users.map((user, index) => (
+              <div key={index} className="cr-user-input">
+                <input
+                  className='cr-input'
+                  type="text"
+                  placeholder="Username"
+                  value={user.username}
+                  onChange={(e) => handleUserChange(index, 'username', e.target.value)}
+                />
+                <input
+                  className='cr-input'
+                  type="text"
+                  value={user.creator}
+                  disabled
+                  placeholder="Creator"
+                />
+              </div>
+            ))}
+          </div>
+          <button className='cr-button' onClick={handleAddUserField}>+</button>
+          <button className='cr-button' onClick={handleCreateUsers}>Create</button>
+</Modal>
 </section>
     {
       isModelOpen && <UpdateUserModel user={selectedUser} onClose={handleCloseModel} onRoleUpdate = {refetch}/>

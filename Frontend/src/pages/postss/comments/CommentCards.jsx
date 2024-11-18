@@ -1,8 +1,8 @@
 import React from 'react'
-import commentorIcon from "../../../assets/commentor.jpg"
 import { formatDate } from '../../../utility/formatDate'
 import PostAComment from './PostAComment'
 import { useSelector } from 'react-redux'
+import Avatar from '../../../components/Avatar/Avatar'
 
 const CommentCards = ({comments}) => {
     const user = useSelector((state) => state.auth.user);
@@ -18,7 +18,7 @@ const CommentCards = ({comments}) => {
                             comments.map((comment, index) => (
                                 <div key={index} className='mt-4'>
                                     <div className='flex gap-4 items-center'>
-                                        <img src={commentorIcon} alt="" className='h-14'></img>
+                                        <Avatar username={comment?.user?.username}/>
                                         <div>
                                             <p className='text-lg font-medium underline capitalize underline-offset-4 text-blue-400'>{comment?.user?.username}</p>
                                             <p className='text-[12px] italic'>{formatDate(comment.createdAt)}</p>
