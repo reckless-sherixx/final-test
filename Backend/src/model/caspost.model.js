@@ -1,15 +1,17 @@
 const mongoose  = require('mongoose');
 
-const AnnouncementSchema  = new mongoose.Schema({
+const CasPostSchema  = new mongoose.Schema({
     title: {
         type: String,
         required: true,
         },
+    description: String,
     content: {
         type: Object,
         required: true,
     },
     coverImg: String,
+    category: String,
     author:  {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -21,5 +23,5 @@ const AnnouncementSchema  = new mongoose.Schema({
     }
 })
 
-const Announcement =  mongoose.model('Announcement', AnnouncementSchema);
-module.exports = Announcement;
+const CasPost =  mongoose.model('CAS', CasPostSchema);
+module.exports = CasPost;

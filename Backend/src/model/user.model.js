@@ -1,5 +1,6 @@
 const { Schema, model }  = require('mongoose');
 const bcrypt = require('bcrypt');
+const mongoose  = require('mongoose');
 
 const userSchema =  new Schema({
     username: {
@@ -19,6 +20,14 @@ const userSchema =  new Schema({
     role: {
         type: String,
         default : 'user' //Add, SimpleUser (Can only comment) and Annoucer (or administrator that can post annoucement) 
+    },
+    appliedPost:{
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'CasPost',
+    },
+    club:{
+        type:[mongoose.Schema.Types.ObjectId],
+        ref: 'Club',
     },
     createdAt: {
         type: Date,

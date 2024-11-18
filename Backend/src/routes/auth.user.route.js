@@ -7,8 +7,9 @@ const generateToken = require('../middleware/generateToken.js')
 router.post('/register', async (req, res) => {
     try {
         const {email,  password, username} = req.body;
+        console.log(req.body);
         const user = new  User({email, password, username});
-        // console.log(user);
+        //console.log(user);
         await  user.save();
         res.status(200).json({message: 'User Registerd successfully!', user: user});
 
@@ -74,7 +75,7 @@ router.post('/logout', async (req, res) => {
 // Get  users
 router.get('/users', async (req, res) => {
     try {
-        const users = await User.find({}, 'id email role');
+        const users = await User.find({}, 'id username role');
         res.status(200).send({message: "Users Found Sucessfully", users}); 
     } catch (error) {
         console.error("Error Fetching Users.",error);
