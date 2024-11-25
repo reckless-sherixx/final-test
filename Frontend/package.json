@@ -9,9 +9,11 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "dependencies": {
+"dependencies": {
     "@editorjs/editorjs": "^2.30.6",
     "@editorjs/header": "^2.8.8",
+    "@editorjs/image": "^2.10.1",
+    "@editorjs/link": "^2.6.2",
     "@editorjs/list": "^1.10.0",
     "@reduxjs/toolkit": "^2.3.0",
     "editorjs-html": "^3.4.3",
