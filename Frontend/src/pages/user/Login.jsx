@@ -7,9 +7,13 @@ import { setUser } from '../../redux/features/auth/authSlice';
 import "./customCheckbox.css"
 
 const Login = () => {
-  const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [password, setPassword] = useState('');
+
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
+  const [grade, setGrade] = useState('');
+
   const dispatch = useDispatch();
 
   const [loginUser, { isLoading: loginLoading }] = useLoginUserMutation();
@@ -17,9 +21,10 @@ const Login = () => {
   const navigate = useNavigate();
     // console.log("Loging user Api", loginUser);
   const handleLogin = async (e) => {
+    const username = `${name}${surname}${grade}`;
     e.preventDefault();
     const data = {
-        email,
+        username : username,
         password,
       }
     
@@ -28,11 +33,10 @@ const Login = () => {
       //console.log(response)
       const { token, user } = response;
       dispatch(setUser({ user }));
-      alert('Login successful');
       navigate('/');
       
     } catch (err) {
-      setMessage(`Please provide a valid email and password! ${JSON.stringify(err)}`);
+      setMessage(`Please provide valid informations !`);
     }
   };
 
@@ -42,11 +46,18 @@ const Login = () => {
     <div className='max-w-sm bg-white mx-auto p-8 mt-36'>
       <h2 className='text-2xl font-semibold pt-5'>Please login</h2>
       <form onSubmit={handleLogin} className='space-y-5 max-w-sm mx-auto pt-8'>
-        <input type="text" value={email} 
+        <input type="text" value={name} 
          className='w-full bg-bgPrimary focus:outline-none px-5 py-3'
-        onChange={(e) => setEmail(e.target.value)} 
-        placeholder="Email" required />
-
+        onChange={(e) => setName(e.target.value)} 
+        placeholder="Name" required />
+        <input type="text" value={surname} 
+         className='w-full bg-bgPrimary focus:outline-none px-5 py-3'
+        onChange={(e) => setSurname(e.target.value)} 
+        placeholder="Surname" required />
+        <input type="text" value={grade} 
+         className='w-full bg-bgPrimary focus:outline-none px-5 py-3'
+        onChange={(e) => setGrade(e.target.value)} 
+        placeholder="Grade" required />
         <input type="password" value={password} 
         className='w-full bg-bgPrimary focus:outline-none px-5 py-3'
         onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />

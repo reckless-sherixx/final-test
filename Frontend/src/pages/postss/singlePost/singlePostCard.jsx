@@ -1,12 +1,27 @@
 import React from 'react'
 import { formatDate } from '../../../utility/formatDate';
 import EditorJSHTML from "editorjs-html"
+import DeleteButtonWithConfirmation from '../../../components/DeletionButton/DeletionButton';
+import { useDeletePostMutation } from '../../../redux/features/posts/PostsApi';
+import { useNavigate } from 'react-router-dom';
 
 const editorJSHTML = EditorJSHTML();
 
 const singlePostCard = ({post}) => {
   const {title,description,content,coverImg,category,author,rating,createdAt} = post || {};
   const htmlContent = editorJSHTML.parse(content).join('');
+  const [deletePosts] = useDeletePostMutation();
+  const navigate = useNavigate();
+  
+  const handleDelete = async (id) => {
+    try {
+      const response = await deletePosts(id).unwrap();
+      navigate('/posts');
+
+    } catch (error) {
+      console.error("Failed to delete post", error);
+    }
+  }
 
   return (
     <>
@@ -26,6 +41,9 @@ const singlePostCard = ({post}) => {
       {/* Blog content */}
       <div className='mt-8 space-y-6'>
         <div dangerouslySetInnerHTML={{__html: htmlContent}} className='space-y-4 leading-relaxed text-gray-700 editorjsdiv' />
+      </div>
+      <div>
+        <DeleteButtonWithConfirmation onDelete={() => handleDelete(post._id)}/>
       </div>
     </div>
     </>

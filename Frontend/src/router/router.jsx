@@ -14,6 +14,7 @@ import PrivateRouter from "./PrivateRouter";
 import UpdatePost from "../pages/admin/post/UpdatePost";
 import Cas from "../pages/admin/activities/underpages/CAS/cas";
 import SingleCAS from "../pages/admin/activities/underpages/CAS/singleCAS/singleCas";
+//import ClubActivities from "../pages/admin/activities/underpages/Club/club";
 
 
 const router = createBrowserRouter([

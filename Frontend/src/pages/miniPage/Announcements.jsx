@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Announcement.css";
 import Modal from "../../components/Modal/Modal";
 import Avatar from "../../components/Avatar/Avatar";
+import RichTextPostCreator from "../../components/RichTextEditor/RichTextEditor";
 
 const Announcements = () => {
   // Charger les posts depuis le LocalStorage ou utiliser des données par défaut
@@ -102,12 +103,7 @@ const Announcements = () => {
   return (
     <div className="Ann">
       <div className="ann-create-post">
-        <textarea
-          placeholder="What's on your mind?"
-          value={newPostContent}
-          onChange={(e) => setNewPostContent(e.target.value)}
-        />
-        <button onClick={createPost}>Post</button>
+        <RichTextPostCreator addPost={createPost}/>
       </div>
       {posts.map((post) => (
         <div key={post.id} className="ann-post">
@@ -115,7 +111,10 @@ const Announcements = () => {
             <Avatar username={post.author.username} />
             <span className="ann-username" style={{marginLeft:"10px"}}>{post.author.username}</span>
           </div>
-          <p>{post.content}</p>
+          <div
+            className="post-content"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          ></div>
           <button onClick={() => openCommentsModal(post)} className="ann-comment-button">
             💬 {post.comments.length}
           </button>

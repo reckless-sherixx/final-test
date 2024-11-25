@@ -2,13 +2,15 @@ const express  = require('express');
 const router  = express.Router();
 const User = require('../model/user.model.js')
 const generateToken = require('../middleware/generateToken.js')
+const bcrypt = require('bcrypt');
 
 // Register a user
 router.post('/register', async (req, res) => {
     try {
-        const {email,  password, username} = req.body;
+        const {username} = req.body;
         console.log(req.body);
-        const user = new  User({email, password, username});
+        const password = "1234";
+        const user = new  User({password, username});
         //console.log(user);
         await  user.save();
         res.status(200).json({message: 'User Registerd successfully!', user: user});
@@ -25,8 +27,8 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         // console.log(req.body);
-        const {email, password} = req.body;
-        const user = await User.findOne({email});
+        const {username, password} = req.body;
+        const user = await User.findOne({username});
         if(!user) {
             return res.status(404).send({message: 'User Not Found.'});
         } 
@@ -112,6 +114,23 @@ router.put('/users/:id', async (req, res) => {
     } catch (error) {
         console.error("Error Updating The Role.",error);
         res.status(500).send({ message: "Error Updating Role!"});
+    }
+})
+
+//Update
+router.put('/users/password/:id', async(req, res) =>{
+    try {
+        const {id} = req.params;
+        let {password} = req.body;
+        password = await  bcrypt.hash(password, 10);
+        const user = await User.findByIdAndUpdate(id, {password}, {new : true} );
+        if(!user){
+            return res.status(404).send({message: "User not found!"});
+        }
+        res.status(200).send({message: "User Password updated successfully!", user});
+    }catch (error) {
+        console.error("Error chnaging password", error);
+        res.status(500).send({ message: "Error changing password"});
     }
 })
 

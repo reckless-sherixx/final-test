@@ -8,7 +8,7 @@ const Avatar = ({ username }) => {
     };
   
     const generateRandomColor = () => {
-      const colors = ["#FFD700", "#FF5733", "#33C3FF", "#28A745", "#FFC107"];
+      const colors = ["#555555"];
       return colors[Math.floor(Math.random() * colors.length)];
     };
   
@@ -16,7 +16,7 @@ const Avatar = ({ username }) => {
       <div
         className="avatar-initials"
         style={{
-          backgroundColor: generateRandomColor(),
+          backgroundColor:generateRandomColor(),
         }}
       >
         {getInitials(username)}

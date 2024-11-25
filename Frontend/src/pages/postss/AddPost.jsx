@@ -5,6 +5,9 @@ import List from '@editorjs/list';
 import Header from '@editorjs/header'; 
 import { useCreatePostMutation } from '../../redux/features/posts/PostsApi';
 import { useNavigate } from 'react-router-dom';
+import ImageTool from '@editorjs/image';
+import LinkTool from '@editorjs/link';
+
 
 const AddPost = ({closeModalOnSubmit}) => {
   const editorRef = useRef(null);
@@ -13,8 +16,10 @@ const AddPost = ({closeModalOnSubmit}) => {
   const [metadesc, setMetadesc] = useState(""); 
   const [category, setCategory] = useState(""); 
   const [rating, setRating] = useState(0); 
-  const [message, setMessage] = useState(""); 
+  const [message, setMessage] = useState("");
   const {user} = useSelector((state) => state.auth);
+  const [username, setUsername] = useState(user.username);
+  
   const [createPost, {isLoading}] = useCreatePostMutation();
   useEffect(() => {
     const editor = new EditorJS({
@@ -32,6 +37,27 @@ const AddPost = ({closeModalOnSubmit}) => {
           class: List,
           inlineToolbar: true,
         },
+        image: {
+          class: ImageTool,
+          config:{
+            field: 'image',
+            types: 'image/*',
+            captionPlaceholder:'Image',
+            uploader: {
+              uploadByUrl: async (url) => {
+                return new Promise((resolve, reject) => {
+                  // Retourner simplement l'URL de l'image en tant qu'objet
+                  resolve({ success: 1, file: { url: url } });
+                });
+              },
+            }
+          },
+          inlineToolbar:true
+        },
+        link: {
+          class: LinkTool,
+          inlineToolbar:true
+        },
       }
     });
 
@@ -47,6 +73,7 @@ const AddPost = ({closeModalOnSubmit}) => {
     e.preventDefault();
     try {
       const content = await editorRef.current.save();
+      console.log(content)
       const newPost = {
         title,
         coverImg,
@@ -130,10 +157,11 @@ const AddPost = ({closeModalOnSubmit}) => {
         {/* Author */}
         <div className='space-y-4'>
           <label className='font-semibold'>Author:</label>
-          <input type="text"  disabled 
+          <input type="text"  
           className='w-full inline-block bg-bgprimary focus:outline-none px-5 py-3'
-          value={user.username}
-          placeholder={`{user.username} (not editable)`}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)} 
+          placeholder={`Name of the Author`}
           ></input>
         </div>
 
