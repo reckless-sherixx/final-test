@@ -9,8 +9,8 @@ const port = process.env.PORT  || 5000;
 // parse options
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true, 
+    origin: ['https://school-web-test-front.onrender.com', 'http://localhost:3000'],
+    credentials: true,
 }));
 
 // Routes
