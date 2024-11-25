@@ -5,7 +5,7 @@ import List from '@editorjs/list';
 import Header from '@editorjs/header'; 
 import { useCreatePostMutation } from '../../redux/features/posts/PostsApi';
 import { useNavigate } from 'react-router-dom';
-// import ImageTool from '@editorjs/image';
+import ImageTool from '@editorjs/image';
 import LinkTool from '@editorjs/link';
 
 
