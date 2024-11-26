@@ -34,9 +34,9 @@ async function main(){
 main().then(() => console.log("MongoDb Connected Successfully.")).catch(err => console.log(err)); 
 
 
-app.get('/', (req, res) => {
-    res.send('Hello Worldd!');
-});
+// app.get('/', (req, res) => {
+//     res.send('Hello Worldd!');
+// });
 
 // app.listen (port, () => {
 //     console.log(`Server is running on port ${port}`)
