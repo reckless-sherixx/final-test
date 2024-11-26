@@ -38,9 +38,9 @@ app.get('/', (req, res) => {
     res.send('Hello Worldd!');
 });
 
-app.listen (port, () => {
-    console.log(`Server is running on port ${port}`)
-});
+// app.listen (port, () => {
+//     console.log(`Server is running on port ${port}`)
+// });
 
 
 // user : blizdia69
