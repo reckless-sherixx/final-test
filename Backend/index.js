@@ -4,7 +4,7 @@ const mongoose =  require('mongoose');
 const app =  express();
 const cors  = require('cors');
 require ('dotenv').config()
-// const port = process.env.PORT  || 5000;
+const port = process.env.PORT  || 3000;
 
 // parse options
 app.use(express.json());
@@ -34,13 +34,13 @@ async function main(){
 main().then(() => console.log("MongoDb Connected Successfully.")).catch(err => console.log(err)); 
 
 
-// app.get('/', (req, res) => {
-//     res.send('Hello Worldd!');
-// });
+app.get('/', (req, res) => {
+    res.send('Hello Worldd!');
+});
 
-// app.listen (port, () => {
-//     console.log(`Server is running on port ${port}`)
-// });
+app.listen (port, () => {
+    console.log(`Server is running on port ${port}`)
+});
 
 
 // user : blizdia69
