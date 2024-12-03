@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoClose, IoMenu } from 'react-icons/io5';
+import cookies from "js-cookie"
 
 import { useLogoutUserMutation } from '../redux/features/auth/authapi';
 import { logout } from '../redux/features/auth/authSlice';
@@ -10,14 +11,13 @@ import Avatar from './Avatar/Avatar';
 
 const navLists = [
   { name: 'Home', path: '/' },
-  { name: 'Posts', path: '/Posts' },
-  { name: 'Announcements', path: '/Announcements' },
+  { name: 'Posts', path: '/posts' },
+  { name: 'Announcements', path: '/announcements' },
 ];
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const {user} = useSelector((state) => state.auth);
-  console.log(user);
+  const { user } = useSelector((state) => state.auth);
   const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
   const [visible, setVisible] = useState(true);
 
@@ -29,9 +29,11 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logoutUser().unwrap();
+      localStorage.removeItem("user")
+      cookies.remove("isLoggedIn")
       dispatch(logout());
     } catch (error) {
-      
+      console.error(error)
     }
   };
 
@@ -90,9 +92,7 @@ const Navbar = () => {
         {/* Desktop Nav Menu */}
         <ul className='hidden sm:flex items-center gap-10'>
           {navLists.map((list, index) => (
-            
-              <li key={index}>
-          
+            <li key={index}>
               <NavLink
                 to={`${list.path}`}
                 className={({ isActive }) =>
@@ -103,44 +103,36 @@ const Navbar = () => {
               >
                 {list.name}
               </NavLink>
-           
             </li> 
-           
-            
           ))}
           <li ref={dropdownRef}>
-          <button
+            <button
               onClick={toggleDropdown}
-              
-              className={({ isActive }) =>
-                isActive
-                  ? 'text-blue-600 border-b-2 border-blue-600 pb-1 font-medium'
-                  : 'text-gray-600 hover:text-blue-600 transition-all'
-              }
-              style={{display:'inline-block', position:'relative'}}
+              className="text-gray-600 hover:text-blue-600 transition-all"
+              style={{ display:'inline-block', position:'relative' }}
             >
               Activities
               {isOpen && (
                 <div className="dropdown-content">
-                <NavLink
-                to={`/Cas`}
-                className='text-gray-600 hover:text-blue-600 transition-all'
-              >
-                CAS
-              </NavLink>
-              <NavLink
-                to={`/`}
-                className='text-gray-600 hover:text-blue-600 transition-all'
-              >
-                Tutoring
-              </NavLink>
-              <NavLink
-                to={`/`}
-                className='text-gray-600 hover:text-blue-600 transition-all'
-              >
-                Club
-              </NavLink>
-              </div>
+                  <NavLink
+                    to={`/Cas`}
+                    className='text-gray-600 hover:text-blue-600 transition-all'
+                  >
+                    CAS
+                  </NavLink>
+                  <NavLink
+                    to={`/`}
+                    className='text-gray-600 hover:text-blue-600 transition-all'
+                  >
+                    Tutoring
+                  </NavLink>
+                  <NavLink
+                    to={`/`}
+                    className='text-gray-600 hover:text-blue-600 transition-all'
+                  >
+                    Club
+                  </NavLink>
+                </div>
               )}
             </button>
           </li>

@@ -7,8 +7,7 @@ const bcrypt = require('bcrypt');
 // Register a user
 router.post('/register', async (req, res) => {
     try {
-        const {username} = req.body;
-        console.log(req.body);
+        const { username } = req.body;
         const password = "1234";
         const user = new  User({password, username});
         //console.log(user);
@@ -27,39 +26,37 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         // console.log(req.body);
-        const {username, password} = req.body;
-        const user = await User.findOne({username});
-        if(!user) {
-            return res.status(404).send({message: 'User Not Found.'});
-        } 
+        const { username, password } = req.body;
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).send({ message: 'User Not Found.' });
+        }
 
-        const isMatch = await  user.comparePassword(password);
-        if(!isMatch) {
-            return res.status(401).send({message: 'Invalid Password.'});
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            return res.status(401).send({ message: 'Invalid Password.' });
         }
 
         // Generate token here
         const token = await generateToken(user._id)
-        console.log("Generated Token:",token);
-        res.cookie("token", token, {
+        const options = {
             httpOnly: true, // enable this only when u have https
-            secure:  true,
+            secure: true,
             sameSite: true
+        }
+        res.cookie("token", token, options);
+        res.cookie("isLoggedIn", true, { ...options, httpOnly: false });
+        res.status(200).send({
+            message: 'User logged in successfully!', token, user: {
+                _id: user._id,
+                email: user.email,
+                username: user.username,
+                role: user.role
+            }
         });
-        res.status(200).send({message: 'User logged in successfully!', token, user: {
-            _id:  user._id,
-            email: user.email,
-            username: user.username,
-            role:  user.role
-        }});
-
-
-
-
-
     } catch (error) {
         console.error("Failed to Login", error);
-        res.status(500).json({ message: "Login Failed!"});
+        res.status(500).json({ message: "Login Failed!" });
     }
 })
 

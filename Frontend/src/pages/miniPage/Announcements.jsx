@@ -40,20 +40,6 @@ const Announcements = () => {
   }, [posts]);
 
   const createPost = () => {
-    if (!newPostContent.trim()) return;
-
-    const newPost = {
-      id: Date.now(),
-      content: newPostContent,
-      author: {
-        username: "CurrentUser",
-        avatar: `https://i.pravatar.cc/40?u=CurrentUser${Date.now()}`,
-      },
-      comments: [],
-    };
-
-    setPosts([newPost, ...posts]);
-    setNewPostContent("");
   };
 
 
@@ -100,10 +86,37 @@ const Announcements = () => {
     setNewComment("");
   };
 
+  const handlePostContentChange = (e) => {
+    setNewPostContent(e.target.value)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    if (!newPostContent.trim()) return;
+
+    const newPost = {
+      id: Date.now(),
+      content: newPostContent,
+      author: {
+        username: "CurrentUser",
+        avatar: `https://i.pravatar.cc/40?u=CurrentUser${Date.now()}`,
+      },
+      comments: [],
+    };
+
+    setPosts([newPost, ...posts]);
+    setNewPostContent("");
+  }
+
   return (
     <div className="Ann">
       <div className="ann-create-post">
-        <RichTextPostCreator addPost={createPost}/>
+        <RichTextPostCreator
+          value={newPostContent}
+          onChange={handlePostContentChange}
+          onSubmit={handleSubmit}
+        />
       </div>
       {posts.map((post) => (
         <div key={post.id} className="ann-post">
