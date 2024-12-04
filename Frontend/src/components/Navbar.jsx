@@ -2,12 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoClose, IoMenu } from 'react-icons/io5';
-import cookies from "js-cookie"
+
+import Avatar from './Avatar/Avatar';
 
 import { useLogoutUserMutation } from '../redux/features/auth/authapi';
 import { logout } from '../redux/features/auth/authSlice';
+import { clearUserData } from "../common"
+
 import "./Dropdown.css";
-import Avatar from './Avatar/Avatar';
 
 const navLists = [
   { name: 'Home', path: '/' },
@@ -24,13 +26,12 @@ const Navbar = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const dispatch = useDispatch();
-  const [logoutUser] = useLogoutUserMutation()
+  const [logoutUserMutation] = useLogoutUserMutation()
 
   const handleLogout = async () => {
     try {
-      await logoutUser().unwrap();
-      localStorage.removeItem("user")
-      cookies.remove("isLoggedIn")
+      await logoutUserMutation().unwrap();
+      clearUserData()
       dispatch(logout());
     } catch (error) {
       console.error(error)

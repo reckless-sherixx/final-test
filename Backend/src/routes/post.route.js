@@ -5,23 +5,6 @@ const Comment = require('../model/comment.model.js');
 const verifyToken = require('../middleware/verifyToken.js');
 const isAdmin = require('../middleware/isAdmin.js');
 
-
-// Create A post
-router.post("/create-post", verifyToken, isAdmin, async (req, res) => {
-  try {
-    // console.log("Post Data From API:",req.body)
-    const newPost = new Post({ ...req.body, author: req.userId }); // use author: req.userId after making verify token
-    await newPost.save();
-    res.status(201).send({
-      message: "Post Created Successfully",
-      post: newPost
-    })
-  } catch (error) {
-    console.error("Error Creating Post:", error);
-    res.status(500).send({ message: "Error Creating Post" })
-  }
-})
-
 // Get all Posts
 router.get('/', async (req, res) => {
   try {
@@ -47,14 +30,19 @@ router.get('/', async (req, res) => {
       }
     }
 
+    const postsResult = await Post.find(query)
+      .populate({ path: 'author', select: "username" })
+      .sort({ createdAt: -1 })
+    
+    const posts = postsResult.map(post => ({
+      ...post.toJSON(),
+      comments: [],
+    }))
 
-
-    const posts = await Post.find(query).populate('author', 'email').sort({ createdAt: -1 });
-    res.status(200).send(posts);
-
+    res.status(200).send(posts)
   } catch (error) {
-    console.error("Error Creating Post:", error);
-    res.status(500).send({ message: "Error Creating Post" })
+    console.error("Error fetching posts:", error)
+    res.status(500).send({ message: "Error fetching posts" })
   }
 });
 
@@ -79,10 +67,59 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+// Related Posts
+router.get("/related/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).send({ message: "Post Id Is Required." })
+    }
+    const post = await Post.findById(id);
+    if (!post) {
+      return res.status(404).send({ message: "Post is not found." })
+    }
+    const titleRegex = new RegExp(post.title.split(' ').join('|'), 'i');
+    const relatedQuery = {
+      _id: { $ne: id },
+      title: { $regex: titleRegex }
+    }
+    const relatedPost = await Post.find(relatedQuery);
+    res.status(200).send(relatedPost);
+
+
+  } catch (error) {
+    console.error("Error Fetching Related Post:", error);
+    res.status(500).send({ message: "Error Fetching Related Post" });
+  }
+})
+
+// Create A post
+router.post("/", verifyToken, isAdmin, async (req, res) => {
+  try {
+    const newPost = await Post.create({
+      content: req.body.content,
+      author: req.user.id,
+    })
+
+    res.status(201).send({
+      message: "Post Created Successfully",
+      post: {
+        id: newPost._id,
+        content: newPost.content,
+        comments: [],
+        author: {
+          username: req.user.username,
+        },
+      }
+    })
+  } catch (error) {
+    console.error("Error Creating Post:", error);
+    res.status(500).send({ message: "Error Creating Post" })
+  }
+})
 
 // Update a post
-router.patch("/update-post/:id", verifyToken, async (req, res) => {
-
+router.put("/update-post/:id", verifyToken, async (req, res) => {
   try {
     const postId = req.params.id;
     const updatedPost = await Post.findByIdAndUpdate(postId, {
@@ -122,32 +159,6 @@ router.delete("/:id", verifyToken, async (req, res) => {
   } catch (error) {
     console.error("Error Deleting Post:", error);
     res.status(500).send({ message: "Error Deleting Post" });
-  }
-})
-
-// Related Posts
-router.get("/related/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    if (!id) {
-      return res.status(400).send({ message: "Post Id Is Required." })
-    }
-    const post = await Post.findById(id);
-    if (!post) {
-      return res.status(404).send({ message: "Post is not found." })
-    }
-    const titleRegex = new RegExp(post.title.split(' ').join('|'), 'i');
-    const relatedQuery = {
-      _id: { $ne: id },
-      title: { $regex: titleRegex }
-    }
-    const relatedPost = await Post.find(relatedQuery);
-    res.status(200).send(relatedPost);
-
-
-  } catch (error) {
-    console.error("Error Fetching Related Post:", error);
-    res.status(500).send({ message: "Error Fetching Related Post" });
   }
 })
 

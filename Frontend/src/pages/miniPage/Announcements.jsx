@@ -1,61 +1,36 @@
-import React, { useState, useEffect } from "react";
-import "./Announcement.css";
-import Modal from "../../components/Modal/Modal";
-import Avatar from "../../components/Avatar/Avatar";
-import RichTextPostCreator from "../../components/RichTextEditor/RichTextEditor";
+import React, { useEffect, useState } from "react"
+import { useNavigate } from 'react-router-dom'
+
+import Modal from "../../components/Modal/Modal"
+import Avatar from "../../components/Avatar/Avatar"
+import RichTextPostCreator from "../../components/RichTextEditor/RichTextEditor"
+
+import { clearUserData } from "../../common"
+
+import "./Announcement.css"
 
 const Announcements = () => {
-  // Charger les posts depuis le LocalStorage ou utiliser des données par défaut
-  const [posts, setPosts] = useState(() => {
-    const savedPosts = localStorage.getItem("posts");
-    return savedPosts ? JSON.parse(savedPosts) : [
-      {
-        id: 1,
-        content: "My first post!",
-        author: { username: "JohnDoe", avatar: "https://i.pravatar.cc/40?u=JohnDoe" },
-        comments: [
-          {
-            id: 1,
-            content: "Nice post!",
-            author: { username: "JaneDoe", avatar: "https://i.pravatar.cc/40?u=JaneDoe" },
-          },
-          {
-            id: 2,
-            content: "I agree!",
-            author: { username: "User123", avatar: "https://i.pravatar.cc/40?u=User123" },
-          },
-        ],
-      },
-    ];
-  });
+  const navigate = useNavigate()
 
-  const [newPostContent, setNewPostContent] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPost, setSelectedPost] = useState(null); // Post sélectionné pour la modal
-  const [newComment, setNewComment] = useState(""); // Nouveau commentaire
-
-  // Sauvegarde les posts dans le LocalStorage à chaque modification
-  useEffect(() => {
-    localStorage.setItem("posts", JSON.stringify(posts));
-  }, [posts]);
-
-  const createPost = () => {
-  };
-
+  const [posts, setPosts] = useState([])
+  const [content, setContent] = useState("")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedPost, setSelectedPost] = useState(null)
+  const [newComment, setNewComment] = useState("")
 
   const openCommentsModal = (post) => {
-    setSelectedPost(post);
-    setIsModalOpen(true);
-  };
+    setSelectedPost(post)
+    setIsModalOpen(true)
+  }
 
   const closeCommentsModal = () => {
-    setSelectedPost(null);
-    setNewComment(""); // Réinitialise le champ de saisie
-    setIsModalOpen(false);
-  };
+    setSelectedPost(null)
+    setNewComment("") // Réinitialise le champ de saisie
+    setIsModalOpen(false)
+  }
 
   const addComment = () => {
-    if (!newComment.trim()) return;
+    if (!newComment.trim()) return
   
     const updatedPosts = posts.map((post) => {
       if (post.id === selectedPost.id) {
@@ -72,50 +47,75 @@ const Announcements = () => {
               },
             },
           ],
-        };
+        }
   
         // Ensure selectedPost is updated to reflect the changes
-        setSelectedPost(updatedPost);
+        setSelectedPost(updatedPost)
   
-        return updatedPost;
+        return updatedPost
       }
-      return post;
-    });
+      return post
+    })
   
-    setPosts(updatedPosts);
-    setNewComment("");
-  };
-
-  const handlePostContentChange = (e) => {
-    setNewPostContent(e.target.value)
+    setPosts(updatedPosts)
+    setNewComment("")
   }
 
-  const handleSubmit = (e) => {
+  const handleContentChange = (e) => {
+    setContent(e.target.value)
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!newPostContent.trim()) return;
+    const trimmedContent = content.trim()
+    if (!trimmedContent) return
 
-    const newPost = {
-      id: Date.now(),
-      content: newPostContent,
-      author: {
-        username: "CurrentUser",
-        avatar: `https://i.pravatar.cc/40?u=CurrentUser${Date.now()}`,
+    const response = await fetch(import.meta.env.VITE_API_URL + "/posts", {
+      method: "POST",
+      body: JSON.stringify({ content }),
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
       },
-      comments: [],
-    };
+    })
 
-    setPosts([newPost, ...posts]);
-    setNewPostContent("");
+    if (!response.ok) {
+      if (response.status === 401) {
+        clearUserData()
+        navigate("/login")
+      }
+
+      return
+    }
+
+    const jsonResponse = await response.json()
+    
+    setPosts([ { ...jsonResponse.post }, ...posts ])
+    setContent("")
   }
+
+  const fetchPosts = async () => {
+    const response = await fetch(import.meta.env.VITE_API_URL + "/posts")
+
+    if (!response.ok) {
+      return
+    }
+
+    setPosts(await response.json())
+  }
+
+  useEffect(() => {
+    fetchPosts()
+  }, [])
 
   return (
     <div className="Ann">
       <div className="ann-create-post">
         <RichTextPostCreator
-          value={newPostContent}
-          onChange={handlePostContentChange}
-          onSubmit={handleSubmit}
+          value={content}
+          onChange={handleContentChange}
+          handleSubmit={handleSubmit}
         />
       </div>
       {posts.map((post) => (
@@ -133,7 +133,6 @@ const Announcements = () => {
           </button>
         </div>
       ))}
-
       {selectedPost && (
         <Modal isOpen={isModalOpen} onClose={closeCommentsModal}>
           <div className="ann-modal-post">
@@ -169,7 +168,7 @@ const Announcements = () => {
         </Modal>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Announcements;
+export default Announcements

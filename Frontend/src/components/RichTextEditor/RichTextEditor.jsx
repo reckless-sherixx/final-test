@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
 const RichTextPostCreator = ({
-  addPost,
   value,
   onChange,
+  handleSubmit,
 }) => {
   const handleStyleInsert = (tag) => {
     const selectedText = window.getSelection().toString();
@@ -15,20 +15,22 @@ const RichTextPostCreator = ({
   };
 
   return (
-    <div className="create-post">
-      <div className="text-editor">
-        <button onClick={() => handleStyleInsert("b")}>Bold</button>
-        <button onClick={() => handleStyleInsert("i")}>Italic</button>
-        <button onClick={() => handleStyleInsert("u")}>Underline</button>
-        <button onClick={() => handleStyleInsert("s")}>Strikethrough</button>
+    <form onSubmit={handleSubmit}>
+      <div className="create-post">
+        <div className="text-editor">
+          <button onClick={() => handleStyleInsert("b")}>Bold</button>
+          <button onClick={() => handleStyleInsert("i")}>Italic</button>
+          <button onClick={() => handleStyleInsert("u")}>Underline</button>
+          <button onClick={() => handleStyleInsert("s")}>Strikethrough</button>
+        </div>
+        <textarea
+          value={value}
+          onChange={onChange}
+          placeholder="What's happening?"
+        ></textarea>
+        <button type="submit">Post</button>
       </div>
-      <textarea
-        value={value}
-        onChange={onChange}
-        placeholder="What's happening?"
-      ></textarea>
-      <button onClick={addPost}>Post</button>
-    </div>
+    </form>
   );
 };
 

@@ -1,32 +1,37 @@
-const jwt =  require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET_KEY;
+const jwt = require('jsonwebtoken')
 
-const verifyToken = (req, res, next) => {
-    try {
-        //const token = req.cookies.token;
-        //const token = req.headers.Authorization
-        let token = ''
-        const cookie = req.headers.cookie
+const User = require('../model/user.model.js')
 
-        if(cookie){
-            token = cookie.split('; ').find(item => item.includes("token=")).split('=')[1]
-        }
+class UnauthorizedError extends Error {}
 
-        if (!token) {
-            return res.status(401).send({ message: "No Token Provided." });
-        }
-        const decoded = jwt.verify(token, JWT_SECRET);
-        if(!decoded.userId){
-            return res.status(401).send({ message: "User ID not found." });
-        }
-        req.userId = decoded.userId;
-        req.role  = decoded.role;
-        next();
-
-    } catch (error) {
-        console.error("Error Verifying the Token.",error);
-        res.status(401).send({ message: "Invalid Token" });
+const verifyToken = async (req, res, next) => {
+  try {
+    const token = req.cookies.token
+    if (!token) {
+      throw new UnauthorizedError()
     }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
+    if (!decoded.userId) {
+      throw new UnauthorizedError()
+    }
+
+    const user = await User.findById(decoded.userId)
+    if (!user) {
+      throw new UnauthorizedError()
+    }
+
+    req.user = user
+
+    next()
+  } catch (error) {
+    if (error instanceof UnauthorizedError) {
+      return res.status(401).send({ message: "Unauthorized" })
+    }
+
+    console.log(error)
+    return res.status(500).send({ message: "Internal Server Error" })
+  }
 }
 
 module.exports = verifyToken

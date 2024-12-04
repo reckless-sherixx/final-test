@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
 require('dotenv').config()
+const cookieParser = require("cookie-parser")
+const bodyParser = require("body-parser")
+
 const port = process.env.PORT || 3000;
 
 // parse options
@@ -16,6 +19,9 @@ app.use(cors({
   ],
   credentials: true,
 }));
+app.use(cookieParser())
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // Routes
 const postRoutes = require("./src/routes/post.route");
@@ -37,7 +43,6 @@ async function main() {
 }
 
 main().then(() => console.log("MongoDb Connected Successfully.")).catch(err => console.log(err));
-
 
 app.get('/', (req, res) => {
   res.send('Hello Worldd!');

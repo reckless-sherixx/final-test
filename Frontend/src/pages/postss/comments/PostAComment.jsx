@@ -12,6 +12,7 @@ const PostAComment = () => {
     // console.log(user);
     const [postComment] = usePostCommentMutation()
     const {refetch} = useFetchPostByIdQuery(id, {skip: !id});
+
     const handleSubmit = async (e) => {
       e.preventDefault();
       if(!user) {
@@ -42,13 +43,14 @@ const PostAComment = () => {
     <div className = 'mt-8'  >
         <h3 className='text-lg font-medium mb-8'>Leave a Comment</h3>
         <form onSubmit={handleSubmit}>
-            <textarea name="text"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            cols="30"
-            rows="10"
-            placeholder='Share your comment'
-            className='w-full bg-bgprimary focus:outline-none p-5'
+            <textarea
+              name="text"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              cols="30"
+              rows="10"
+              placeholder='Share your comment'
+              className='w-full bg-bgprimary focus:outline-none p-5'
             />
             <button type='submit' className='bg-primary text-white font-medium py-2 px-4 rounded-lg mt-5'>Submit</button>
         </form>
