@@ -16,7 +16,6 @@ app.use(cors({
     'https://school-web-test-front.onrender.com',
     'http://localhost:3000',
     'http://localhost:5173',
-    'https://final-final-test-5uiw-9wddxley2-blizdias-projects.vercel.app/',
   ],
   credentials: true,
 }));
