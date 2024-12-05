@@ -4,8 +4,8 @@ import AdminNavigation from './AdminNavigation'
 import { useSelector } from 'react-redux'
 
 const AdminLayout = () => {
-    const {user} = useSelector((state) => state.auth)
-    if(!user || user.role !== 'admin') {
+    const { user, isLoggedIn } = useSelector((state) => state.auth)
+    if (!isLoggedIn || (user && user.role !== 'admin')) {
         return <Navigate to="/login"/>
     }
   return (

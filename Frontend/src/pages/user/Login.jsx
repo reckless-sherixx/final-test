@@ -1,9 +1,11 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
+
 import { useLoginUserMutation, useLogoutUserMutation } from '../../redux/features/auth/authapi';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/features/auth/authSlice';
+
 import "./customCheckbox.css"
 
 const Login = () => {
@@ -17,30 +19,35 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const [loginUser, { isLoading: loginLoading }] = useLoginUserMutation();
+  const { isLoggedIn } = useSelector(state => state.auth)
 
   const navigate = useNavigate();
     // console.log("Loging user Api", loginUser);
+
   const handleLogin = async (e) => {
-    const username = `${name}${surname}${grade}`;
     e.preventDefault();
+
+    const username = `${name}${surname}${grade}`;
     const data = {
-        username : username,
-        password,
-      }
+      username,
+      password,
+    }
     
     try {
-      const response= await loginUser(data).unwrap();
-      //console.log(response)
-      const { token, user } = response;
-      dispatch(setUser({ user }));
+      const response = await loginUser(data).unwrap();
+      const { user } = response;
+      dispatch(setUser({ user, isLoggedIn: true }));
       navigate('/');
-      
     } catch (err) {
       setMessage(`Please provide valid informations !`);
     }
   };
 
-
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/")
+    }
+  }, [])
 
   return (
     <div className='max-w-sm bg-white mx-auto p-8 mt-36'>
@@ -49,7 +56,10 @@ const Login = () => {
         <input type="text" value={name} 
          className='w-full bg-bgPrimary focus:outline-none px-5 py-3'
         onChange={(e) => setName(e.target.value)} 
-        placeholder="Name" required />
+        placeholder="Name"
+        required
+        autoFocus
+        />
         <input type="text" value={surname} 
          className='w-full bg-bgPrimary focus:outline-none px-5 py-3'
         onChange={(e) => setSurname(e.target.value)} 
@@ -67,7 +77,7 @@ const Login = () => {
         <button type="submit" disabled={loginLoading}
          className='w-full mt-5 bg-primary hover:bg-indigo-500 text-white font-medium py-3 rounded-md'
         >Login</button>
-        <label class="custom-checkbox">
+        <label className="custom-checkbox">
           <input type="checkbox" required/>
           <span></span>
           <p className='my-5 text-center' >I accept the use of cookies (it is only to stay logged in, even after closing your browser).</p>

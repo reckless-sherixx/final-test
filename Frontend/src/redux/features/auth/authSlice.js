@@ -1,3 +1,4 @@
+import cookies from "js-cookie"
 import { createSlice } from '@reduxjs/toolkit';
 
 // Utility function to check if the token exists in cookies
@@ -22,23 +23,39 @@ const loadUserFromLocalStorage = () => {
   }
 };
 
-const initialState = loadUserFromLocalStorage();
+const getInitialState = () => {
+  const state = {
+    user: null,
+    isLoggedIn: false,
+  } 
+
+  const localStorageUser = localStorage.getItem('user')
+  if (localStorageUser) {
+    state.user = JSON.parse(localStorageUser)
+  }
+
+  const isLoggedInCookie = cookies.get("isLoggedIn")
+  if (isLoggedInCookie) {
+    state.isLoggedIn = Boolean(isLoggedInCookie)
+  }
+
+  return state
+}
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState :{
-    token:null,
-  },
+  initialState : getInitialState(),
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload.user;
-      // Save user state to localStorage
+      state.isLoggedIn = action.payload.isLoggedIn;
       localStorage.setItem('user', JSON.stringify(state.user));
     },
     logout: (state) => {
       state.user = null;
-      // Remove user from localStorage
+      state.isLoggedIn = false;
       localStorage.removeItem('user');
+      cookies.remove("isLoggedIn")
     },
   },
 });
