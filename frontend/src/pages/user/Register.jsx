@@ -41,25 +41,25 @@ const Register = () => {
         <input type="text" value={username} 
         placeholder='Username'
         required
-        className='w-full bg-bgprimary focus:outline-none px-5 py-3'
+        className='w-full bg-gray-50 focus:outline-none px-5 py-3'
         onChange={(e) => setUsername(e.target.value)}
         />
         <input type="email" value={email} 
         placeholder='Email'
         required
-        className='w-full bg-bgprimary focus:outline-none px-5 py-3'
+        className='w-full bg-gray-50 focus:outline-none px-5 py-3'
         onChange={(e) => setEmail(e.target.value)}
         />
         <input type="password" value={password} 
         placeholder='Password'
         required
-        className='w-full bg-bgprimary focus:outline-none px-5 py-3'
+        className='w-full bg-gray-50 focus:outline-none px-5 py-3'
         onChange={(e) => setPassword(e.target.value)}
         />
         {
             message && <p className='text-red-500'>{message}</p>
         }
-        <button type='sumbit' className='w-full mt-5 bg-primary hover:bg-indigo-500 text-white font-medium py-3 rounded-md'>Register</button>
+        <button type='sumbit' className='w-full mt-5 bg-gray-900 hover:bg-indigo-500 text-white font-medium py-3 rounded-md'>Register</button>
     </form>
     <p className='my-5 text-center'>Already Have an Account? <Link to="/login" className='text-red-700 italic'>Login</Link> Here </p>
 </div>

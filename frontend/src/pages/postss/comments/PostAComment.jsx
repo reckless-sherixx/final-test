@@ -50,9 +50,9 @@ const PostAComment = () => {
               cols="30"
               rows="10"
               placeholder='Share your comment'
-              className='w-full bg-bgprimary focus:outline-none p-5'
+              className='w-full bg-gray-50 focus:outline-none p-5'
             />
-            <button type='submit' className='bg-primary text-white font-medium py-2 px-4 rounded-lg mt-5'>Submit</button>
+            <button type='submit' className='bg-gray-900 text-white font-medium py-2 px-4 rounded-lg mt-5'>Submit</button>
         </form>
 
     </div>

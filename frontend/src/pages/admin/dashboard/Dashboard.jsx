@@ -25,7 +25,7 @@ const Dashboard = () => {
     <>
     {isLoading && (<div>Loading...</div>)}
     <div className='space-y-6 '>
-      <div className='bg-bgprimary p-5'>
+      <div className='bg-gray-50 p-5'>
         <h1>Hi, {user?.username}!</h1>
         <p>Welcome to the admin dashboard</p>
         <p>Here you can manage your posts, users, and other related data</p>

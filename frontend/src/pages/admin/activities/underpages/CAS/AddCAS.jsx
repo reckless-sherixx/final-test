@@ -102,7 +102,7 @@ const AddCAS = ({closeModalOnSubmit}) => {
         <div className='space-y-4'>
           <label className='font-semibold text-xl'>CAS Title:</label>
           <input type="text" placeholder='Ex: Importance of STEM Education...' required 
-          className='w-full inline-block bg-bgprimary focus:outline-none px-5 py-3'
+          className='w-full inline-block bg-gray-50 focus:outline-none px-5 py-3'
           value={title}
           onChange={(e) => setTitle(e.target.value)} 
           ></input>
@@ -124,7 +124,7 @@ const AddCAS = ({closeModalOnSubmit}) => {
           <div className='space-y-4'>
           <label className='font-semibold'>CAS Cover:</label>
           <input type="text" placeholder='https://unsplash.com/cover-image-of-post.png...' required 
-          className='w-full inline-block bg-bgprimary focus:outline-none px-5 py-3'
+          className='w-full inline-block bg-gray-50 focus:outline-none px-5 py-3'
           value={coverImg}
           onChange={(e) => setCoverImg(e.target.value)} 
           ></input>
@@ -134,7 +134,7 @@ const AddCAS = ({closeModalOnSubmit}) => {
         <div className='space-y-4'>
           <label className='font-semibold'>Meta Description:</label>
           <textarea type="text" cols={4} rows={4} placeholder='Write your Post meta description' required 
-          className='w-full inline-block bg-bgprimary focus:outline-none px-5 py-3'
+          className='w-full inline-block bg-gray-50 focus:outline-none px-5 py-3'
           value={metadesc}
           onChange={(e) => setMetadesc(e.target.value)} 
           ></textarea>
@@ -144,7 +144,7 @@ const AddCAS = ({closeModalOnSubmit}) => {
         <div className='space-y-4'>
           <label className='font-semibold'>Author:</label>
           <input type="text"  
-          className='w-full inline-block bg-bgprimary focus:outline-none px-5 py-3'
+          className='w-full inline-block bg-gray-50 focus:outline-none px-5 py-3'
           value={username}
           onChange={(e) => setUsername(e.target.value)} 
           placeholder={`Name of the Author`}
@@ -160,7 +160,7 @@ const AddCAS = ({closeModalOnSubmit}) => {
         }
         <button type="submit" 
         disabled={isLoading}
-        className='w-full mt-5 bg-primary hover:bg-indigo-500 text-white font-medium py-3 rounded-md'
+        className='w-full mt-5 bg-gray-900 hover:bg-indigo-500 text-white font-medium py-3 rounded-md'
         >Post Your CAS</button>
 
       </form>

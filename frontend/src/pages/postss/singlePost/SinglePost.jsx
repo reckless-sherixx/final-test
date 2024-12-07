@@ -13,7 +13,7 @@ const singlePost = () => {
   const {data: post, error, isLoading} = useFetchPostByIdQuery(id);
   console.log(post);
   return (
-    <div className='text-primary container mx-auto mt-8'>
+    <div className='text-gray-900 container mx-auto mt-8'>
       <div>
         {isLoading && <div>Loading...</div>}
         {error && <div>Something Went Wrong...</div>}

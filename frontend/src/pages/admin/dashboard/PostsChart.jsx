@@ -13,7 +13,7 @@ const FormatData = (posts) => {
 const PostsChart = ({posts}) => {
   const data = FormatData(posts);
   return (
-    <div className='p-6 bg-bgprimary rounded-lg shadow-md'>
+    <div className='p-6 bg-gray-50 rounded-lg shadow-md'>
       <h2 className='text-xl font-semibold mb-4'>Posts Chart!</h2>
       <div className='h-80'>
         <ResponsiveContainer width="100%" height="100%">

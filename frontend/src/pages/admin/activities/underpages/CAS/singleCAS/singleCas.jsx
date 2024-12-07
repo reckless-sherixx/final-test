@@ -14,7 +14,7 @@ const SingleCAS = () => {
   const {data: cas, error, isLoading} = useFetchCasByIdQuery(id);
   console.log(cas);
   return (
-    <div className='text-primary container mx-auto mt-8'>
+    <div className='text-gray-900 container mx-auto mt-8'>
       <div>
         {isLoading && <div>Loading...</div>}
         {error && <div>Something Went Wrong...</div>}
