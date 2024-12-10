@@ -1,30 +1,31 @@
-import React from 'react'
+import React from "react";
 import { IoSearch } from "react-icons/io5";
 
-const SearchPost = ({search, handleSearchChange, handleSearch}) => {
-    const handleKeyPress = (event)  => {
-        if (event.key === 'Enter') {
-            handleSearch();
-        }
+const SearchPost = ({ search, handleSearchChange, handleSearch }) => {
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
     }
+  };
 
   return (
-    <div className='w-full flex'>
-        <input type="text" 
-        value ={search} 
+    <div className="w-full flex">
+      <input
+        type="text"
+        value={search}
         onChange={handleSearchChange}
-        onKeyPress={handleKeyPress}
-        placeholder='Example Post Name'
-        className='py-2 px-4 mr-5 w-full bg-[#f7f8f9] focus:outline-none focus:border'
-         />
-         <button
-         onClick={handleSearch} 
-         className='bg-[#1F2937] px-4 py-2 text-[#F9FAFB] rounded-lg'>
-         <IoSearch />
-         </button>
-
+        onKeyDown={handleKeyDown}
+        placeholder="Example Post Name"
+        className="py-8 px-16 mr-20 w-full bg-gray-50 focus:outline-none focus:border"
+      />
+      <button
+        onClick={handleSearch}
+        className="bg-gray-800 px-16 py-8 text-gray-100 rounded-lg"
+      >
+        <IoSearch />
+      </button>
     </div>
-  )
-}
+  );
+};
 
-export default SearchPost
+export default SearchPost;

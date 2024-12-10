@@ -1,17 +1,24 @@
 import React from "react";
-import "./Addbutton.css";
-import { useDispatch, useSelector } from 'react-redux';
+import classnames from "classnames";
+import { useSelector } from 'react-redux';
+import { IoAdd } from 'react-icons/io5';
 
 const AddButton = ({ onClick }) => {
+  const { user } = useSelector((state) => state.auth);
 
-  const {user} = useSelector((state) => state.auth);
+  const canView = user && user.role === "admin" || user.role === "teacher"
+
   return (
-    <div className="floating-plus" onClick={onClick} style={user && user.role === "admin" || user.role === "teacher" ? {} : {display:"none"}}>
-      <div className="plus">
-        <div className="vertical"></div>
-        <div className="horizontal"></div>
-      </div>
-    </div>
+    <button
+      type="button"
+      className={classnames("fixed bottom-30 right-30 size-60 flex items-center justify-center bg-black leading-60 text-36 font-bold text-white rounded-full shadow-md transition-all", {
+        "block": canView,
+        "hidden": !canView,
+      })}
+      onClick={onClick}
+    >
+      <IoAdd className="text-white" />
+    </button>
   );
 };
 

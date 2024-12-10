@@ -2,14 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoClose, IoMenu } from 'react-icons/io5';
+import classnames from "classnames"
 
 import Avatar from './Avatar/Avatar';
 
 import { useLogoutUserMutation } from '../redux/features/auth/authapi';
 import { logout } from '../redux/features/auth/authSlice';
 import { clearUserData } from "../common"
-
-import "./Dropdown.css";
 
 const navLists = [
   { name: 'Home', path: '/' },
@@ -42,16 +41,14 @@ const Navbar = () => {
 
   const dropdownRef = useRef(null);
 
-  // Fonction pour ouvrir/fermer le dropdown
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
 
-  // Gestion du clic extérieur
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false); // Fermer le dropdown si on clique à l'extérieur
+        setIsOpen(false);
       }
     };
 
@@ -62,7 +59,6 @@ const Navbar = () => {
     };
   }, []);
 
-  // Handle scrolling and navbar visibility
   const handleScroll = () => {
     const currentScrollPos = window.pageYOffset;
     setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
@@ -78,27 +74,28 @@ const Navbar = () => {
   }, [prevScrollPos, visible]);
 
   return (
-    <header className={`bg-white py-6 shadow-md sticky top-0 z-50 transition-all duration-300 ${visible ? 'navbar-visible' : 'navbar-hidden'}`}>
-      <nav className='container mx-auto flex justify-between items-center px-5'>
-        {/* Brand Logo */}
-        <a href="/" className='flex items-center gap-2'>
+    <header className={classnames("bg-white py-24 shadow-md sticky z-10 top-0 transition-all duration-300", {
+      "translate-y-0 opacity-full": visible,
+      "-translate-y-full opacity-0": !visible,
+    })}>
+      <nav className='container mx-auto flex justify-between items-center px-20'>
+        <a href="/" className='flex items-center gap-8'>
           <img
             src="/logo3.jpg"
             alt="Logo"
-            className="h-12 w-19"
+            className="h-48"
           />
-          <span className='text-2xl font-semibold text-gray-800'></span>
+          <span className='text-24 font-semibold text-gray-800'></span>
         </a>
 
-        {/* Desktop Nav Menu */}
-        <ul className='hidden sm:flex items-center gap-10'>
+        <ul className='hidden sm:flex items-center gap-40'>
           {navLists.map((list, index) => (
             <li key={index}>
               <NavLink
                 to={`${list.path}`}
                 className={({ isActive }) =>
                   isActive
-                    ? 'text-blue-600 border-b-2 border-blue-600 pb-1 font-medium'
+                    ? 'text-blue-600 border-b-2 border-blue-600 pb-4 font-medium'
                     : 'text-gray-600 hover:text-blue-600 transition-all'
                 }
               >
@@ -109,90 +106,85 @@ const Navbar = () => {
           <li ref={dropdownRef}>
             <button
               onClick={toggleDropdown}
-              className="text-gray-600 hover:text-blue-600 transition-all"
-              style={{ display:'inline-block', position:'relative' }}
+              className="inline-block relative text-gray-600 hover:text-blue-600 transition-all"
             >
               Activities
               {isOpen && (
-                <div className="dropdown-content">
-                  <NavLink
-                    to={`/Cas`}
-                    className='text-gray-600 hover:text-blue-600 transition-all'
-                  >
-                    CAS
-                  </NavLink>
-                  <NavLink
-                    to={`/`}
-                    className='text-gray-600 hover:text-blue-600 transition-all'
-                  >
-                    Tutoring
-                  </NavLink>
-                  <NavLink
-                    to={`/`}
-                    className='text-gray-600 hover:text-blue-600 transition-all'
-                  >
-                    Club
-                  </NavLink>
+                <div className="dropdown-content absolute left-1/2 -translate-x-1/2 translate-y-10 w-160 bg-gray-50">
+                  {[
+                    {
+                      text: "CAS",
+                      to: "/cas"
+                    },
+                    {
+                      text: "Tutoring",
+                      to: "/"
+                    },
+                    {
+                      text: "Club",
+                      to: "/"
+                    },
+                  ].map(link => (
+                    <NavLink
+                      to={link.to}
+                      className='block px-16 py-12 hover:bg-gray-200 text-gray-600 hover:text-blue-600 transition-all'
+                    >
+                      {link.text}
+                    </NavLink>
+                  ))}
                 </div>
               )}
             </button>
           </li>
 
-          {/* Render button based on user login action */}
-
-          {
-            user ? (<li className='flex items-center gap-3'>
-              
+          {user ? (
+            <li className='flex items-center gap-3'>
               <button
-               onClick={handleLogout}
-               className='text-gray-600 hover:text-blue-600 transition-all font-medium'>Logout</button>
-            </li>) : (          <li>
+              onClick={handleLogout}
+              className='text-gray-600 hover:text-blue-600 transition-all font-medium'>Logout</button>
+            </li>
+          ) : (
+            <li>
               <NavLink
                 to='/login'
                 className='text-gray-600 hover:text-blue-600 transition-all font-medium'>
                 Login
               </NavLink>
-            </li>)
-          }
+            </li>
+          )}
 
-
-          {
-            user && user.role === "admin" && (<li className='flex items-center gap-3'>
-              <Link to="/dashboard"><button className='bg-[#1E73BE] px-4 py-1.5 text-white rounded-sm'>Dashboard</button></Link>
-            </li>) 
-          }
-  {user ? (
-    <li>
-    <Avatar username={user.username}/>
-    </li>
-  ) : (
-""
-  )}
-          
+          {(user && user.role === "admin") && (
+            <li className='flex items-center gap-3'>
+              <Link to="/dashboard"><button className='bg-[#1E73BE] px-16 py-6 text-white rounded-sm'>Dashboard</button></Link>
+            </li>
+          )}
+          {user && (
+            <li>
+              <Avatar username={user.username}/>
+            </li>
+          )}
         </ul>
 
-        {/* Mobile Menu Toggle Button */}
         <div className='flex items-center sm:hidden'>
           <button
             onClick={toggleMenu}
-            className='flex items-center px-3 py-3 bg-gray-100 rounded-full shadow-md text-gray-700 hover:bg-gray-200 transition'
+            className='flex items-center p-12 bg-gray-100 rounded-full shadow-md text-gray-700 hover:bg-gray-200 transition'
           >
-            {isMenuOpen ? <IoClose className='w-6 h-6' /> : <IoMenu className='w-6 h-6' />}
+            {isMenuOpen ? <IoClose className='size-24' /> : <IoMenu className='size-24' />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile Menu Items */}
       {isMenuOpen && (
-        <ul className='fixed top-[88px] left-0 w-full h-auto pb-8 bg-white shadow-lg z-50 rounded-b-lg'>
+        <ul className='fixed z-10 top-88 left-0 w-full h-auto pb-32 bg-white shadow-lg rounded-b-lg'>
           {navLists.map((list, index) => (
-            <li className='mt-5 px-6' key={index}>
+            <li className='mt-20 px-24' key={index}>
               <NavLink
                 onClick={() => setIsMenuOpen(false)}
                 to={`${list.path}`}
                 className={({ isActive }) =>
                   isActive
-                    ? 'text-blue-600 border-b-2 border-blue-600 pb-1 font-medium'
+                    ? 'text-blue-600 border-b-2 border-blue-600 pb-4 font-medium'
                     : 'text-gray-600 hover:text-blue-600 transition-all'
                 }
               >
@@ -200,7 +192,7 @@ const Navbar = () => {
               </NavLink>
             </li>
           ))}
-          <li className='px-6 mt-5'>
+          <li className='px-24 mt-20'>
             <NavLink
               to='/login'
               onClick={() => setIsMenuOpen(false)}

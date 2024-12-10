@@ -12,7 +12,7 @@ import UpdatePost from "../pages/admin/post/UpdatePost";
 import Announcements from "../pages/miniPage/Announcements"
 
 import Login from "../pages/user/Login";
-//import Register from "../pages/user/Register";
+// import Register from "../pages/user/Register";
 
 import AdminLayout from "../pages/admin/AdminLayout";
 import Dashboard from "../pages/admin/dashboard/Dashboard";
@@ -20,7 +20,7 @@ import ManageItems from "../pages/admin/post/ManageItems";
 import ManageUsers from "../pages/admin/user/ManageUsers";
 import Cas from "../pages/admin/activities/underpages/CAS/cas";
 import SingleCAS from "../pages/admin/activities/underpages/CAS/singleCAS/singleCas";
-//import ClubActivities from "../pages/admin/activities/underpages/Club/club";
+// import ClubActivities from "../pages/admin/activities/underpages/Club/club";
 
 const router = createBrowserRouter([
     {
@@ -51,14 +51,8 @@ const router = createBrowserRouter([
           path: "/posts/:id",
           element: <PrivateRouter><SinglePost/></PrivateRouter>
         },
-        {
-          path: "/login",
-          element: <Login/>
-        },
-        /*{
-          path: "/register",
-          element: <Register/>
-        },*/
+        { path: "/login", element: <Login/> },
+        // { path: "/register", element: <Register/> },
         {
           path: "dashboard",
           element: <PrivateRouter><AdminLayout/></PrivateRouter>,
