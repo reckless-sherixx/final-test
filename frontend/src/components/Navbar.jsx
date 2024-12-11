@@ -110,7 +110,7 @@ const Navbar = () => {
             >
               Activities
               {isOpen && (
-                <div className="dropdown-content absolute left-1/2 -translate-x-1/2 translate-y-10 w-160 bg-gray-50">
+                <div className="absolute left-1/2 -translate-x-1/2 translate-y-10 w-160 bg-gray-50 shadow-lg">
                   {[
                     {
                       text: "CAS",
