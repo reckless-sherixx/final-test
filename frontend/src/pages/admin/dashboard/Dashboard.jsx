@@ -28,44 +28,39 @@ const Dashboard = () => {
 
   return (
     <>
-    {isLoading && (<div>Loading...</div>)}
-    <div className='space-y-6 '>
-      <div className='bg-gray-50 p-5'>
-        <h1>Hi, {user?.username}!</h1>
-        <p>Welcome to the admin dashboard</p>
-        <p>Here you can manage your posts, users, and other related data</p>
+      {isLoading && (<div>Loading...</div>)}
+      <div className='space-y-24'>
+        <div className='bg-gray-50 p-20'>
+          <h1>Hi, {user?.username}!</h1>
+          <p>Welcome to the admin dashboard</p>
+          <p>Here you can manage your posts, users, and other related data</p>
+        </div>
+        <div className='flex flex-col md:flex-row justify-between gap-32 pt-32'>
+          <div className='bg-indigo-100 py-24 w-full rounded-sm space-y-4 flex flex-col items-center'>
+            {/* user react icons */}
+            <FaUserFriends className='size-32 text-indigo-600'/>
+            <p>{usersCount} Users</p>
+          </div>
+          <div className='bg-red-100 py-24 w-full rounded-sm space-y-4 flex flex-col items-center'>
+            {/* user react icons */}
+            <LiaBlogSolid className='size-32 text-red-600'/>
+            <p>{posts.length} Blogs</p>
+          </div>
+          <div className='bg-lime-100 py-24 w-full rounded-sm space-y-4 flex flex-col items-center'>
+            {/* user react icons */}
+            <RiAdminFill className='size-32 text-lime-600'/>
+            <p>{adminCounts} Admin{adminCounts !==1 ? 's' : ''}</p>
+          </div>
+          <div className='bg-orange-100 py-24 w-full rounded-sm space-y-4 flex flex-col items-center'>
+            {/* user react icons */}
+            <FaComments  className='size-32 text-orange-600'/>
+            <p>{comments?.totalComments} Comments</p>
+          </div>
+        </div>
+        <div className='py-20'>
+          <PostsChart posts={posts} />
+        </div>
       </div>
-
-      {/* Cards Grid */}
-      <div className='flex flex-col md:flex-row justify-between gap-8 pt-8'>
-        <div className='bg-indigo-100 py-6 w-full rounded-sm space-y-1 flex flex-col items-center'>
-          {/* user react icons */}
-          <FaUserFriends className='size-8 text-indigo-600'/>
-          <p>{usersCount} Users</p>
-        </div>
-        <div className='bg-red-100 py-6 w-full rounded-sm space-y-1 flex flex-col items-center'>
-          {/* user react icons */}
-          <LiaBlogSolid className='size-8 text-red-600'/>
-          <p>{posts.length} Blogs</p>
-        </div>
-        <div className='bg-lime-100 py-6 w-full rounded-sm space-y-1 flex flex-col items-center'>
-          {/* user react icons */}
-          <RiAdminFill className='size-8 text-lime-600'/>
-          <p>{adminCounts} Admin{adminCounts !==1 ? 's' : ''}</p>
-        </div>
-        <div className='bg-orange-100 py-6 w-full rounded-sm space-y-1 flex flex-col items-center'>
-          {/* user react icons */}
-          <FaComments  className='size-8 text-orange-600'/>
-          <p>{comments?.totalComments} Comments</p>
-        </div>
-      </div>
-
-      {/* Graphs and chart */}
-      <div className='pt-5 pb-5'>
-        <PostsChart posts={posts} />
-      </div>
-
-    </div>
     </>
   )
 }

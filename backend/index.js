@@ -14,7 +14,6 @@ app.use(express.json());
 app.use(cors({
   origin: [
     'https://school-web-test-front.onrender.com',
-    'http://localhost:3000',
     'http://localhost:5173',
   ],
   credentials: true,
@@ -42,7 +41,9 @@ async function main() {
   await mongoose.connect(process.env.MONGODB_URL)
 }
 
-main().then(() => console.log("MongoDb Connected Successfully.")).catch(err => console.log(err));
+main()
+  .then(() => console.log("MongoDb Connected Successfully."))
+  .catch(err => console.log(err));
 
 app.get('/', (req, res) => {
   res.send('Hello Worldd!');
