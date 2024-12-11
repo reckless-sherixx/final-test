@@ -20,4 +20,9 @@ const seed = async () => {
   console.log("Database Seeded")
 }
 
-seed()
+const main = async () => {
+  await seed()
+  process.exit(0)
+}
+
+main()

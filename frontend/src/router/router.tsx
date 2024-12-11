@@ -23,60 +23,88 @@ import SingleCAS from "../pages/admin/activities/underpages/CAS/singleCAS/single
 // import ClubActivities from "../pages/admin/activities/underpages/Club/club";
 
 const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <App/>,
-      children: [
-        {
-            path: "/",
-            element: <PrivateRouter><Home/></PrivateRouter>
-        }, 
-        {
-          path: "/announcements",
-          element: <PrivateRouter><Announcements/></PrivateRouter>
-        },
-        {
-          path: "/cas",
-          element: <PrivateRouter><Cas/></PrivateRouter>
-        },
-        {
-          path: "/cas/:id",
-          element: <PrivateRouter><SingleCAS/></PrivateRouter>
-        },
-        {
-          path: "/posts",
-          element: <PrivateRouter><Posts/></PrivateRouter>
-        },
-        {
-          path: "/posts/:id",
-          element: <PrivateRouter><SinglePost/></PrivateRouter>
-        },
-        { path: "/login", element: <Login/> },
-        // { path: "/register", element: <Register/> },
-        {
-          path: "dashboard",
-          element: <PrivateRouter><AdminLayout/></PrivateRouter>,
-          children: [
-            {
-              path: '',
-              element: <Dashboard/>
-            },
-            {
-              path: 'manage-items',
-              element: <ManageItems/>
-            },
-            {
-              path: 'users',
-              element: <ManageUsers/>
-            },
-            {
-              path: 'update-items/:id',
-              element: <UpdatePost/>
-            },
-          ]
-        }
-      ]
-    },
-  ]);
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "/",
+        element: (
+          <PrivateRouter>
+            <Home />
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "/announcements",
+        element: (
+          <PrivateRouter>
+            <Announcements />
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "/cas",
+        element: (
+          <PrivateRouter>
+            <Cas />
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "/cas/:id",
+        element: (
+          <PrivateRouter>
+            <SingleCAS />
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "/posts",
+        element: (
+          <PrivateRouter>
+            <Posts />
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "/posts/:id",
+        element: (
+          <PrivateRouter>
+            <SinglePost />
+          </PrivateRouter>
+        ),
+      },
+      { path: "/login", element: <Login /> },
+      // { path: "/register", element: <Register/> },
+      {
+        path: "dashboard",
+        element: (
+          <PrivateRouter>
+            <AdminLayout />
+          </PrivateRouter>
+        ),
+        children: [
+          {
+            path: "",
+            element: <Dashboard />,
+          },
+          {
+            path: "manage-items",
+            element: <ManageItems />,
+          },
+          {
+            path: "users",
+            element: <ManageUsers />,
+          },
+          {
+            path: "update-items/:id",
+            element: <UpdatePost />,
+          },
+        ],
+      },
+    ],
+  },
+]);
 
-  export default router
+export default router

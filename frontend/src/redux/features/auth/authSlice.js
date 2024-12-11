@@ -27,7 +27,7 @@ const getInitialState = () => {
   const state = {
     user: null,
     isLoggedIn: false,
-  } 
+  }
 
   const localStorageUser = localStorage.getItem('user')
   if (localStorageUser) {
@@ -44,7 +44,7 @@ const getInitialState = () => {
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState : getInitialState(),
+  initialState: getInitialState(),
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload.user;

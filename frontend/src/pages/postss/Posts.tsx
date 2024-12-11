@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchPost from './SearchPost'
-import { useFetchPostsQuery } from '../../redux/features/posts/PostsApi';
+// import { useFetchPostsQuery } from '../../redux/features/posts/PostsApi';
 import { Link } from 'react-router-dom';
 
 import AddButton from '../../components/AddButton/AddButton';
@@ -12,15 +12,48 @@ const Posts = () => {
   const [category, setCategory] = useState("");
   const [query, setQuery] = useState({ search: "", category: "" });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   // Get data using redux
-  const { data: posts = [], error, isLoading } = useFetchPostsQuery(query);
+  // const { data: posts = [], error, isLoading } = useFetchPostsQuery(query);
   const handleSearchChange = (e) => setSearch(e.target.value);
   const handleSearch = () => setQuery({ search, category });
 
   //Open close Modal handler
   const closeModal = () => setIsModalOpen(false);
   const openModal = () => setIsModalOpen(true);
+
+  const fetchPosts = async () => {
+    let url = import.meta.env.VITE_BACKEND_URL + `/posts`
+    if (search) {
+      url += `?search=${search}`
+    }
+
+    const response = await fetch(url)
+
+    if (!response.ok) {
+      return []
+    }
+
+    const posts = await response.json()
+
+    return posts.map(post => ({
+      ...post,
+      title: "Test title",
+      description: "test",
+    }))
+  }
+
+  const fetchData = async () => {
+    const posts = await fetchPosts()
+    setPosts(posts)
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   return (
     <div className="mt-64 container mx-auto">
@@ -30,8 +63,7 @@ const Posts = () => {
         handleSearch={handleSearch}
       />
 
-      {isLoading && <div>Loading....</div>}
-      {error && <div>{error.toString()}</div>}
+      {loading && <div>Loading....</div>}
 
       <div className="mt-32 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-32">
         {posts.map((post) => (

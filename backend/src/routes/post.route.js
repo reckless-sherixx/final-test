@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
     const postsResult = await Post.find(query)
       .populate({ path: 'author', select: "username" })
       .sort({ createdAt: -1 })
-    
+
     const posts = postsResult.map(post => ({
       ...post.toJSON(),
       comments: [],
@@ -162,6 +162,4 @@ router.delete("/:id", verifyToken, async (req, res) => {
   }
 })
 
-
 module.exports = router;
-
