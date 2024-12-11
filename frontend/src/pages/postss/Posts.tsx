@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import SearchPost from './SearchPost'
-// import { useFetchPostsQuery } from '../../redux/features/posts/PostsApi';
 import { Link } from 'react-router-dom';
 
 import AddButton from '../../components/AddButton/AddButton';
@@ -15,12 +14,9 @@ const Posts = () => {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // Get data using redux
-  // const { data: posts = [], error, isLoading } = useFetchPostsQuery(query);
   const handleSearchChange = (e) => setSearch(e.target.value);
   const handleSearch = () => setQuery({ search, category });
 
-  //Open close Modal handler
   const closeModal = () => setIsModalOpen(false);
   const openModal = () => setIsModalOpen(true);
 

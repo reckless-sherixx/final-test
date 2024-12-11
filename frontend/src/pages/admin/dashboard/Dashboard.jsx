@@ -12,7 +12,12 @@ import PostsChart from './PostsChart';
 const Dashboard = () => {
   const [query, setQuery] = useState({search: '', category: ''});
   const {user} = useSelector((state) => state.auth);
-  const {data: posts=[], error, isLoading} = useFetchPostsQuery(query);
+
+  const posts = []
+  const isLoading = false
+  const error = false
+
+  // const {data: posts=[], error, isLoading} = useFetchPostsQuery(query);
   // console.log(posts)
   const {data: comments=[]} = useGetCommentsQuery();
   const {data: usersData = {}} = useGetUserProfileQuery();
