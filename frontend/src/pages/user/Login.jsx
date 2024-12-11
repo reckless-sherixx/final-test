@@ -50,44 +50,67 @@ const Login = () => {
   }, [])
 
   return (
-    <div className='max-w-sm bg-white mx-auto p-8 mt-36'>
-      <h2 className='text-2xl font-semibold pt-5'>Please login</h2>
-      <form onSubmit={handleLogin} className='space-y-5 max-w-sm mx-auto pt-8'>
-        <input type="text" value={name} 
-         className='w-full bg-gray-50 focus:outline-none px-5 py-3'
-        onChange={(e) => setName(e.target.value)} 
-        placeholder="Name"
-        required
-        autoFocus
+    <div className="max-w-sm bg-white mx-auto p-32 mt-144">
+      <h2 className="text-24 font-semibold pt-20">Please login</h2>
+      <form
+        onSubmit={handleLogin}
+        className="space-y-20 max-w-sm mx-auto pt-32"
+      >
+        <input
+          type="text"
+          value={name}
+          className="w-full bg-gray-50 focus:outline-none px-20 py-12"
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Name"
+          required
+          autoFocus
         />
-        <input type="text" value={surname} 
-         className='w-full bg-gray-50 focus:outline-none px-5 py-3'
-        onChange={(e) => setSurname(e.target.value)} 
-        placeholder="Surname" required />
-        <input type="text" value={grade} 
-         className='w-full bg-gray-50 focus:outline-none px-5 py-3'
-        onChange={(e) => setGrade(e.target.value)} 
-        placeholder="Grade" required />
-        <input type="password" value={password} 
-        className='w-full bg-gray-50 focus:outline-none px-5 py-3'
-        onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
+        <input
+          type="text"
+          value={surname}
+          className="w-full bg-gray-50 focus:outline-none px-20 py-12"
+          onChange={(e) => setSurname(e.target.value)}
+          placeholder="Surname"
+          required
+        />
+        <input
+          type="text"
+          value={grade}
+          className="w-full bg-gray-50 focus:outline-none px-20 py-12"
+          onChange={(e) => setGrade(e.target.value)}
+          placeholder="Grade"
+          required
+        />
+        <input
+          type="password"
+          value={password}
+          className="w-full bg-gray-50 focus:outline-none px-20 py-12"
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          required
+        />
         {
-          message && <p className="text-red-500">{message}</p>  // Display error message if any
+          message && <p className="text-red-500">{message}</p> // Display error message if any
         }
-        <button type="submit" disabled={loginLoading}
-         className='w-full mt-5 bg-gray-900 hover:bg-indigo-500 text-white font-medium py-3 rounded-md'
-        >Login</button>
+        <button
+          type="submit"
+          disabled={loginLoading}
+          className="w-full mt-20 bg-gray-900 hover:bg-indigo-500 text-white font-medium py-12 rounded-md"
+        >
+          Login
+        </button>
         <label className="custom-checkbox">
-          <input type="checkbox" required/>
+          <input type="checkbox" required />
           <span></span>
-          <p className='my-5 text-center' >I accept the use of cookies (it is only to stay logged in, even after closing your browser).</p>
+          <p className="my-20 text-center">
+            {" "}
+            I accept the use of cookies (it is only to stay logged in, even
+            after closing your browser).
+          </p>
         </label>
-       
       </form>
-     
-       
     </div>
   );
-};
+}
 
 export default Login;
