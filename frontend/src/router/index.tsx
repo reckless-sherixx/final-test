@@ -6,7 +6,7 @@ import AuthGuard from "@/router/AuthGuard"
 import Home from "@/pages/home/Home"
 
 import SinglePost from "@/pages/postss/singlePost/SinglePost"
-import Posts from "@/pages/postss/Posts"
+import Posts from "@/pages/Posts"
 import UpdatePost from "@/pages/dashboard/post/UpdatePost"
 
 import Announcements from "@/pages/miniPage/Announcements"
@@ -31,9 +31,11 @@ export const routes = {
   dashboard_posts: "/dashboard/posts",
 }
 
+const AuthProtectedApp = () => <AuthGuard><App /></AuthGuard>
+
 const router = createBrowserRouter([
   {
-    element: <AuthGuard><App /></AuthGuard>,
+    element: <AuthProtectedApp />,
     children: [
       {
         path: "/",
@@ -69,7 +71,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <AuthGuard><App /></AuthGuard>,
+    element: <AuthProtectedApp />,
     children: [
       {
         element: <AdminLayout />,

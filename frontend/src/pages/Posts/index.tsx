@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import SearchPost from './SearchPost'
 import { Link } from 'react-router-dom';
 
@@ -6,15 +6,22 @@ import AddButton from '../../components/AddButton/AddButton';
 import Modal from '../../components/Modal/Modal';
 import AddPost from './AddPost';
 
+type Post = {
+  id: string,
+  title: string,
+  description: string,
+  coverImage: string,
+}
+
 const Posts = () => {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [query, setQuery] = useState({ search: "", category: "" });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
 
-  const handleSearchChange = (e) => setSearch(e.target.value);
+  const handleSearchChange = (e:ChangeEvent<HTMLInputElement>) => setSearch(e.target.value);
   const handleSearch = () => setQuery({ search, category });
 
   const closeModal = () => setIsModalOpen(false);
@@ -34,10 +41,11 @@ const Posts = () => {
 
     const posts = await response.json()
 
-    return posts.map(post => ({
-      ...post,
+    return posts.map((post:any) => ({
+      id: post._id,
       title: "Test title",
       description: "test",
+      coverImage: post.coverImg,
     }))
   }
 
@@ -64,13 +72,13 @@ const Posts = () => {
       <div className="mt-32 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-32">
         {posts.map((post) => (
           <Link
-            to={`/posts/${post._id}`}
-            key={post._id}
+            to={`/posts/${post.id}`}
+            key={post.id}
             className="group block overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
           >
             <div className="relative">
               <img
-                src={post?.coverImg}
+                src={post.coverImage}
                 className="h-288 w-full object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
               />
               <div className="p-20 bg-white">
