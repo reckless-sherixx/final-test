@@ -1,16 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import EditorJS from '@editorjs/editorjs';
 import List from '@editorjs/list';
 import Header from '@editorjs/header'; 
-import { useNavigate } from 'react-router-dom';
 import ImageTool from '@editorjs/image';
 import LinkTool from '@editorjs/link';
 
 import { useCreatePostMutation } from '../../redux/features/posts/PostsApi';
+import Editor from "@/components/Editor"
 
 const AddPost = ({ closeModalOnSubmit }) => {
   const editorRef = useRef(null);
+  const titleRef = useRef(null)
+
   const [title, setTitle] = useState("");
   const [coverImg, setCoverImg] = useState("");
   const [metadesc, setMetadesc] = useState("");
@@ -23,50 +26,54 @@ const AddPost = ({ closeModalOnSubmit }) => {
   const [createPost, { isLoading }] = useCreatePostMutation();
 
   useEffect(() => {
-    const editor = new EditorJS({
-      holder: "editorjs",
-      onReady: () => {
-        editorRef.current = editor;
-      },
-      autofocus: true,
-      tools: {
-        header: {
-          class: Header,
-          inlineToolbar: true,
-        },
-        list: {
-          class: List,
-          inlineToolbar: true,
-        },
-        image: {
-          class: ImageTool,
-          config: {
-            field: "image",
-            types: "image/*",
-            captionPlaceholder: "Image",
-            uploader: {
-              uploadByUrl: async (url) => {
-                return new Promise((resolve, reject) => {
-                  // Retourner simplement l'URL de l'image en tant qu'objet
-                  resolve({ success: 1, file: { url: url } });
-                });
-              },
-            },
-          },
-          inlineToolbar: true,
-        },
-        link: {
-          class: LinkTool,
-          inlineToolbar: true,
-        },
-      },
-    });
+    // if (!editorRef.current) {
+    //   const editor = new EditorJS({
+    //     holder: "editorjs",
+    //     onReady: () => {
+    //       editorRef.current = editor;
+    //     },
+    //     autofocus: false,
+    //     tools: {
+    //       header: {
+    //         class: Header,
+    //         inlineToolbar: true,
+    //       },
+    //       list: {
+    //         class: List,
+    //         inlineToolbar: true,
+    //       },
+    //       image: {
+    //         class: ImageTool,
+    //         config: {
+    //           field: "image",
+    //           types: "image/*",
+    //           captionPlaceholder: "Image",
+    //           uploader: {
+    //             uploadByUrl: async (url) => {
+    //               return new Promise((resolve, reject) => {
+    //                 resolve({ success: 1, file: { url: url } });
+    //               });
+    //             },
+    //           },
+    //         },
+    //         inlineToolbar: true,
+    //       },
+    //       link: {
+    //         class: LinkTool,
+    //         inlineToolbar: true,
+    //       },
+    //     },
+    //   });
 
-    return () => {
-      // editor.destroy();
-      editorRef.current = null;
-    };
+    //   editorRef.current = editor
+    // }
   }, []);
+
+  useEffect(() => {
+    if (titleRef.current) {
+      titleRef.current.focus()
+    }
+  }, [])
 
   const navigate = useNavigate();
 
@@ -103,11 +110,13 @@ const AddPost = ({ closeModalOnSubmit }) => {
           <label className="font-semibold text-20">Post Title:</label>
           <input
             type="text"
+            ref={titleRef}
             placeholder="Ex: Importance of STEM Education..."
             required
             className="w-full inline-block bg-gray-50 focus:outline-none px-20 py-12"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            autoFocus
           ></input>
         </div>
 
@@ -115,12 +124,10 @@ const AddPost = ({ closeModalOnSubmit }) => {
         <div className="flex flex-col md:flex-row justify-between items-start gap-16">
           {/* Left side */}
           <div className="md:w-2/3 w-full">
-            <p className="font-semibold text-20 mb-20">Content Section</p>
+            <p className="font-semibold text-20 mb-20 text-zinc-800">Content Section</p>
             <p className="text-12 italic">Write your Post below here</p>
-            <div
-              id="editorjs"
-              style={{ maxHeight: "400px", overflowY: "scroll" }}
-            ></div>
+            {/* <div id="editorjs"></div> */}
+            <Editor />
           </div>
 
           {/* Right Side */}

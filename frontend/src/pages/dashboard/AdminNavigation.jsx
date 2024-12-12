@@ -5,6 +5,8 @@ import { useLogoutUserMutation } from "../../redux/features/auth/authapi";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/features/auth/authSlice";
 
+import { routes } from "@/router"
+
 const AdminNavigation = () => {
   const [logoutUser] = useLogoutUserMutation();
 
@@ -28,6 +30,37 @@ const AdminNavigation = () => {
         </div>
         <hr />
         <ul className="space-y-20 pt-20">
+          {[
+            {
+              to: routes.dashboard,
+              text: "Dashboard",
+            },
+            {
+              to: routes.dashboard_manageItems,
+              text: "Manage Items",
+            },
+            {
+              to: routes.dashboard_users,
+              text: "Users",
+            },
+            {
+              to: routes.dashboard_posts,
+              text: "Posts",
+            },
+          ].map(link => (
+            <li>
+              <NavLink
+                to={link.to}
+                end
+                className={({ isActive }) =>
+                  isActive ? "text-blue-600 font-bold" : "text-black"
+                }
+              >
+                {link.text}
+              </NavLink>
+            </li>
+          ))}
+          {/*
           <li>
             <NavLink
               to="/dashboard"
@@ -59,6 +92,7 @@ const AdminNavigation = () => {
               Users
             </NavLink>
           </li>
+          */}
         </ul>
       </div>
 
