@@ -6,12 +6,7 @@ import AddButton from '../../components/AddButton/AddButton';
 import Modal from '../../components/Modal/Modal';
 import AddPost from './AddPost';
 
-type Post = {
-  id: string,
-  title: string,
-  description: string,
-  coverImage: string,
-}
+import { Post } from "@/types"
 
 const Posts = () => {
   const [search, setSearch] = useState("");
@@ -40,13 +35,14 @@ const Posts = () => {
     }
 
     const posts = await response.json()
+    console.log(posts)
 
     return posts.map((post:any) => ({
-      id: post._id,
-      title: "Test title",
+      ...post,
       description: "test",
-      coverImage: post.coverImg,
     }))
+
+    // return posts
   }
 
   const fetchData = async () => {
@@ -67,32 +63,35 @@ const Posts = () => {
         handleSearch={handleSearch}
       />
 
-      {loading && <div>Loading....</div>}
-
-      <div className="mt-32 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-32">
-        {posts.map((post) => (
-          <Link
-            to={`/posts/${post.id}`}
-            key={post.id}
-            className="group block overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
-          >
-            <div className="relative">
-              <img
-                src={post.coverImage}
-                className="h-288 w-full object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="p-20 bg-white">
-                <h2 className="text-lg font-semibold text-gray-800 group-hover:text-[#1E73BE] transition-colors duration-300">
-                  {post?.title}
-                </h2>
-                <p className="text-sm text-gray-500 mt-8">
-                  {post?.description.substring(0, 60)}...
-                </p>
+      {loading ? (
+        <div>Loading....</div>
+      ) : (
+        <div className="mt-32 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-32">
+          {posts.map((post) => (
+            <Link
+              to={`/posts/${post.id}`}
+              key={post.id}
+              className="group block overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
+            >
+              <div className="relative">
+                <img
+                  src={post.coverImage}
+                  className="h-288 w-full object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
+                />
+                <div className="p-20 bg-white">
+                  <h2 className="text-lg font-semibold text-gray-800 group-hover:text-[#1E73BE] transition-colors duration-300">
+                    {post?.title}
+                  </h2>
+                  <p className="text-sm text-gray-500 mt-8">
+                    {post?.description.substring(0, 60)}...
+                  </p>
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+            </Link>
+          ))}
+        </div>
+      )}
+
       <AddButton onClick={openModal} />
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <h2 className="text-24 font-semibold">Create a new Post</h2>

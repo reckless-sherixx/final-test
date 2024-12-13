@@ -5,7 +5,7 @@ import AuthGuard from "@/router/AuthGuard"
 
 import Home from "@/pages/home/Home"
 
-import SinglePost from "@/pages/postss/singlePost/SinglePost"
+import Post from "@/pages/Post"
 import Posts from "@/pages/Posts"
 import UpdatePost from "@/pages/dashboard/post/UpdatePost"
 
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/posts/:id",
-        element: <SinglePost />,
+        element: <Post />,
       },
     ],
   },

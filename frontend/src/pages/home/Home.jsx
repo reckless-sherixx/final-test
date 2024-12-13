@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 
 import Banner from "./Banner"
-import SearchPost from '../postss/SearchPost'
+import SearchPost from '@/pages/Posts/SearchPost'
 
 const Home = () => {
   const [search, setSearch] = useState("")

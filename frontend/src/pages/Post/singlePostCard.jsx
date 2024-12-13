@@ -1,9 +1,11 @@
 import React from 'react'
-import { formatDate } from '../../../utility/formatDate';
 import EditorJSHTML from "editorjs-html"
-import DeleteButtonWithConfirmation from '../../../components/DeletionButton/DeletionButton';
-import { useDeletePostMutation } from '../../../redux/features/posts/PostsApi';
 import { useNavigate } from 'react-router-dom';
+
+import { formatDate } from '@/utility/formatDate';
+import { useDeletePostMutation } from '@/redux/features/posts/PostsApi';
+
+import DeleteButtonWithConfirmation from '@/components/DeletionButton/DeletionButton';
 
 const editorJSHTML = EditorJSHTML();
 

@@ -3,26 +3,29 @@ const mongoose = require('mongoose');
 const PostSchema = new mongoose.Schema({
   title: {
     type: String,
-    // required: true,
-    required: false,
+    required: true,
   },
   description: String,
   content: {
     type: Object,
     required: true,
   },
-  coverImg: String,
+  coverImageUrl: String,
   category: String,
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
-  rating: Number,
+  published: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
-  }
+  },
 })
 
 PostSchema.set("toJSON", {

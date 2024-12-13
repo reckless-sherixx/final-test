@@ -2,12 +2,13 @@ const mongoose = require('mongoose');
 require('dotenv').config()
 
 const User = require('./src/model/user.model.js')
+const Post = require('./src/model/post.model.js')
 
-const seed = async () => {
-  await mongoose.connect(process.env.MONGODB_URL)
-
+const deleteUsers = async () => {
   await User.deleteMany({})
+}
 
+const createAdminUser = async () => {
   const name = "User"
   const surname = "Test"
   const grade = "Admin"
@@ -16,6 +17,16 @@ const seed = async () => {
 
   const user = new User({ username, password, role: "admin" })
   await user.save()
+  
+  return user
+}
+
+const seed = async () => {
+  await mongoose.connect(process.env.MONGODB_URL)
+
+  await deleteUsers()
+
+  const user = await createAdminUser()
 
   console.log("Database Seeded")
 }

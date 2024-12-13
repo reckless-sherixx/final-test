@@ -1,10 +1,9 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { useFetchPostByIdQuery } from '../../../redux/features/posts/PostsApi';
-import SinglePostCard from '../singlePost/singlePostCard';
-import CommentCards from '../comments/CommentCards';
+import { useFetchPostByIdQuery } from '@/redux/features/posts/PostsApi';
+import SinglePostCard from './singlePostCard';
+import CommentCards from './comments/CommentCards';
 import RelatedPosts from './RelatedPosts';
-
 
 const singlePost = () => {
   // Fetch data from API and display post details here

@@ -42,7 +42,7 @@ async function main() {
 }
 
 main()
-  .then(() => console.log("MongoDb Connected Successfully."))
+  .then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
 
 app.get('/', (req, res) => {

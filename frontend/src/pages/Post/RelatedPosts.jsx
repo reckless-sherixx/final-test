@@ -1,5 +1,5 @@
 import React from 'react'
-import { useFetchRelatedPostsQuery } from '../../../redux/features/posts/PostsApi';
+import { useFetchRelatedPostsQuery } from '@/redux/features/posts/PostsApi';
 import { Link, useParams } from 'react-router-dom';
 
 const RelatedPosts = () => {
