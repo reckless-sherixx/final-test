@@ -3,7 +3,7 @@ import { useDeleteUserMutation, useGetUserProfileQuery } from '../../../redux/fe
 import { MdEdit } from "react-icons/md";
 import { Link, useNavigate } from 'react-router-dom';
 import UpdateUserModel from './UpdateUserModel';
-import Modal from '../../../components/Modal/Modal';
+import Modal from '@/components/Modal';
 import "./CreateUser.css";
 
 const ManageUsers = () => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 
-import Modal from "../../components/Modal/Modal"
+import Modal from "@/components/Modal"
 import Avatar from "../../components/Avatar/Avatar"
 import RichTextPostCreator from "../../components/RichTextEditor/RichTextEditor"
 

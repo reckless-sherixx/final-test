@@ -25,10 +25,18 @@ import SingleCAS from "@/pages/dashboard/activities/underpages/CAS/singleCAS/sin
 
 export const routes = {
   login: "/login",
+
+  posts: "/posts",
+  post: "/posts/:postId",
+
   dashboard: "/dashboard",
   dashboard_manageItems: "/dashboard/manage-items",
   dashboard_users: "/dashboard/users",
   dashboard_posts: "/dashboard/posts",
+}
+
+export const createPostRoute = (id:string) => {
+  return routes.post.replace(":postId", id)
 }
 
 const AuthProtectedApp = () => <AuthGuard><App /></AuthGuard>

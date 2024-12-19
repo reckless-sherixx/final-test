@@ -1,0 +1,207 @@
+import React, { useEffect, useRef, useState } from 'react'
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import EditorJS from '@editorjs/editorjs';
+import List from '@editorjs/list';
+import Header from '@editorjs/header'; 
+import ImageTool from '@editorjs/image';
+import LinkTool from '@editorjs/link';
+
+import { useCreatePostMutation } from '@/redux/features/posts/PostsApi';
+import Editor from "@/components/Editor"
+
+const EditPost = ({ closeModalOnSubmit }) => {
+  const editorRef = useRef(null);
+  const titleRef = useRef(null)
+
+  const [title, setTitle] = useState("");
+  const [coverImg, setCoverImg] = useState("");
+  const [metadesc, setMetadesc] = useState("");
+  const [category, setCategory] = useState("");
+  const [rating, setRating] = useState(0);
+  const [message, setMessage] = useState("");
+  const { user } = useSelector((state) => state.auth);
+  const [username, setUsername] = useState(user.username);
+
+  const [createPost, { isLoading }] = useCreatePostMutation();
+
+  useEffect(() => {
+    // if (!editorRef.current) {
+    //   const editor = new EditorJS({
+    //     holder: "editorjs",
+    //     onReady: () => {
+    //       editorRef.current = editor;
+    //     },
+    //     autofocus: false,
+    //     tools: {
+    //       header: {
+    //         class: Header,
+    //         inlineToolbar: true,
+    //       },
+    //       list: {
+    //         class: List,
+    //         inlineToolbar: true,
+    //       },
+    //       image: {
+    //         class: ImageTool,
+    //         config: {
+    //           field: "image",
+    //           types: "image/*",
+    //           captionPlaceholder: "Image",
+    //           uploader: {
+    //             uploadByUrl: async (url) => {
+    //               return new Promise((resolve, reject) => {
+    //                 resolve({ success: 1, file: { url: url } });
+    //               });
+    //             },
+    //           },
+    //         },
+    //         inlineToolbar: true,
+    //       },
+    //       link: {
+    //         class: LinkTool,
+    //         inlineToolbar: true,
+    //       },
+    //     },
+    //   });
+
+    //   editorRef.current = editor
+    // }
+  }, []);
+
+  useEffect(() => {
+    if (titleRef.current) {
+      titleRef.current.focus()
+    }
+  }, [])
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const content = await editorRef.current.save();
+      console.log(content);
+      const newPost = {
+        title,
+        coverImg,
+        content,
+        description: metadesc,
+        category,
+        author: user?._id,
+        rating,
+      };
+
+      // console.log(newPost)
+      const response = await createPost(newPost).unwrap();
+      console.log("Content Posted successfully!");
+      closeModalOnSubmit();
+      navigate("/posts");
+    } catch (error) {
+      console.log("Failed to submit Post", error);
+      setMessage("Failed to submit Post. Please try again!");
+    }
+  };
+
+  return (
+    <div className="bg-white md:p-32 p-8">
+      <form onSubmit={handleSubmit} className="space-y-20 pt-24">
+        <div className="space-y-32">
+          <label className="font-semibold text-20">Post Title:</label>
+          <input
+            type="text"
+            ref={titleRef}
+            placeholder="Ex: Importance of STEM Education..."
+            required
+            className="w-full inline-block bg-gray-50 focus:outline-none px-20 py-12"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            autoFocus
+          ></input>
+        </div>
+
+        {/* Post Details */}
+        <div className="flex flex-col md:flex-row justify-between items-start gap-16">
+          {/* Left side */}
+          <div className="md:w-2/3 w-full">
+            <p className="font-semibold text-20 mb-20 text-zinc-800">Content Section</p>
+            <p className="text-12 italic">Write your Post below here</p>
+            {/* <div id="editorjs"></div> */}
+            <Editor />
+          </div>
+
+          {/* Right Side */}
+          <div
+            className="md:w-1/3 w-full border p-20 space-y-20"
+            style={{ maxHeight: "400px", overflowY: "scroll" }}
+          >
+            <p className="text-20 font-semibold">Choose Post Format</p>
+            {/* For images */}
+            <div className="space-y-16">
+              <label className="font-semibold">Post Cover:</label>
+              <input
+                type="text"
+                placeholder="https://unsplash.com/cover-image-of-post.png..."
+                required
+                className="w-full inline-block bg-gray-50 focus:outline-none px-20 py-12"
+                value={coverImg}
+                onChange={(e) => setCoverImg(e.target.value)}
+              ></input>
+            </div>
+
+            {/* Category */}
+            <div className="space-y-16">
+              <label className="font-semibold">Category:</label>
+              <input
+                type="text"
+                placeholder="Technology/Education/etc..."
+                required
+                className="w-full inline-block bg-gray-50 focus:outline-none px-20 py-12"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              ></input>
+            </div>
+
+            {/* Meta Description */}
+            <div className="space-y-16">
+              <label className="font-semibold">Meta Description:</label>
+              <textarea
+                type="text"
+                cols={4}
+                rows={4}
+                placeholder="Write your Post meta description"
+                required
+                className="w-full inline-block bg-gray-50 focus:outline-none px-20 py-12"
+                value={metadesc}
+                onChange={(e) => setMetadesc(e.target.value)}
+              ></textarea>
+            </div>
+
+            {/* Author */}
+            <div className="space-y-16">
+              <label className="font-semibold">Author:</label>
+              <input
+                type="text"
+                className="w-full inline-block bg-gray-50 focus:outline-none px-20 py-12"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder={`Name of the Author`}
+              ></input>
+            </div>
+          </div>
+        </div>
+
+        {message && <p className="text-red-500">{message}</p>}
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full mt-20 bg-gray-900 hover:bg-indigo-500 text-white font-medium py-12 rounded-md"
+        >
+          Post Your Content
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default EditPost

@@ -1,49 +1,55 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import SearchPost from './SearchPost'
 import { Link } from 'react-router-dom';
 
-import AddButton from '../../components/AddButton/AddButton';
-import Modal from '../../components/Modal/Modal';
-import AddPost from './AddPost';
+import SearchPost from './SearchPost'
 
+import { fetchPosts } from "@/api"
+import { createPostRoute } from "@/router"
 import { Post } from "@/types"
+import * as u from "@/utils" 
+
+const PostList = ({
+  posts,
+} : {
+  posts: Post[],
+}) => {
+  return (
+    <div className="mt-32 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-32">
+      {posts.map((post) => (
+        <Link
+          to={createPostRoute(post.id)}
+          key={post.id}
+          className="group block overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
+        >
+          <div className="relative">
+            <img
+              src={post.coverImage}
+              className="h-288 w-full object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
+            />
+            <div className="p-20 bg-white">
+              <h2 className="text-lg font-semibold text-gray-800 group-hover:text-[#1E73BE] transition-colors duration-300">
+                {post?.title}
+              </h2>
+              <p className="text-sm text-gray-500 mt-8">
+                {u.trimWithEllipsis(post.description)}
+              </p>
+            </div>
+          </div>
+        </Link>
+      ))}
+    </div>
+  )
+}
 
 const Posts = () => {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [query, setQuery] = useState({ search: "", category: "" });
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
 
   const handleSearchChange = (e:ChangeEvent<HTMLInputElement>) => setSearch(e.target.value);
   const handleSearch = () => setQuery({ search, category });
-
-  const closeModal = () => setIsModalOpen(false);
-  const openModal = () => setIsModalOpen(true);
-
-  const fetchPosts = async () => {
-    let url = import.meta.env.VITE_BACKEND_URL + `/posts`
-    if (search) {
-      url += `?search=${search}`
-    }
-
-    const response = await fetch(url)
-
-    if (!response.ok) {
-      return []
-    }
-
-    const posts = await response.json()
-    console.log(posts)
-
-    return posts.map((post:any) => ({
-      ...post,
-      description: "test",
-    }))
-
-    // return posts
-  }
 
   const fetchData = async () => {
     const posts = await fetchPosts()
@@ -62,41 +68,16 @@ const Posts = () => {
         handleSearchChange={handleSearchChange}
         handleSearch={handleSearch}
       />
-
       {loading ? (
         <div>Loading....</div>
       ) : (
-        <div className="mt-32 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-32">
-          {posts.map((post) => (
-            <Link
-              to={`/posts/${post.id}`}
-              key={post.id}
-              className="group block overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
-            >
-              <div className="relative">
-                <img
-                  src={post.coverImage}
-                  className="h-288 w-full object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="p-20 bg-white">
-                  <h2 className="text-lg font-semibold text-gray-800 group-hover:text-[#1E73BE] transition-colors duration-300">
-                    {post?.title}
-                  </h2>
-                  <p className="text-sm text-gray-500 mt-8">
-                    {post?.description.substring(0, 60)}...
-                  </p>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <PostList posts={posts} />
       )}
-
-      <AddButton onClick={openModal} />
+      {/* <AddButton onClick={openModal} />
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <h2 className="text-24 font-semibold">Create a new Post</h2>
         <AddPost closeModalOnSubmit={closeModal} />
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

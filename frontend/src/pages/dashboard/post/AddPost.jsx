@@ -3,8 +3,9 @@ import { useSelector } from 'react-redux';
 import EditorJS from '@editorjs/editorjs';
 import List from '@editorjs/list';
 import Header from '@editorjs/header'; 
-import { useCreatePostMutation } from '../../../redux/features/posts/PostsApi';
 import { useNavigate } from 'react-router-dom';
+
+import { useCreatePostMutation } from '@/redux/features/posts/PostsApi';
 
 const AddPost = () => {
   const editorRef = useRef(null);
@@ -16,6 +17,7 @@ const AddPost = () => {
   const [message, setMessage] = useState(""); 
   const {user} = useSelector((state) => state.auth);
   const [createPost, {isLoading}] = useCreatePostMutation();
+
   useEffect(() => {
     const editor = new EditorJS({
       holder: 'editorjs',

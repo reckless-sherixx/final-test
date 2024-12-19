@@ -1,8 +1,30 @@
+.button-group {
+	display: flex;
+	gap: .25rem;
+	flex-wrap: wrap;
+}
+
+.button-group button {
+	color: #2E2B29;
+	font-size: 0.875rem;
+	padding: .375rem .625rem;
+	border-radius: .5rem;
+	background-color: rgba(61, 37, 20, .08);
+}
+
+.button-group button.is-active {
+	background-color: #6A00F5;
+	color: white;
+}
+
 /* Basic editor styles */
 .tiptap {
-	/* List styles */
-	/* Heading styles */
-	/* Code and preformatted text styles */
+	margin-top: 30px;
+	outline: none;
+	border: 2px solid rgb(229, 231, 235);
+	border-radius: 6px;
+	padding: 12px;
+	min-height: 300px;
 }
 .tiptap :first-child {
 	 margin-top: 0;
@@ -11,18 +33,22 @@
 	 padding: 0 1rem;
 	 margin: 1.25rem 1rem 1.25rem 0.4rem;
 }
+.tiptap ul li, .tiptap ol li {
+	 list-style-type: disc;
+}
 .tiptap ul li p, .tiptap ol li p {
 	 margin-top: 0.25em;
 	 margin-bottom: 0.25em;
 }
 .tiptap h1, .tiptap h2, .tiptap h3, .tiptap h4, .tiptap h5, .tiptap h6 {
-	 line-height: 1.1;
-	 margin-top: 2.5rem;
-	 text-wrap: pretty;
+	font-weight: 700;
+	line-height: 1.1;
+	/* margin-top: 2.5rem; */
+	text-wrap: pretty;
 }
 .tiptap h1, .tiptap h2 {
-	 margin-top: 3.5rem;
-	 margin-bottom: 1.5rem;
+	 /* margin-top: 3.5rem;
+	 margin-bottom: 1.5rem; */
 }
 .tiptap h1 {
 	 font-size: 1.4rem;
@@ -58,7 +84,7 @@
 	 padding: 0;
 }
 .tiptap blockquote {
-	 border-left: 3px solid var(--gray-3);
+	 border-left: 3px solid rgba(61, 37, 20, .12);
 	 margin: 1.5rem 0;
 	 padding-left: 1rem;
 }

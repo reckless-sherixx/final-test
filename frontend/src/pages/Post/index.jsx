@@ -1,16 +1,14 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { useFetchPostByIdQuery } from '@/redux/features/posts/PostsApi';
+// import { useFetchPostByIdQuery } from '@/redux/features/posts/PostsApi';
 import SinglePostCard from './singlePostCard';
 import CommentCards from './comments/CommentCards';
 import RelatedPosts from './RelatedPosts';
 
-const singlePost = () => {
-  // Fetch data from API and display post details here
-  const {id} = useParams(); 
-  // console.log(id);
-  const {data: post, error, isLoading} = useFetchPostByIdQuery(id);
-  console.log(post);
+const SinglePost = () => {
+  const { id } = useParams(); 
+  // const { data: post, error, isLoading } = useFetchPostByIdQuery(id);
+
   return (
     <div className='text-gray-900 container mx-auto mt-8'>
       <div>
@@ -24,7 +22,7 @@ const singlePost = () => {
                 <CommentCards comments={post?.comments}/>
               </div>
               <div className='bg-white lg:w-1/3 w-full'>
-              <RelatedPosts/>
+              <RelatedPosts />
               </div>
             </div>
           )
@@ -34,4 +32,4 @@ const singlePost = () => {
   )
 }
 
-export default singlePost
+export default SinglePost

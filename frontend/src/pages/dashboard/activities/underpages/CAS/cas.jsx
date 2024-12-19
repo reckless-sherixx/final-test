@@ -3,7 +3,7 @@ import SearchCAS from '../../searchCas'
 import { useFetchCasQuery } from '../../../../../redux/features/activities/casApi';
 import { Link } from 'react-router-dom';
 import AddButton from '../../../../../components/AddButton/AddButton';
-import Modal from '../../../../../components/Modal/Modal';
+import Modal from '@/components/Modal';
 import AddCAS from './AddCAS';
 
 const Activities = () => {
