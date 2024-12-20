@@ -13,7 +13,6 @@ export const fetchPosts = async (search = ""):Promise<Post[]> => {
   }
 
   const posts = await response.json()
-  console.log(posts)
 
   return posts.map((post:any) => ({
     ...post,

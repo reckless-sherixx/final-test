@@ -96,21 +96,25 @@ router.get("/related/:id", async (req, res) => {
 // Create A post
 router.post("/", verifyToken, isAdmin, async (req, res) => {
   try {
-    const newPost = await Post.create({
+    // validate
+    console.log(req.body)
+
+    const post = await Post.create({
+      title: req.body.title,
+      coverImageUrl: req.body.coverImage,
       content: req.body.content,
+      description: req.body.description,
       author: req.user.id,
     })
 
     res.status(201).send({
       message: "Post Created Successfully",
       post: {
-        id: newPost._id,
-        content: newPost.content,
-        comments: [],
+        ...post.toJSON(),
         author: {
-          username: req.user.username,
+          username: req.user.username
         },
-      }
+      },
     })
   } catch (error) {
     console.error("Error Creating Post:", error);

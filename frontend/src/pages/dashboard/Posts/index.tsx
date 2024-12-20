@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import AddButton from '@/components/AddButton/AddButton';
 import Modal from '@/components/Modal';
 import PostList from './PostList';
-import AddPost from './AddPost';
+import CreatePost from './CreatePost';
 import EditPost from './EditPost';
 
 import { fetchPosts } from "@/api"
@@ -36,6 +36,13 @@ const Posts = () => {
     setEditingPost(null)
   }
 
+  const addPostToList = (post:Post) => {
+    setPosts([
+      ...posts,
+      post,
+    ])
+  }
+
   useEffect(() => {
     fetchData()
   }, [])
@@ -53,7 +60,10 @@ const Posts = () => {
       <AddButton onClick={openModal} />
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <h2 className="text-24 font-semibold">Create a new Post</h2>
-        <AddPost closeModalOnSubmit={closeModal} />
+        <CreatePost
+          addPostToList={addPostToList}
+          closeModalOnSubmit={closeModal}
+        />
       </Modal>
       <Modal isOpen={isEditModalOpen} onClose={closeEditModal}>
         <h2 className="text-24 font-semibold">Edit Post</h2>

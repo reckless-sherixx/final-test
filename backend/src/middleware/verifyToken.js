@@ -25,7 +25,10 @@ const verifyToken = async (req, res, next) => {
 
     next()
   } catch (error) {
-    if (error instanceof UnauthorizedError) {
+    if (
+      error instanceof UnauthorizedError ||
+      error instanceof jwt.TokenExpiredError
+    ) {
       return res.status(401).send({ message: "Unauthorized" })
     }
 

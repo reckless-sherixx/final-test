@@ -2,5 +2,6 @@ export type Post = {
   id: string,
   title: string,
   description: string,
-  coverImage: string,
+  coverImageUrl: string,
+  content: string,
 }

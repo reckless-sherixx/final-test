@@ -47,8 +47,8 @@ const AdminNavigation = () => {
               to: routes.dashboard_posts,
               text: "Posts",
             },
-          ].map(link => (
-            <li>
+          ].map((link, index) => (
+            <li key={index}>
               <NavLink
                 to={link.to}
                 end

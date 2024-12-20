@@ -35,6 +35,10 @@ export const routes = {
   dashboard_posts: "/dashboard/posts",
 }
 
+export const apiRoutes = {
+  createPost: import.meta.env.VITE_BACKEND_URL + "/posts",
+}
+
 export const createPostRoute = (id:string) => {
   return routes.post.replace(":postId", id)
 }
