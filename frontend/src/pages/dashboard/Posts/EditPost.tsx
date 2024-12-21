@@ -53,11 +53,13 @@ const Error = (
   return null
 }
 
-const AddPost = ({
-  addPostToList,
+const EditPost = ({
+  post,
+  updatePost: updatePostInList,
   closeModalOnSubmit: closeCreatePostModal,
 } : {
-  addPostToList: (post:Post) => void,
+  post: Post,
+  updatePost: (post:Post) => void,
   closeModalOnSubmit: () => void,
 }) => {
   const titleRef = useRef<HTMLInputElement>(null)
@@ -70,19 +72,19 @@ const AddPost = ({
 
   const dispatch = useDispatch()
 
-  const createPost = async (newPost:NewPost):Promise<
+  const updatePost = async (updatedPost:NewPost):Promise<
     SuccessResponse
     | ErrorResponse
     | UnauthorizedErrorResponse
   > => {
-    const response = await fetch(apiRoutes.createPost, {
-      method: "POST",
+    const response = await fetch(apiRoutes.updatePost(post), {
+      method: "PUT",
       credentials: "include",
       body: JSON.stringify({
-        title: newPost.title,
-        coverImageUrl: newPost.coverImageUrl,
-        content: newPost.content,
-        description: newPost.description,
+        title: updatedPost.title,
+        coverImageUrl: updatedPost.coverImageUrl,
+        content: updatedPost.content,
+        description: updatedPost.description,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -117,10 +119,7 @@ const AddPost = ({
 
   const form = useFormik({
     initialValues: {
-      title: '',
-      content: '',
-      coverImageUrl: '',
-      description: '',
+      ...post,
     },
     validationSchema: yup.object().shape({
       title: yup.string().max(50).required("Title is required"),
@@ -132,7 +131,7 @@ const AddPost = ({
       try {
         showLoadingIndicator()
 
-        const result = await createPost({
+        const result = await updatePost({
           title: values.title,
           coverImageUrl: values.coverImageUrl,
           content: values.content,
@@ -140,7 +139,7 @@ const AddPost = ({
         })
 
         if (result.type === "success") {
-          addPostToList(result.post)
+          updatePostInList(result.post)
           closeCreatePostModal();
         } else if (result.type === "unauthorized") {
           logout()
@@ -238,11 +237,11 @@ const AddPost = ({
           disabled={isLoading}
           className="w-full mt-20 bg-gray-900 hover:bg-indigo-500 text-white font-medium py-12 rounded-md"
         >
-          Post Your Content
+          Update Post
         </button>
       </form>
     </div>
   );
 };
 
-export default AddPost
+export default EditPost

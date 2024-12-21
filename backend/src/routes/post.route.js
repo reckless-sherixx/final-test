@@ -123,20 +123,30 @@ router.post("/", verifyToken, isAdmin, async (req, res) => {
 })
 
 // Update a post
-router.put("/update-post/:id", verifyToken, async (req, res) => {
+router.put("/:id", verifyToken, isAdmin, async (req, res) => {
   try {
     const postId = req.params.id;
+
+    console.log(req.body)
+
     const updatedPost = await Post.findByIdAndUpdate(postId, {
       ...req.body
     }, { new: true });
+    console.log({ updatedPost })
+
     if (!updatedPost) {
       return res.status(404).send({ message: "Post Not Found" })
     }
+
     res.status(200).send({
       message: "Post Updated Successfully",
-      post: updatedPost
+      post: {
+        ...updatedPost.toJSON(),
+        author: {
+          username: req.user.username
+        },
+      },
     })
-
   } catch (error) {
     console.error("Error Updating Post:", error);
     res.status(500).send({ message: "Error Updating Post" });

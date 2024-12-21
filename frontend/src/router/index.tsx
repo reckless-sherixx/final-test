@@ -40,6 +40,7 @@ export const routes = {
 export const apiRoutes = {
   findPost: (postId:string) => `${import.meta.env.VITE_BACKEND_URL}/posts/${postId}`,
   createPost: import.meta.env.VITE_BACKEND_URL + "/posts",
+  updatePost: (post:TPost) => `${import.meta.env.VITE_BACKEND_URL}/posts/${post.id}`,
   deletePost: (post:TPost) => `${import.meta.env.VITE_BACKEND_URL}/posts/${post.id}`,
 }
 

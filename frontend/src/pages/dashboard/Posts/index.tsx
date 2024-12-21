@@ -47,6 +47,16 @@ const Posts = () => {
     setPosts(posts.filter(p => p.id !== post.id))
   }
 
+  const updatePost = (updatedPost:Post) => {
+    setPosts(posts.map(post => {
+      if (post.id !== updatedPost.id) {
+        return post
+      }
+
+      return { ...updatedPost }
+    }))
+  }
+
   useEffect(() => {
     fetchData()
   }, [])
@@ -72,7 +82,11 @@ const Posts = () => {
       </Modal>
       <Modal isOpen={isEditModalOpen} onClose={closeEditModal}>
         <h2 className="text-24 font-semibold">Edit Post</h2>
-        <EditPost closeModalOnSubmit={closeModal} />
+        <EditPost 
+          post={editingPost} 
+          updatePost={updatePost} 
+          closeModalOnSubmit={closeEditModal} 
+        />
       </Modal>
     </>
   )
