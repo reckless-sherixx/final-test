@@ -23,6 +23,8 @@ import Cas from "@/pages/dashboard/activities/underpages/CAS/cas"
 import SingleCAS from "@/pages/dashboard/activities/underpages/CAS/singleCAS/singleCas"
 // import ClubActivities from "@/pages/dashboard/activities/underpages/Club/club"
 
+import { Post as TPost } from "@/types"
+
 export const routes = {
   login: "/login",
 
@@ -36,7 +38,9 @@ export const routes = {
 }
 
 export const apiRoutes = {
+  findPost: (postId:string) => `${import.meta.env.VITE_BACKEND_URL}/posts/${postId}`,
   createPost: import.meta.env.VITE_BACKEND_URL + "/posts",
+  deletePost: (post:TPost) => `${import.meta.env.VITE_BACKEND_URL}/posts/${post.id}`,
 }
 
 export const createPostRoute = (id:string) => {
@@ -70,7 +74,7 @@ const router = createBrowserRouter([
         element: <Posts />,
       },
       {
-        path: "/posts/:id",
+        path: routes.post,
         element: <Post />,
       },
     ],

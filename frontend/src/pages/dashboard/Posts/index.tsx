@@ -43,6 +43,10 @@ const Posts = () => {
     ])
   }
 
+  const removePostFromList = (post:Post) => {
+    setPosts(posts.filter(p => p.id !== post.id))
+  }
+
   useEffect(() => {
     fetchData()
   }, [])
@@ -56,6 +60,7 @@ const Posts = () => {
       <PostList
         posts={posts}
         editPost={editPost}
+        removePostFromList={removePostFromList}
       />
       <AddButton onClick={openModal} />
       <Modal isOpen={isModalOpen} onClose={closeModal}>

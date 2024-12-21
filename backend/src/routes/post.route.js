@@ -59,7 +59,7 @@ router.get('/:id', async (req, res) => {
     const comment = await Comment.find({ postId: postId }).populate('user', "username email");
     res.status(200).send({
       message: "Post Retrieved Successfully",
-      post: post
+      post,
     })
   } catch (error) {
     console.error("Error Fetching Single Post:", error);
@@ -101,7 +101,7 @@ router.post("/", verifyToken, isAdmin, async (req, res) => {
 
     const post = await Post.create({
       title: req.body.title,
-      coverImageUrl: req.body.coverImage,
+      coverImageUrl: req.body.coverImageUrl,
       content: req.body.content,
       description: req.body.description,
       author: req.user.id,

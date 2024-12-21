@@ -99,7 +99,11 @@ const AddPost = ({
     }
 
     const jsonResponse = await response.json()
-    return jsonResponse.post
+
+    return {
+      type: "success", 
+      post: jsonResponse.post
+    }
   }
 
   const logout = () => {

@@ -64,7 +64,6 @@ const AddPost = () => {
       console.log(response);
       alert("Content Posted successfully!");
       navigate('/posts');
-
     } catch (error) {
       console.log('Failed to submit Post', error);
       setMessage("Failed to submit Post. Please try again!");
