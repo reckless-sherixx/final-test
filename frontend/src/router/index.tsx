@@ -28,13 +28,13 @@ import { Post as TPost } from "@/types"
 export const routes = {
   login: "/login",
 
-  posts: "/posts",
-  post: "/posts/:postId",
+  news: "/news",
+  singleNews: "/news/:id",
 
   dashboard: "/dashboard",
   dashboard_manageItems: "/dashboard/manage-items",
   dashboard_users: "/dashboard/users",
-  dashboard_posts: "/dashboard/posts",
+  dashboard_news_list: "/dashboard/news",
 }
 
 export const apiRoutes = {
@@ -44,8 +44,8 @@ export const apiRoutes = {
   deletePost: (post:TPost) => `${import.meta.env.VITE_BACKEND_URL}/posts/${post.id}`,
 }
 
-export const createPostRoute = (id:string) => {
-  return routes.post.replace(":postId", id)
+export const createSingleNewsRoute = (id:string) => {
+  return routes.singleNews.replace(":id", id)
 }
 
 const AuthProtectedApp = () => <AuthGuard><App /></AuthGuard>
@@ -71,11 +71,11 @@ const router = createBrowserRouter([
         element: <SingleCAS />,
       },
       {
-        path: "/posts",
+        path: routes.news,
         element: <Posts />,
       },
       {
-        path: routes.post,
+        path: routes.singleNews,
         element: <Post />,
       },
     ],
@@ -106,7 +106,7 @@ const router = createBrowserRouter([
             element: <ManageUsers />,
           },
           {
-            path: routes.dashboard_posts,
+            path: routes.dashboard_news_list,
             element: <DashboardPosts />,
           },
           // {

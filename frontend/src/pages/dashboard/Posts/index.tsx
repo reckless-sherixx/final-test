@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { Link } from 'react-router-dom';
 
 import AddButton from '@/components/AddButton/AddButton';
 import Modal from '@/components/Modal';
@@ -8,7 +7,6 @@ import CreatePost from './CreatePost';
 import EditPost from './EditPost';
 
 import { fetchPosts } from "@/api"
-import { createPostRoute } from "@/router"
 import { Post } from "@/types"
 
 const Posts = () => {

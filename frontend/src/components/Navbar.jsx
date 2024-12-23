@@ -12,7 +12,7 @@ import { clearUserData } from "../common"
 
 const navLists = [
   { name: 'Home', path: '/' },
-  { name: 'Posts', path: '/posts' },
+  { name: 'News', path: '/news' },
   { name: 'Announcements', path: '/announcements' },
 ];
 

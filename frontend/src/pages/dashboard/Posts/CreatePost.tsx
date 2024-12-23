@@ -1,15 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { useFormik, FormikValues } from "formik"
 import * as yup from "yup"
-// import EditorJS from '@editorjs/editorjs';
-// import List from '@editorjs/list';
-// import Header from '@editorjs/header'; 
-// import ImageTool from '@editorjs/image';
-// import LinkTool from '@editorjs/link';
 
-import { useCreatePostMutation } from '@/redux/features/posts/PostsApi';
 import Editor from "@/components/Editor"
 
 import { apiRoutes } from "@/router"
@@ -70,7 +63,7 @@ const AddPost = ({
 
   const dispatch = useDispatch()
 
-  const createPost = async (newPost:NewPost):Promise<
+  const createPostApi = async (newPost:NewPost):Promise<
     SuccessResponse
     | ErrorResponse
     | UnauthorizedErrorResponse
@@ -132,7 +125,7 @@ const AddPost = ({
       try {
         showLoadingIndicator()
 
-        const result = await createPost({
+        const result = await createPostApi({
           title: values.title,
           coverImageUrl: values.coverImageUrl,
           content: values.content,

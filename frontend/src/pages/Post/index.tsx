@@ -14,7 +14,7 @@ import { logout as clearUserDataFromRedux } from '@/redux/features/auth/authSlic
 import { Post } from "@/types"
 
 const SinglePost = () => {
-  const { postId } = useParams(); 
+  const { id } = useParams(); 
 
   const dispatch = useDispatch()
 
@@ -27,11 +27,11 @@ const SinglePost = () => {
   }
   
   const fetchData = async () => {
-    if (!postId) {
+    if (!id) {
       return
     }
 
-    const response = await fetch(apiRoutes.findPost(postId), {
+    const response = await fetch(apiRoutes.findPost(id), {
       credentials: "include",
     })
 
@@ -61,7 +61,7 @@ const SinglePost = () => {
           <div className='flex flex-col lg:flex-row justify-between items-start md:gap-12 gap-8'>
             <div className='lg:w-2/3 w-full'>
               <SinglePostCard post={post}/>
-              <CommentCards comments={post?.comments}/>
+              {/* <CommentCards comments={post?.comments}/> */}
             </div>
             {/*
             <div className='bg-white lg:w-1/3 w-full'>

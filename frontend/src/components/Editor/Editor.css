@@ -36,8 +36,11 @@
 	 padding: 0 1rem;
 	 margin: 1.25rem 1rem 1.25rem 0.4rem;
 }
-.tiptap ul li, .tiptap ol li {
+.tiptap ul li{
 	 list-style-type: disc;
+}
+.tiptap ol li {
+	 list-style-type: decimal;
 }
 .tiptap ul li p, .tiptap ol li p {
 	 margin-top: 0.25em;
@@ -95,4 +98,8 @@
 	 border: none;
 	 border-top: 1px solid var(--gray-2);
 	 margin: 2rem 0;
+}
+.tiptap p:empty {
+  display: block;
+  height: 1rem;
 }

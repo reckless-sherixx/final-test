@@ -1,15 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { useFormik, FormikValues } from "formik"
 import * as yup from "yup"
-// import EditorJS from '@editorjs/editorjs';
-// import List from '@editorjs/list';
-// import Header from '@editorjs/header'; 
-// import ImageTool from '@editorjs/image';
-// import LinkTool from '@editorjs/link';
 
-import { useCreatePostMutation } from '@/redux/features/posts/PostsApi';
 import Editor from "@/components/Editor"
 
 import { apiRoutes } from "@/router"
@@ -56,7 +49,7 @@ const Error = (
 const EditPost = ({
   post,
   updatePost: updatePostInList,
-  closeModalOnSubmit: closeCreatePostModal,
+  closeModalOnSubmit: closeModal,
 } : {
   post: Post,
   updatePost: (post:Post) => void,
@@ -140,7 +133,7 @@ const EditPost = ({
 
         if (result.type === "success") {
           updatePostInList(result.post)
-          closeCreatePostModal();
+          closeModal();
         } else if (result.type === "unauthorized") {
           logout()
         } else {

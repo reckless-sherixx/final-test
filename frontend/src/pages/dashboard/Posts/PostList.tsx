@@ -1,10 +1,11 @@
 import { FaPen, FaTrash } from "react-icons/fa";
 import { useDispatch } from "react-redux"
+import { Link } from "react-router-dom"
 
 import { clearUserData } from "@/common"
 import { logout as clearUserDataFromRedux } from '@/redux/features/auth/authSlice';
 import * as u from "@/utils"
-import { apiRoutes } from "@/router"
+import { apiRoutes, createSingleNewsRoute } from "@/router"
 
 import { Post } from "@/types"
 
@@ -63,18 +64,22 @@ const PostList = ({
               <FaTrash className="group-hover:text-white text-black transition duration-150" />
             </button>
           </div>
-          <img
-            src={post.coverImageUrl}
-            className="h-288 w-full object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
-          />
-          <div className="p-20 bg-white">
-            <h2 className="text-lg font-semibold text-gray-800 group-hover:text-[#1E73BE] transition-colors duration-300">
-              {post.title}
-            </h2>
-            <p className="text-sm text-gray-500 mt-8">
-              {u.trimWithEllipsis(post.description)}
-            </p>
-          </div>
+          <Link to={createSingleNewsRoute(post.id)}>
+            <div>
+              <img
+                src={post.coverImageUrl}
+                className="h-288 w-full object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="p-20 bg-white">
+                <h2 className="text-lg font-semibold text-gray-800 group-hover:text-[#1E73BE] transition-colors duration-300">
+                  {post.title}
+                </h2>
+                <p className="text-sm text-gray-500 mt-8">
+                  {u.trimWithEllipsis(post.description)}
+                </p>
+              </div>
+            </div>
+          </Link>
         </div>
       ))}
     </div>
