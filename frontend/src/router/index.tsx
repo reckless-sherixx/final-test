@@ -9,7 +9,7 @@ import Post from "@/pages/Post"
 import Posts from "@/pages/Posts"
 import UpdatePost from "@/pages/dashboard/post/UpdatePost"
 
-import Announcements from "@/pages/miniPage/Announcements"
+import Announcements from "@/pages/Announcements"
 
 import Login from "@/pages/user/Login"
 // import Register from "@/pages/user/Register"

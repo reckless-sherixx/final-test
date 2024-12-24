@@ -1,25 +1,28 @@
-const mongoose  = require('mongoose');
+const mongoose = require('mongoose');
 
-const AnnouncementSchema  = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true,
-        },
-    content: {
-        type: Object,
-        required: true,
-    },
-    coverImg: String,
-    author:  {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required:  true,
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    }
+const AnnouncementSchema = new mongoose.Schema({
+  content: {
+    type: Object,
+    required: true,
+  },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  }
 })
 
-const Announcement =  mongoose.model('Announcement', AnnouncementSchema);
+AnnouncementSchema.set("toJSON", {
+  transform: (doc, ret) => {
+    ret.id = ret._id
+    delete ret._id
+    delete ret.__v
+  }
+})
+
+const Announcement = mongoose.model('Announcement', AnnouncementSchema);
 module.exports = Announcement;
