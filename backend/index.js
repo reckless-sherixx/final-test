@@ -28,9 +28,11 @@ const commentRoutes = require("./src/routes/comment.route");
 const userRoutes = require("./src/routes/auth.user.route");
 const casroute = require("./src/routes/caspost.route")
 const casresponseroute = require("./src/routes/casResponse.route")
+const activityRoutes = require("./src/routes/activity")
 
 app.use("/api/posts", postRoutes);
 app.use("/api/announcements", announcementRoutes);
+app.use("/api/activities", activityRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/auth", userRoutes);
 app.use("/api/cas", casroute);

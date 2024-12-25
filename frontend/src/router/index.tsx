@@ -23,7 +23,9 @@ import Cas from "@/pages/dashboard/activities/underpages/CAS/cas"
 import SingleCAS from "@/pages/dashboard/activities/underpages/CAS/singleCAS/singleCas"
 // import ClubActivities from "@/pages/dashboard/activities/underpages/Club/club"
 
-import { Post as TPost } from "@/types"
+import DashboardActivity from "@/pages/dashboard/Activity"
+
+import { Activity, Post as TPost } from "@/types"
 
 export const routes = {
   login: "/login",
@@ -31,21 +33,38 @@ export const routes = {
   news: "/news",
   singleNews: "/news/:id",
 
+  activity: "/activities/:id",
+
   dashboard: "/dashboard",
   dashboard_manageItems: "/dashboard/manage-items",
   dashboard_users: "/dashboard/users",
   dashboard_news_list: "/dashboard/news",
+
+  dashboard_activity: "/dashboard/activities/:slug"
 }
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL
+
 export const apiRoutes = {
-  findPost: (postId:string) => `${import.meta.env.VITE_BACKEND_URL}/posts/${postId}`,
-  createPost: import.meta.env.VITE_BACKEND_URL + "/posts",
-  updatePost: (post:TPost) => `${import.meta.env.VITE_BACKEND_URL}/posts/${post.id}`,
-  deletePost: (post:TPost) => `${import.meta.env.VITE_BACKEND_URL}/posts/${post.id}`,
+  createPost: `${backendUrl}/posts`,
+  findPost: (postId:string) => `${backendUrl}/posts/${postId}`,
+  updatePost: (post:TPost) => `${backendUrl}/posts/${post.id}`,
+  deletePost: (post:TPost) => `${backendUrl}/posts/${post.id}`,
+
+  createActivity: `${backendUrl}/activities`,
+  deleteActivity: (activity:Activity) => `${backendUrl}/activities/${activity.id}`,
 }
 
 export const createSingleNewsRoute = (id:string) => {
   return routes.singleNews.replace(":id", id)
+}
+
+export const createActivityRoute = (activity:Activity) => {
+  return routes.activity.replace(":id", activity.id)
+}
+
+export const createDashboardActivityRoute = (slug:string) => {
+  return routes.dashboard_activity.replace(":slug", slug)
 }
 
 const AuthProtectedApp = () => <AuthGuard><App /></AuthGuard>
@@ -108,6 +127,10 @@ const router = createBrowserRouter([
           {
             path: routes.dashboard_news_list,
             element: <DashboardPosts />,
+          },
+          {
+            path: routes.dashboard_activity,
+            element: <DashboardActivity />
           },
           // {
           //   path: "/dashboard/update-items/:id",

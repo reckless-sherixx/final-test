@@ -1,7 +1,10 @@
 import { Post } from "@/types"
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL
+
 export const fetchPosts = async (search = ""):Promise<Post[]> => {
-  let url = import.meta.env.VITE_BACKEND_URL + `/posts`
+  let url = `${backendUrl}/posts`
+
   if (search) {
     url += `?search=${search}`
   }
@@ -12,12 +15,16 @@ export const fetchPosts = async (search = ""):Promise<Post[]> => {
     return []
   }
 
-  const posts = await response.json()
+  return await response.json()
+}
 
-  return posts.map((post:any) => ({
-    ...post,
-    description: "test",
-  }))
+export const fetchActivities = async (search = ""):Promise<Activity[]> => {
+  const url = `${backendUrl}/activities`
+  const response = await fetch(url)
 
-  // return posts
+  if (!response.ok) {
+    return []
+  }
+
+  return await response.json()
 }

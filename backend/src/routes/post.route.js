@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+
 const Post = require('../model/post.model.js');
 const Comment = require('../model/comment.model.js');
 const verifyToken = require('../middleware/verifyToken.js');
 const isAdmin = require('../middleware/isAdmin.js');
 
 // Get all Posts
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
   try {
     const { search, category } = req.query;
     console.log(search);
@@ -152,7 +153,7 @@ router.put("/:id", verifyToken, isAdmin, async (req, res) => {
 })
 
 // Delete a post
-router.delete("/:id", verifyToken, async (req, res) => {
+router.delete("/:id", verifyToken, isAdmin, async (req, res) => {
   try {
     const postId = req.params.id;
     const post = await Post.findByIdAndDelete(postId);

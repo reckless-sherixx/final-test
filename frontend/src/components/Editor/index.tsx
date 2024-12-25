@@ -156,7 +156,7 @@ const Editor = ({
 } : {
   content: string,
   setContent: (content:string) => void,
-  autoFocus: boolean,
+  autoFocus?: boolean,
 }) => {
   const editor = useEditor({
     extensions,

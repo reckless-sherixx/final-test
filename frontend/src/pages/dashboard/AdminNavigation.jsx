@@ -1,14 +1,18 @@
-import React from "react";
+import { useState } from "react";
+import classnames from "classnames";
 import AdminImg from "../../assets/admin.jpg";
 import { NavLink } from "react-router-dom";
 import { useLogoutUserMutation } from "../../redux/features/auth/authapi";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/features/auth/authSlice";
 
-import { routes } from "@/router"
+import { FaChevronDown as ArrowDownIcon } from "react-icons/fa";
+
+import { routes, createDashboardActivityRoute } from "@/router"
 
 const AdminNavigation = () => {
   const [logoutUser] = useLogoutUserMutation();
+  const [accordionOpen, setAccordionOpen] = useState(true)
 
   const dispatch = useDispatch();
   const handleLogout = async () => {
@@ -19,6 +23,10 @@ const AdminNavigation = () => {
       console.error("Failed to log out", error);
     }
   };
+
+  const toggleAccordion = () => {
+    setAccordionOpen(!accordionOpen)
+  }
 
   return (
     <div className="space-y-20 bg-white p-32 md:h-[calc(100vh-98px)] flex flex-col justify-between">
@@ -53,46 +61,54 @@ const AdminNavigation = () => {
                 to={link.to}
                 end
                 className={({ isActive }) =>
-                  isActive ? "text-blue-600 font-bold" : "text-black"
+                  isActive ? "block text-blue-600 font-bold" : "block text-black"
                 }
               >
                 {link.text}
               </NavLink>
             </li>
           ))}
-          {/*
           <li>
-            <NavLink
-              to="/dashboard"
-              end
-              className={({ isActive }) =>
-                isActive ? "text-blue-600 font-bold" : "text-black"
-              }
+            <button
+              type="button"
+              onClick={toggleAccordion}
+              className="w-full flex justify-between items-center"
             >
-              Dashboard
-            </NavLink>
+              <p>Activities</p>
+              <ArrowDownIcon className={classnames({
+                "-rotate-90": !accordionOpen,
+              })} />
+            </button>
           </li>
-          <li>
-            <NavLink
-              to="/dashboard/manage-items"
-              className={({ isActive }) =>
-                isActive ? "text-blue-600 font-bold" : "text-black"
-              }
-            >
-              Manage Items
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/dashboard/users"
-              className={({ isActive }) =>
-                isActive ? "text-blue-600 font-bold" : "text-black"
-              }
-            >
-              Users
-            </NavLink>
-          </li>
-          */}
+          {accordionOpen && (
+            <>
+              {[
+                {
+                  slug: "cas",
+                  name: "CAS",
+                },
+                {
+                  slug: "tutoring",
+                  name: "Tutoring",
+                },
+                {
+                  slug: "clubs",
+                  name: "Clubs",
+                },
+              ].map(link => (
+                <li>
+                  <NavLink
+                    to={createDashboardActivityRoute(link.slug)}
+                    className={({ isActive }) =>
+                      isActive ? "block pl-12 text-blue-600 font-bold" : "block pl-12 text-black"
+                    }
+                  >
+                    {link.name}
+                  </NavLink>
+                </li>
+              ))}
+            </>
+          )}
         </ul>
       </div>
 
