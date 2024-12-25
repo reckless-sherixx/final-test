@@ -74,7 +74,7 @@ router.post("/", verifyToken, isAdmin, async (req, res) => {
     })
 
     return createdResponse(res, {
-      ...activity,
+      ...activity.toJSON(),
       author: {
         username: req.user.username
       },
@@ -82,6 +82,31 @@ router.post("/", verifyToken, isAdmin, async (req, res) => {
   } catch (error) {
     console.error("Error Creating Activity:", error)
     res.status(500).send({ message: "Error Creating Activity" })
+  }
+})
+
+router.put("/:id", verifyToken, isAdmin, async (req, res) => {
+  try {
+    const activityId = req.params.id;
+
+    const updatedActivity = await Activity
+      .findByIdAndUpdate(
+        activityId, 
+        { ...req.body }, 
+        { new: true }
+      )
+      .populate("author", "username")
+
+    if (!updatedActivity) {
+      return res.status(404).send({ message: "Activity Not Found" })
+    }
+
+    res.status(200).send({
+      ...updatedActivity.toJSON(),
+    })
+  } catch (error) {
+    console.error("Error Updating Activity:", error);
+    res.status(500).send({ message: "Error Updating Activity" });
   }
 })
 
