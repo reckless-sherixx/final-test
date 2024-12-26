@@ -53,11 +53,7 @@ const ActivityPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [editingActivity, setEditingActivity] = useState<Activity|null>(null)
 
-  const addActivityToList = (activity:Activity) => {
-    setActivities([ ...activities, activity ])
-  }
-
-  const isEditModalOpen = editingActivity !== null
+  const editModalOpen = editingActivity !== null
 
   const createForm = useFormik({
     initialValues: {
@@ -74,7 +70,7 @@ const ActivityPage = () => {
     }),
     onSubmit: async (values) => {
       try {
-        showLoader()
+        setIsLoading(true)
 
         const response = await fetch(apiRoutes.createActivity, {
           method: "POST",
@@ -99,14 +95,13 @@ const ActivityPage = () => {
           return 
         }
 
-        const jsonResponse = await response.json()
-
-        addActivityToList(jsonResponse)
-        closeCreateModal();
+        const activity = await response.json()
+        setActivities([ ...activities, activity ])
+        setCreateModalOpen(false);
       } catch (error) {
         console.log("Failed to submit Post", error);
       } finally {
-        hideLoader()
+        setIsLoading(false)
       }
     },
   });
@@ -173,12 +168,6 @@ const ActivityPage = () => {
       }
     },
   });
-
-  const showLoader = () => setIsLoading(true)
-  const hideLoader = () => setIsLoading(false)
-
-  const openCreateModal = () => setCreateModalOpen(true);
-  const closeCreateModal = () => setCreateModalOpen(false);
 
   const logout = () => {
     clearUserData()
@@ -303,8 +292,8 @@ const ActivityPage = () => {
           )}
         </>
       )}
-      <AddButton onClick={openCreateModal} />
-      <Modal isOpen={createModalOpen} onClose={closeCreateModal}>
+      <AddButton onClick={() => setCreateModalOpen(true)} />
+      <Modal isOpen={createModalOpen} onClose={() => setCreateModalOpen(false)}>
         <h2 className="text-24 font-semibold">Create a new Post</h2>
         <div className="bg-white md:p-32 p-8">
           <form onSubmit={createForm.handleSubmit} className="space-y-20 pt-24">
@@ -387,7 +376,7 @@ const ActivityPage = () => {
           </form>
         </div>
       </Modal>
-      <Modal isOpen={isEditModalOpen} onClose={closeEditModal}>
+      <Modal isOpen={editModalOpen} onClose={closeEditModal}>
         <h2 className="text-24 font-semibold">Edit Post</h2>
         <div className="bg-white md:p-32 p-8">
           <form onSubmit={editForm.handleSubmit} className="space-y-20 pt-24">
