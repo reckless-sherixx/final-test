@@ -147,6 +147,7 @@ const AddPost = ({
       }
     },
   });
+  console.log({ content: form.values.content })
 
   useEffect(() => {
     if (titleRef.current) {
@@ -176,7 +177,7 @@ const AddPost = ({
             <p className="font-semibold text-20 mb-20 text-zinc-800">Content Section</p>
             <Editor
               content={form.values.content}
-              setContent={(content) => form.setFieldValue("content", content)}
+              setContent={newContent => form.setFieldValue("content", newContent)}
             />
             <Error form={form} fieldName="content" />
           </div>

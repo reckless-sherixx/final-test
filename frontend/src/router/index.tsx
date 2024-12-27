@@ -51,6 +51,8 @@ export const apiRoutes = {
   updatePost: (post:TPost) => `${backendUrl}/posts/${post.id}`,
   deletePost: (post:TPost) => `${backendUrl}/posts/${post.id}`,
 
+  getRelatedPosts: (id:string) => `${backendUrl}/posts/related/${id}`,
+
   createActivity: `${backendUrl}/activities`,
   updateActivity: (activityId:string) => `${backendUrl}/activities/${activityId}`,
   deleteActivity: (activity:Activity) => `${backendUrl}/activities/${activity.id}`,

@@ -58,9 +58,8 @@ const Home = () => {
         <div className="mt-32 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-32">
           {posts.map((post) => (
             <Link
-              // to={`/posts/${post.id}`}
               to={createSingleNewsRoute(post.id)}
-              key={post._id}
+              key={post.id}
               className="group block overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
             >
               <div className="relative">

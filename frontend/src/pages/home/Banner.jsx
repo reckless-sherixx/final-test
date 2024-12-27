@@ -53,8 +53,8 @@ const Banner = () => {
           modules={[Pagination, Autoplay]}
           className="mySwiper"
         >
-          {[Img1, Img2, Img3, Img4].map(src => (
-            <SwiperSlide>
+          {[Img1, Img2, Img3, Img4].map((src, index) => (
+            <SwiperSlide key={index}>
               <img
                 src={src}
                 alt=""

@@ -95,8 +95,8 @@ const AdminNavigation = () => {
                   slug: "clubs",
                   name: "Clubs",
                 },
-              ].map(link => (
-                <li>
+              ].map((link, index) => (
+                <li key={index}>
                   <NavLink
                     to={createDashboardActivityRoute(link.slug)}
                     className={({ isActive }) =>

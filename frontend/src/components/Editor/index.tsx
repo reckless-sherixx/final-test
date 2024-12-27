@@ -1,15 +1,12 @@
-import { useEffect } from "react"
 import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
 import TextStyle from '@tiptap/extension-text-style'
-import { EditorContent, EditorProvider, useEditor, useCurrentEditor, Editor as TEditor } from '@tiptap/react'
+import { EditorContent, useEditor, Editor as TEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 
 import './Editor.css'
 
 const MenuBar = ({ editor } : { editor: TEditor }) => {
-  // const { editor } = useCurrentEditor()
-
   if (!editor) {
     return null
   }
@@ -166,12 +163,6 @@ const Editor = ({
     },
     autofocus: autoFocus,
   })
-
-  useEffect(() => {
-    if (editor) {
-      editor.commands.setContent(content)
-    }
-  }, [content])
 
   if (!editor) {
     return null

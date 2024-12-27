@@ -1,4 +1,4 @@
-import { Post } from "@/types"
+import { Activity, Post } from "@/types"
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 
@@ -9,7 +9,12 @@ export const fetchPosts = async (search = ""):Promise<Post[]> => {
     url += `?search=${search}`
   }
 
-  const response = await fetch(url)
+  const response = await fetch(url, {
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  })
 
   if (!response.ok) {
     return []

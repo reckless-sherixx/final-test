@@ -58,10 +58,7 @@ router.get('/:id', async (req, res) => {
     }
 
     const comment = await Comment.find({ postId: postId }).populate('user', "username email");
-    res.status(200).send({
-      message: "Post Retrieved Successfully",
-      post,
-    })
+    res.status(200).send(post.toJSON())
   } catch (error) {
     console.error("Error Fetching Single Post:", error);
     res.status(500).send({ message: "Error Fetching Single Post" });
@@ -72,9 +69,6 @@ router.get('/:id', async (req, res) => {
 router.get("/related/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    if (!id) {
-      return res.status(400).send({ message: "Post Id Is Required." })
-    }
     const post = await Post.findById(id);
     if (!post) {
       return res.status(404).send({ message: "Post is not found." })
@@ -84,8 +78,8 @@ router.get("/related/:id", async (req, res) => {
       _id: { $ne: id },
       title: { $regex: titleRegex }
     }
-    const relatedPost = await Post.find(relatedQuery);
-    res.status(200).send(relatedPost);
+    const relatedPosts = await Post.find(relatedQuery);
+    res.status(200).send(relatedPosts.map(post => post.toJSON()));
   } catch (error) {
     console.error("Error Fetching Related Post:", error);
     res.status(500).send({ message: "Error Fetching Related Post" });
