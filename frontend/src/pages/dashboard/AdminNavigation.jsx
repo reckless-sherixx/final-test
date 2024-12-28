@@ -9,6 +9,7 @@ import { logout } from "../../redux/features/auth/authSlice";
 import { FaChevronDown as ArrowDownIcon } from "react-icons/fa";
 
 import { routes, createDashboardActivityRoute } from "@/router"
+import { navbarActivities } from "@/constants"
 
 const AdminNavigation = () => {
   const [logoutUser] = useLogoutUserMutation();
@@ -82,28 +83,15 @@ const AdminNavigation = () => {
           </li>
           {accordionOpen && (
             <>
-              {[
-                {
-                  slug: "cas",
-                  name: "CAS",
-                },
-                {
-                  slug: "tutoring",
-                  name: "Tutoring",
-                },
-                {
-                  slug: "clubs",
-                  name: "Clubs",
-                },
-              ].map((link, index) => (
+              {navbarActivities.map((activity, index) => (
                 <li key={index}>
                   <NavLink
-                    to={createDashboardActivityRoute(link.slug)}
+                    to={createDashboardActivityRoute(activity.type)}
                     className={({ isActive }) =>
                       isActive ? "block pl-12 text-blue-600 font-bold" : "block pl-12 text-black"
                     }
                   >
-                    {link.name}
+                    {activity.name}
                   </NavLink>
                 </li>
               ))}

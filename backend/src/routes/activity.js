@@ -7,9 +7,11 @@ const isAdmin = require('../middleware/isAdmin.js');
 const Activity = require('../model/activity.js');
 
 const supportedActivities = [
-  "cas",
-  "tutoring",
   "clubs",
+  "cas",
+  "competitions",
+  "events",
+  "tutoring",
 ]
 
 const activityNotSupported = (slug) => !supportedActivities.includes(slug)

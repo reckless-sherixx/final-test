@@ -9,6 +9,9 @@ import Avatar from './Avatar/Avatar';
 import { useLogoutUserMutation } from '../redux/features/auth/authapi';
 import { logout } from '../redux/features/auth/authSlice';
 import { clearUserData } from "../common"
+import { navbarActivities } from "@/constants"
+
+import { createActivitiesRoute } from "@/router"
 
 const navLists = [
   { name: 'Home', path: '/' },
@@ -111,25 +114,13 @@ const Navbar = () => {
               Activities
               {isOpen && (
                 <div className="absolute left-1/2 -translate-x-1/2 translate-y-10 w-160 bg-gray-50 shadow-lg">
-                  {[
-                    {
-                      text: "CAS",
-                      to: "/cas"
-                    },
-                    {
-                      text: "Tutoring",
-                      to: "/"
-                    },
-                    {
-                      text: "Club",
-                      to: "/"
-                    },
-                  ].map(link => (
+                  {navbarActivities.map((activity, index) => (
                     <NavLink
-                      to={link.to}
+                      key={index}
+                      to={createActivitiesRoute(activity.type)}
                       className='block px-16 py-12 hover:bg-gray-200 text-gray-600 hover:text-blue-600 transition-all'
                     >
-                      {link.text}
+                      {activity.name}
                     </NavLink>
                   ))}
                 </div>

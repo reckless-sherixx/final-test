@@ -4,15 +4,14 @@ import App from "@/App"
 import AuthGuard from "@/router/AuthGuard"
 
 import Home from "@/pages/home/Home"
-
 import Post from "@/pages/Post"
 import Posts from "@/pages/Posts"
 import UpdatePost from "@/pages/dashboard/post/UpdatePost"
-
 import Announcements from "@/pages/Announcements"
-
 import Login from "@/pages/user/Login"
 // import Register from "@/pages/user/Register"
+import Activities from "@/pages/Activities"
+import Activity from "@/pages/Activity"
 
 import AdminLayout from "@/pages/dashboard/AdminLayout"
 import Dashboard from "@/pages/dashboard/Dashboard"
@@ -21,11 +20,10 @@ import ManageUsers from "@/pages/dashboard/user/ManageUsers"
 import DashboardPosts from "@/pages/dashboard/Posts"
 import Cas from "@/pages/dashboard/activities/underpages/CAS/cas"
 import SingleCAS from "@/pages/dashboard/activities/underpages/CAS/singleCAS/singleCas"
+import DashboardActivity from "@/pages/dashboard/Activity"
 // import ClubActivities from "@/pages/dashboard/activities/underpages/Club/club"
 
-import DashboardActivity from "@/pages/dashboard/Activity"
-
-import { Activity, Post as TPost } from "@/types"
+import { Activity as TActivity, Post as TPost } from "@/types"
 
 export const routes = {
   login: "/login",
@@ -33,7 +31,8 @@ export const routes = {
   news: "/news",
   singleNews: "/news/:id",
 
-  activity: "/activities/:id",
+  activities: "/activities/:type",
+  activity: "/activity/:id",
 
   dashboard: "/dashboard",
   dashboard_manageItems: "/dashboard/manage-items",
@@ -55,15 +54,19 @@ export const apiRoutes = {
 
   createActivity: `${backendUrl}/activities`,
   updateActivity: (activityId:string) => `${backendUrl}/activities/${activityId}`,
-  deleteActivity: (activity:Activity) => `${backendUrl}/activities/${activity.id}`,
+  deleteActivity: (activity:TActivity) => `${backendUrl}/activities/${activity.id}`,
 }
 
 export const createSingleNewsRoute = (id:string) => {
   return routes.singleNews.replace(":id", id)
 }
 
-export const createActivityRoute = (activity:Activity) => {
+export const createActivityRoute = (activity:TActivity) => {
   return routes.activity.replace(":id", activity.id)
+}
+
+export const createActivitiesRoute = (type:string) => {
+  return routes.activities.replace(":type", type)
 }
 
 export const createDashboardActivityRoute = (slug:string) => {
@@ -85,12 +88,12 @@ const router = createBrowserRouter([
         element: <Announcements />,
       },
       {
-        path: "/cas",
-        element: <Cas />,
+        path: routes.activities,
+        element: <Activities />,
       },
       {
-        path: "/cas/:id",
-        element: <SingleCAS />,
+        path: routes.activity,
+        element: <Activity />,
       },
       {
         path: routes.news,
