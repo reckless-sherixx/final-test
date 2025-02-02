@@ -64,30 +64,19 @@ const Posts = () => {
   }
 
   return (
-    <>
-      <PostList
-        posts={posts}
-        editPost={editPost}
-        removePostFromList={removePostFromList}
-      />
-      <AddButton onClick={openModal} />
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <h2 className="text-24 font-semibold">Create a new Post</h2>
-        <CreatePost
-          addPostToList={addPostToList}
-          closeModalOnSubmit={closeModal}
-        />
-      </Modal>
-      <Modal isOpen={isEditModalOpen} onClose={closeEditModal}>
-        <h2 className="text-24 font-semibold">Edit Post</h2>
-        <EditPost 
-          post={editingPost} 
-          updatePost={updatePost} 
-          closeModalOnSubmit={closeEditModal} 
-        />
-      </Modal>
-    </>
-  )
+		<>
+			<PostList posts={posts} editPost={editPost} removePostFromList={removePostFromList} />
+			<AddButton onClick={openModal} />
+			<Modal isOpen={isModalOpen} onClose={closeModal}>
+				<h2 className='text-24 font-semibold'>Create a new Post</h2>
+				<CreatePost addPostToList={addPostToList} closeModalOnSubmit={closeModal} />
+			</Modal>
+			<Modal isOpen={isEditModalOpen} onClose={closeEditModal}>
+				<h2 className='text-24 font-semibold'>Edit Post</h2>
+				{editingPost && <EditPost post={editingPost} updatePost={updatePost} closeModalOnSubmit={closeEditModal} />}
+			</Modal>
+		</>
+  );
 }
 
 export default Posts

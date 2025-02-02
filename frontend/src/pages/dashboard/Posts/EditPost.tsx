@@ -10,41 +10,37 @@ import { clearUserData } from "@/common"
 import { logout as clearUserDataFromRedux } from '@/redux/features/auth/authSlice';
 
 import { Post } from "@/types"
+import { RootState } from '@/redux/store';
 
-type NewPost = Omit<Post, "id">
+type NewPost = Omit<Post, 'id'>;
 
 type ErrorResponse = {
-  type: "error",
-  message: string,
-}
+	type: 'error';
+	message: string;
+};
 type UnauthorizedErrorResponse = {
-  type: "unauthorized",
-}
+	type: 'unauthorized';
+};
 type SuccessResponse = {
-  type: "success",
-  post: Post,
-}
+	type: 'success';
+	post: Post;
+};
 
-const inputProps = (form:FormikValues, fieldName:string) => {
-  return {
-    value: form.values[fieldName],
-    onChange: form.handleChange,
-    onBlur: form.handleBlur,
-  }
-}
+const inputProps = (form: FormikValues, fieldName: string) => {
+	return {
+		value: form.values[fieldName],
+		onChange: form.handleChange,
+		onBlur: form.handleBlur,
+	};
+};
 
-const Error = (
-  { form, fieldName } : 
-  { form:FormikValues, fieldName:string },
-) => {
-  if (form.touched[fieldName] && form.errors[fieldName]) {
-    return (
-      <p className="mt-8 text-14 text-red-400">{form.errors[fieldName]}</p>
-    )
-  }
+const Error = ({ form, fieldName }: { form: FormikValues; fieldName: string }) => {
+	if (form.touched[fieldName] && form.errors[fieldName]) {
+		return <p className='mt-8 text-14 text-red-400'>{form.errors[fieldName]}</p>;
+	}
 
-  return null
-}
+	return null;
+};
 
 const EditPost = ({
   post,
@@ -57,53 +53,49 @@ const EditPost = ({
 }) => {
   const titleRef = useRef<HTMLInputElement>(null)
 
-  const { user } = useSelector((state) => state.auth);
-  const [isLoading, setIsLoading] = useState(false)
+  const { user } = useSelector((state: RootState) => state.auth);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const showLoadingIndicator = () => setIsLoading(true)
-  const hideLoadingIndicator = () => setIsLoading(false)
+  const showLoadingIndicator = () => setIsLoading(true);
+  const hideLoadingIndicator = () => setIsLoading(false);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const updatePost = async (updatedPost:NewPost):Promise<
-    SuccessResponse
-    | ErrorResponse
-    | UnauthorizedErrorResponse
-  > => {
-    const response = await fetch(apiRoutes.updatePost(post), {
-      method: "PUT",
-      credentials: "include",
-      body: JSON.stringify({
-        title: updatedPost.title,
-        coverImageUrl: updatedPost.coverImageUrl,
-        content: updatedPost.content,
-        description: updatedPost.description,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+  const updatePost = async (updatedPost: NewPost): Promise<SuccessResponse | ErrorResponse | UnauthorizedErrorResponse> => {
+		const response = await fetch(apiRoutes.updatePost(post), {
+			method: 'PUT',
+			credentials: 'include',
+			body: JSON.stringify({
+				title: updatedPost.title,
+				coverImageUrl: updatedPost.coverImageUrl,
+				content: updatedPost.content,
+				description: updatedPost.description,
+			}),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
 
-    if (!response.ok) {
-      if (response.status === 401) {
-        return {
-          type: "unauthorized",
-        }
-      }
+		if (!response.ok) {
+			if (response.status === 401) {
+				return {
+					type: 'unauthorized',
+				};
+			}
 
-      return {
-        type: "error",
-        message: "Something went wrong",
-      }
-    }
+			return {
+				type: 'error',
+				message: 'Something went wrong',
+			};
+		}
 
-    const jsonResponse = await response.json()
+		const jsonResponse = await response.json();
 
-    return {
-      type: "success", 
-      post: jsonResponse.post
-    }
-  }
+		return {
+			type: 'success',
+			post: jsonResponse.post,
+		};
+  };
 
   const logout = () => {
     clearUserData()
@@ -152,7 +144,7 @@ const EditPost = ({
       titleRef.current.focus()
     }
   }, [])
-
+if (user == null) return null;
   return (
     <div className="bg-white md:p-32 p-8">
       <form onSubmit={form.handleSubmit} className="space-y-20 pt-24">

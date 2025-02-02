@@ -22,7 +22,7 @@ export const fetchPosts = async (search = ""):Promise<Post[]> => {
 
   return await response.json()
 }
-
+// @ts-ignore
 export const fetchActivities = async (search = ""):Promise<Activity[]> => {
   const url = `${backendUrl}/activities`
   const response = await fetch(url)
