@@ -1,6 +1,5 @@
-import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import AdminNavigation from "./AdminNavigation";
+import AdminNavigation from '@/pages/dashboard/AdminNavigation'
 import { useSelector } from "react-redux";
 
 import { routes } from "@/router"
@@ -8,7 +7,7 @@ import { routes } from "@/router"
 const AdminLayout = () => {
   const { user, isLoggedIn } = useSelector((state) => state.auth);
 
-  if (!isLoggedIn || (user && user.role !== "admin")) {
+  if (!isLoggedIn || (user && user.role !== "admin" && user.role !== "moderator" && user.role !== 'creator')) {
     return <Navigate to={routes.login} />;
   }
 

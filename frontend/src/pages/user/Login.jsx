@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
+
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +23,7 @@ const Login = () => {
   const { isLoggedIn } = useSelector(state => state.auth)
 
   const navigate = useNavigate();
-    // console.log("Loging user Api", loginUser);
+  // console.log("Loging user Api", loginUser);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -32,10 +33,11 @@ const Login = () => {
       username,
       password,
     }
-    
+
     try {
       const response = await loginUser(data).unwrap();
       const { user } = response;
+
       dispatch(setUser({ user, isLoggedIn: true }));
       navigate('/');
     } catch (err) {
@@ -51,6 +53,7 @@ const Login = () => {
 
   return (
     <div className="max-w-sm bg-white mx-auto p-32 mt-144">
+
       <h2 className="text-24 font-semibold pt-20">Please login</h2>
       <form
         onSubmit={handleLogin}

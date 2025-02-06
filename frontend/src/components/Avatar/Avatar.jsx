@@ -1,6 +1,6 @@
 const Avatar = ({ username }) => {
   const getInitials = (name) => {
-    const parts = name.split(" ");
+    const parts = name.split("");
     const initials = parts
       .map((part) => part[0])
       .join("")

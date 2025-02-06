@@ -3,9 +3,9 @@ import classnames from "classnames";
 import AdminImg from "../../assets/admin.jpg";
 import { NavLink } from "react-router-dom";
 import { useLogoutUserMutation } from "../../redux/features/auth/authapi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/features/auth/authSlice";
-
+import { RootState } from '@/redux/store'
 import { FaChevronDown as ArrowDownIcon } from "react-icons/fa";
 
 import { routes, createDashboardActivityRoute } from "@/router"
@@ -15,10 +15,11 @@ const AdminNavigation = () => {
   const [logoutUser] = useLogoutUserMutation();
   const [accordionOpen, setAccordionOpen] = useState(true)
 
+  const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const handleLogout = async () => {
     try {
-      await logoutUser().unwrap();
+      await logoutUser('').unwrap();
       dispatch(logout());
     } catch (error) {
       console.error("Failed to log out", error);
@@ -28,7 +29,7 @@ const AdminNavigation = () => {
   const toggleAccordion = () => {
     setAccordionOpen(!accordionOpen)
   }
-
+  if (!(user?.role)) return null;
   return (
     <div className="space-y-20 bg-white p-32 md:h-[calc(100vh-98px)] flex flex-col justify-between">
       <div>
@@ -44,14 +45,16 @@ const AdminNavigation = () => {
               to: routes.dashboard,
               text: "Dashboard",
             },
-            {
-              to: routes.dashboard_manageItems,
-              text: "Manage Items",
-            },
-            {
-              to: routes.dashboard_users,
-              text: "Users",
-            },
+            ...(user?.role === 'admin' || user?.role === 'moderator' ? [
+              {
+                to: routes.dashboard_manageItems,
+                text: "Manage Items",
+              },
+              {
+                to: routes.dashboard_users,
+                text: "Users",
+              },
+            ] : []),
             {
               to: routes.dashboard_news_list,
               text: "News",

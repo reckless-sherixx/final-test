@@ -3,6 +3,11 @@ const router = express.Router();
 const User = require('../model/user.model.js')
 const generateToken = require('../middleware/generateToken.js')
 const bcrypt = require('bcrypt');
+const isAdmin = require('../middleware/isAdmin.js');
+const verifyToken = require('../middleware/verifyToken.js');
+const bulkRegister = require('../controller/bulkRegister.js');
+const upload = require('../middleware/multerMiddleware.js');
+const { verify } = require('jsonwebtoken');
 
 // Register a user
 router.post('/register', async (req, res) => {
@@ -18,6 +23,32 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ message: "Registration Failed!" });
   }
 })
+// Bulk Register Using Excel
+router.post('/bulkRegister', verifyToken, isAdmin, upload.single('excelFile'), bulkRegister)
+// Multi User Route
+
+router.post('/multiRegisterRoute', verifyToken, isAdmin, async (req, res) => {
+
+  console.log("This is users", req.body);
+  const password = "ISM2025";
+
+  try {
+    const registeredUsers = await Promise.all(
+      req.body.map(async (user) => {
+        const newUser = new User({
+          ...user,
+          password
+        });
+        await newUser.save();
+        return newUser;
+      })
+    );
+
+    res.status(201).json(registeredUsers);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 
 // Login  a user
 router.post('/login', async (req, res) => {
@@ -36,6 +67,7 @@ router.post('/login', async (req, res) => {
 
     // Generate token here
     const token = await generateToken(user._id)
+    console.log("This is token", token)
     const options = {
       httpOnly: true, // enable this only when u have https
       secure: true,
@@ -48,7 +80,8 @@ router.post('/login', async (req, res) => {
         _id: user._id,
         email: user.email,
         username: user.username,
-        role: user.role
+        role: user.role,
+        firstLogin: user.firstLogin,
       }
     });
   } catch (error) {
@@ -110,22 +143,51 @@ router.put('/users/:id', async (req, res) => {
     res.status(500).send({ message: "Error Updating Role!" });
   }
 })
-
-//Update
-router.put('/users/password/:id', async (req, res) => {
+// Reset Password
+router.put('/reset-password/:id', verifyToken, async (req, res) => {
   try {
+    const { newPassword } = req.body;
     const { id } = req.params;
-    let { password } = req.body;
-    password = await bcrypt.hash(password, 10);
-    const user = await User.findByIdAndUpdate(id, { password }, { new: true });
+    console.log("This is new password", newPassword, id)
+    const user = await User.findById({
+      _id: id,
+      firstLogin: true
+    })
     if (!user) {
-      return res.status(404).send({ message: "User not found!" });
+      return res.status(404).send({
+        message: "User Not Found Or Password Has Been reset Once already"
+      })
     }
-    res.status(200).send({ message: "User Password updated successfully!", user });
+    user.password = newPassword
+    user.firstLogin = false;
+    await user.save();
+    return res.status(200).json({
+      message: "Password Reset Successfully",
+      success: true
+    })
+
   } catch (error) {
-    console.error("Error chnaging password", error);
-    res.status(500).send({ message: "Error changing password" });
+    console.error("Error Resetting Password", error);
+    res.status(500).send({
+      message: "Error Resetting Password"
+    })
   }
 })
+//Update
+//router.put('/users/password/:id', async (req, res) => {
+//  try {
+//    const { id } = req.params;
+//    let { password } = req.body;
+//    password = await bcrypt.hash(password, 10);
+//    const user = await User.findByIdAndUpdate(id, { password }, { new: true });
+//    if (!user) {
+//      return res.status(404).send({ message: "User not found!" });
+//    }
+//    res.status(200).send({ message: "User Password updated successfully!", user });
+//  } catch (error) {
+//    console.error("Error chnaging password", error);
+//    res.status(500).send({ message: "Error changing password" });
+//  }
+//})
 
 module.exports = router;

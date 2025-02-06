@@ -15,12 +15,12 @@ import { logout as clearUserDataFromRedux } from '@/redux/features/auth/authSlic
 import { Post } from "@/types"
 
 const SinglePost = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
 
   const dispatch = useDispatch()
 
   const [isLoading, setIsLoading] = useState(true)
-  const [post, setPost] = useState<Post|null>(null)
+  const [post, setPost] = useState<Post | null>(null)
   const [relatedPosts, setRelatedPosts] = useState<Post[]>([])
   console.log(relatedPosts)
 
@@ -28,13 +28,13 @@ const SinglePost = () => {
     clearUserData()
     dispatch(clearUserDataFromRedux());
   }
-  
+
   const fetchData = async () => {
     if (!id) {
       return
     }
 
-    const response = await fetch(apiRoutes.findPost(id), {
+    const response = await fetch(apiRoutes.fineCasPost(id), {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
@@ -85,7 +85,7 @@ const SinglePost = () => {
         {post && (
           <div className='flex flex-col lg:flex-row justify-between items-start md:gap-12 gap-8'>
             <div className='lg:w-2/3 w-full'>
-              <SinglePostCard post={post}/>
+              <SinglePostCard post={post} />
               {/* <CommentCards comments={post?.comments}/> */}
             </div>
             {(relatedPosts.length > 0) && (

@@ -58,7 +58,13 @@ router.get('/:id', async (req, res) => {
     }
 
     const comment = await Comment.find({ postId: postId }).populate('user', "username email");
-    res.status(200).send(post.toJSON())
+    res.status(200).send({
+      message: "Post Found",
+      post: {
+        ...post.toJSON(),
+        comments: comment
+      }
+    })
   } catch (error) {
     console.error("Error Fetching Single Post:", error);
     res.status(500).send({ message: "Error Fetching Single Post" });
@@ -97,7 +103,8 @@ router.post("/", verifyToken, isAdmin, async (req, res) => {
       coverImageUrl: req.body.coverImageUrl,
       content: req.body.content,
       description: req.body.description,
-      author: req.user.id,
+      author: req.user._id,
+      username: req.user.username
     })
 
     res.status(201).send({

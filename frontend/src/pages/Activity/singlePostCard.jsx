@@ -1,12 +1,12 @@
-import React from 'react'
-import EditorJSHTML from "editorjs-html"
-import { useNavigate } from 'react-router-dom';
-
-import { formatDate } from '@/utility/formatDate';
-import { useDeletePostMutation } from '@/redux/features/posts/PostsApi';
-
-import DeleteButtonWithConfirmation from '@/components/DeletionButton/DeletionButton';
-
+//import React from 'react'
+//import EditorJSHTML from "editorjs-html"
+//import { useNavigate } from 'react-router-dom';
+//
+//import { formatDate } from '@/utility/formatDate';
+//import { useDeletePostMutation } from '@/redux/features/posts/PostsApi';
+//
+//import DeleteButtonWithConfirmation from '@/components/DeletionButton/DeletionButton';
+//
 // const editorJSHTML = EditorJSHTML();
 
 const SinglePostCard = ({ post }) => {

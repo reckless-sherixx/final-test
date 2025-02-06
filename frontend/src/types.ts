@@ -4,6 +4,10 @@ export type Post = {
   description: string,
   coverImageUrl: string,
   content: string,
+  author: {
+    id: string,
+    username: string,
+  }
 }
 
 export type Activity = {
@@ -13,4 +17,22 @@ export type Activity = {
   description: string,
   coverImageUrl: string,
   content: string,
+  username: string,
+  author: {
+    id: string
+    username: string
+  }
+}
+export type Cas = {
+  _id: string,
+  type: string,
+  title: string,
+  description: string,
+  coverImageUrl: string,
+  content: string,
+  username: string,
+  author: {
+    id: string
+    username: string
+  }
 }

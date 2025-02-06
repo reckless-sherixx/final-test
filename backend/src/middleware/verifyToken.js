@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 
 const User = require('../model/user.model.js')
 
-class UnauthorizedError extends Error {}
+class UnauthorizedError extends Error { }
 
 const verifyToken = async (req, res, next) => {
   try {
@@ -12,15 +12,18 @@ const verifyToken = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
+
+    console.log("Decoded", decoded)
     if (!decoded.userId) {
       throw new UnauthorizedError()
     }
 
     const user = await User.findById(decoded.userId)
+
     if (!user) {
       throw new UnauthorizedError()
     }
-
+    req.role = decoded.role
     req.user = user
 
     next()

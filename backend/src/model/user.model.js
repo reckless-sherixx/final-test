@@ -14,7 +14,14 @@ const UserSchema = new Schema({
   },
   role: {
     type: String,
-    default: 'user' //Add, SimpleUser (Can only comment) and Annoucer (or administrator that can post annoucement) 
+    enum: ['student', 'admin', 'moderator', 'creator'],
+    default: 'student',
+    required: true
+
+  },
+  firstLogin: {
+    type: Boolean,
+    default: true
   },
   appliedPost: {
     type: [mongoose.Schema.Types.ObjectId],
@@ -39,7 +46,7 @@ UserSchema.set("toJSON", {
 })
 
 // Hash a password before saving to db
-UserSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function(next) {
   const user = this;
   if (!user.isModified('password')) return next();
   const hashedPassword = await bcrypt.hash(user.password, 10);
@@ -48,7 +55,7 @@ UserSchema.pre('save', async function (next) {
 })
 
 // compare password when user logins
-UserSchema.methods.comparePassword = function (givenPassword) {
+UserSchema.methods.comparePassword = function(givenPassword) {
   return bcrypt.compare(givenPassword, this.password);
 }
 
