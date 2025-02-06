@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-
+import { useSelector } from 'react-redux'
 import Banner from "./Banner"
 import SearchPost from '@/pages/Posts/SearchPost'
-
+import Popup from '@/components/popup';
 import { createSingleNewsRoute } from "@/router"
 import * as u from "@/utils"
 
@@ -11,7 +11,9 @@ const Home = () => {
   const [search, setSearch] = useState("")
   const [loading, setLoading] = useState(true)
   const [posts, setPosts] = useState([])
-
+  const { user } = useSelector(state => state.auth)
+  console.log("Utserdfdeifjdf", user)
+  const [showResetPopup, setShowResetPopup] = useState(false);
   const handleSearchChange = (e) => setSearch(e.target.value);
   const handleSearch = () => setQuery({ search, category });
 
@@ -44,10 +46,24 @@ const Home = () => {
   useEffect(() => {
     fetchData()
   }, [])
-
+  useEffect(() => {
+    if (user.firstLogin === true) {
+      setShowResetPopup(true);
+    }
+  }, [user])
+  useEffect(() => {
+    let timer;
+    if (showResetPopup) {
+      timer = setTimeout(() => {
+        setShowResetPopup(false);
+      }, 10000);
+    }
+    return () => clearTimeout(timer);
+  }, [showResetPopup]);
   return (
     <div className='bg-white text-gray-900 container mx-auto mt-16 p-16'>
-      <Banner/>
+      <Popup show={showResetPopup} onClose={() => setShowResetPopup(false)} />
+      <Banner />
       <div className="mt-64 container mx-auto">
         <SearchPost
           search={search}

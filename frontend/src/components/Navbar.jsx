@@ -104,7 +104,7 @@ const Navbar = () => {
               >
                 {list.name}
               </NavLink>
-            </li> 
+            </li>
           ))}
           <li ref={dropdownRef}>
             <button
@@ -131,8 +131,8 @@ const Navbar = () => {
           {user ? (
             <li className='flex items-center gap-3'>
               <button
-              onClick={handleLogout}
-              className='text-gray-600 hover:text-blue-600 transition-all font-medium'>Logout</button>
+                onClick={handleLogout}
+                className='text-gray-600 hover:text-blue-600 transition-all font-medium'>Logout</button>
             </li>
           ) : (
             <li>
@@ -144,14 +144,14 @@ const Navbar = () => {
             </li>
           )}
 
-          {(user && user.role === "admin") && (
+          {(user && (user.role === "admin" || user.role === "moderator" || user.role === 'creator')) && (
             <li className='flex items-center gap-3'>
               <Link to="/dashboard"><button className='bg-[#1E73BE] px-16 py-6 text-white rounded-sm'>Dashboard</button></Link>
             </li>
           )}
           {user && (
             <li>
-              <Avatar username={user.username}/>
+              <Avatar username={user.username} />
             </li>
           )}
         </ul>

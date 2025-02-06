@@ -15,29 +15,35 @@ const Activities = () => {
   const [activities, setActivities] = useState<Activity[]>([])
   const [loading, setLoading] = useState(true)
 
-  const handleSearchChange = (e:ChangeEvent<HTMLInputElement>) => setSearch(e.target.value);
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value);
   const handleSearch = () => setQuery({ search, category });
 
   const fetchData = async () => {
     let url = `${import.meta.env.VITE_BACKEND_URL}/activities/${type}`
 
-    const response = await fetch(url, {
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    })
+    try {
+      const response = await fetch(url, {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
 
-    if (!response.ok) {
-      return []
+      if (!response.ok) {
+        return []
+      }
+
+      const activities = await response.json()
+
+      setActivities(activities)
+      setLoading(false)
+    } catch (error) {
+      console.error(error)
+
     }
 
-    const activities = await response.json()
-
-    setActivities(activities)
-    setLoading(false)
   }
-
+  console.log("Activityed", activities)
   useEffect(() => {
     fetchData()
   }, [type])
@@ -53,11 +59,11 @@ const Activities = () => {
         <div>Loading....</div>
       ) : (
         <>
-        {(activities.length > 0) ? (
-          <PostList posts={activities} />
-        ) : (
-          <p>No activities found</p>
-        )}
+          {(activities.length > 0) ? (
+            <PostList posts={activities} />
+          ) : (
+            <p>No activities found</p>
+          )}
         </>
       )}
       {/* <AddButton onClick={openModal} />

@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux"
 import SinglePostCard from './singlePostCard';
 import CommentCards from './comments/CommentCards';
 
+import { useFetchPostByIdQuery } from '../../redux/features/posts/PostsApi';
 import { trimWithEllipsis } from "@/utils"
 
 import { apiRoutes, createSingleNewsRoute } from "@/router"
@@ -15,12 +16,12 @@ import { logout as clearUserDataFromRedux } from '@/redux/features/auth/authSlic
 import { Post } from "@/types"
 
 const SinglePost = () => {
-  const { id } = useParams(); 
-
+  const { id } = useParams();
+  const { refetch } = useFetchPostByIdQuery(id, { skip: !id })
   const dispatch = useDispatch()
 
   const [isLoading, setIsLoading] = useState(true)
-  const [post, setPost] = useState<Post|null>(null)
+  const [post, setPost] = useState<Post | null>(null)
   const [relatedPosts, setRelatedPosts] = useState<Post[]>([])
   console.log(relatedPosts)
 
@@ -28,7 +29,7 @@ const SinglePost = () => {
     clearUserData()
     dispatch(clearUserDataFromRedux());
   }
-  
+
   const fetchData = async () => {
     if (!id) {
       return
@@ -77,7 +78,6 @@ const SinglePost = () => {
   useEffect(() => {
     fetchData()
   }, [id])
-
   return (
     <div className='text-gray-900 container mx-auto mt-8'>
       <div>
@@ -85,8 +85,7 @@ const SinglePost = () => {
         {post && (
           <div className='flex flex-col lg:flex-row justify-between items-start md:gap-12 gap-8'>
             <div className='lg:w-2/3 w-full'>
-              <SinglePostCard post={post}/>
-              {/* <CommentCards comments={post?.comments}/> */}
+              <SinglePostCard post={post} />
             </div>
             {(relatedPosts.length > 0) && (
               <div className='bg-white lg:w-1/3 w-full'>

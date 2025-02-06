@@ -1,7 +1,7 @@
 import { FaPen, FaTrash } from "react-icons/fa";
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-
+import { RootState } from "@/redux/store"
 import { clearUserData } from "@/common"
 import { logout as clearUserDataFromRedux } from '@/redux/features/auth/authSlice';
 import * as u from "@/utils"
@@ -13,10 +13,10 @@ const PostList = ({
   posts,
   editPost,
   removePostFromList,
-} : {
+}: {
   posts: Post[],
-  editPost: (post:Post) => void,
-  removePostFromList: (post:Post) => void,
+  editPost: (post: Post) => void,
+  removePostFromList: (post: Post) => void,
 }) => {
   const dispatch = useDispatch()
 
@@ -24,13 +24,19 @@ const PostList = ({
     clearUserData()
     dispatch(clearUserDataFromRedux());
   }
+  const { user } = useSelector((state: RootState) => state.auth)
+  console.log("This is user from  delete Post", user)
 
-  const deletePost = async (post:Post) => {
+  console.log("Postis ", posts)
+  const deletePost = async (post: Post) => {
+
     if (confirm("Are you sure you want to delete this post?")) {
+
       const response = await fetch(apiRoutes.deletePost(post), {
         method: "DELETE",
         credentials: "include",
       })
+
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -41,9 +47,13 @@ const PostList = ({
       }
 
       removePostFromList(post)
+
+
     }
   }
-
+  const message = () => {
+    alert("You are not authorized to delete this post")
+  }
   return (
     <div className="mt-32 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-32">
       {posts.map(post => (
@@ -59,7 +69,7 @@ const PostList = ({
             <button
               type="button"
               className="group ml-8 size-36 flex items-center justify-center border-2 border-black hover:bg-black rounded-full transition duration-150"
-              onClick={() => deletePost(post)}
+              onClick={() => (user && (user?.id === post.author.id || user.role === 'admin')) ? deletePost(post) : message()}
             >
               <FaTrash className="group-hover:text-white text-black transition duration-150" />
             </button>

@@ -6,7 +6,7 @@ import { IoAdd } from 'react-icons/io5';
 const AddButton = ({ onClick }) => {
   const { user } = useSelector((state) => state.auth);
 
-  const canView = user && user.role === "admin" || user.role === "teacher"
+  const canView = user && user.role === "admin" || user.role === "moderator" || user.role == 'creator'
 
   return (
     <button

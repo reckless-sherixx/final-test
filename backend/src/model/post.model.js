@@ -16,6 +16,10 @@ const PostSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  username: {
+    type: String,
+    required: true
+  },
   // published: {
   //   type: Boolean,
   //   required: true,

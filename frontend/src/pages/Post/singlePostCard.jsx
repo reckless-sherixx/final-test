@@ -1,24 +1,31 @@
-import React from 'react'
-import EditorJSHTML from "editorjs-html"
-import { useNavigate } from 'react-router-dom';
-
-import { formatDate } from '@/utility/formatDate';
-import { useDeletePostMutation } from '@/redux/features/posts/PostsApi';
-
-import DeleteButtonWithConfirmation from '@/components/DeletionButton/DeletionButton';
+//import React from 'react'
+//import EditorJSHTML from "editorjs-html"
+//import { useNavigate } from 'react-router-dom';
+//
+//import { formatDate } from '@/utility/formatDate';
+//import { useDeletePostMutation } from '@/redux/features/posts/PostsApi';
+//
+//import DeleteButtonWithConfirmation from '@/components/DeletionButton/DeletionButton';
+import CommentCards from './comments/CommentCards';
 
 // const editorJSHTML = EditorJSHTML();
 
 const SinglePostCard = ({ post }) => {
-  console.log(post)
+  console.log("THis is post", post)
 
   return (
     <div>
-      <img src={post.coverImageUrl} alt="" />
-      <h1 className="mt-24">{post.title}</h1>
-      <p>{post.description}</p>
+      <h1> Posted By :<b> {post.post.username}</b></h1>
+      <img src={post.post.coverImageUrl} alt="" />
+      <h1 className="mt-24">{post.post.title}</h1>
+      <p>{post.post.description}</p>
       {/* <p>{formatDate(post.createdAt)}</p> */}
-      <div className="tiptap" dangerouslySetInnerHTML={{ __html: post.content }}></div>
+      <div className="tiptap" dangerouslySetInnerHTML={{ __html: post.post.content }}></div>
+      <div className={
+        "flex flex-col gap-4 mt-4"
+      }>
+        <CommentCards comments={post.post.comments} />
+      </div>
     </div>
   )
 

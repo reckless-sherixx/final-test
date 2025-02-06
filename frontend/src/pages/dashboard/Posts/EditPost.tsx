@@ -15,40 +15,40 @@ import { RootState } from '@/redux/store';
 type NewPost = Omit<Post, 'id'>;
 
 type ErrorResponse = {
-	type: 'error';
-	message: string;
+  type: 'error';
+  message: string;
 };
 type UnauthorizedErrorResponse = {
-	type: 'unauthorized';
+  type: 'unauthorized';
 };
 type SuccessResponse = {
-	type: 'success';
-	post: Post;
+  type: 'success';
+  post: Post;
 };
 
 const inputProps = (form: FormikValues, fieldName: string) => {
-	return {
-		value: form.values[fieldName],
-		onChange: form.handleChange,
-		onBlur: form.handleBlur,
-	};
+  return {
+    value: form.values[fieldName],
+    onChange: form.handleChange,
+    onBlur: form.handleBlur,
+  };
 };
 
 const Error = ({ form, fieldName }: { form: FormikValues; fieldName: string }) => {
-	if (form.touched[fieldName] && form.errors[fieldName]) {
-		return <p className='mt-8 text-14 text-red-400'>{form.errors[fieldName]}</p>;
-	}
+  if (form.touched[fieldName] && form.errors[fieldName]) {
+    return <p className='mt-8 text-14 text-red-400'>{form.errors[fieldName]}</p>;
+  }
 
-	return null;
+  return null;
 };
 
 const EditPost = ({
   post,
   updatePost: updatePostInList,
   closeModalOnSubmit: closeModal,
-} : {
+}: {
   post: Post,
-  updatePost: (post:Post) => void,
+  updatePost: (post: Post) => void,
   closeModalOnSubmit: () => void,
 }) => {
   const titleRef = useRef<HTMLInputElement>(null)
@@ -62,39 +62,39 @@ const EditPost = ({
   const dispatch = useDispatch();
 
   const updatePost = async (updatedPost: NewPost): Promise<SuccessResponse | ErrorResponse | UnauthorizedErrorResponse> => {
-		const response = await fetch(apiRoutes.updatePost(post), {
-			method: 'PUT',
-			credentials: 'include',
-			body: JSON.stringify({
-				title: updatedPost.title,
-				coverImageUrl: updatedPost.coverImageUrl,
-				content: updatedPost.content,
-				description: updatedPost.description,
-			}),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+    const response = await fetch(apiRoutes.updatePost(post), {
+      method: 'PUT',
+      credentials: 'include',
+      body: JSON.stringify({
+        title: updatedPost.title,
+        coverImageUrl: updatedPost.coverImageUrl,
+        content: updatedPost.content,
+        description: updatedPost.description,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-		if (!response.ok) {
-			if (response.status === 401) {
-				return {
-					type: 'unauthorized',
-				};
-			}
+    if (!response.ok) {
+      if (response.status === 401) {
+        return {
+          type: 'unauthorized',
+        };
+      }
 
-			return {
-				type: 'error',
-				message: 'Something went wrong',
-			};
-		}
+      return {
+        type: 'error',
+        message: 'Something went wrong',
+      };
+    }
 
-		const jsonResponse = await response.json();
+    const jsonResponse = await response.json();
 
-		return {
-			type: 'success',
-			post: jsonResponse.post,
-		};
+    return {
+      type: 'success',
+      post: jsonResponse.post,
+    };
   };
 
   const logout = () => {
@@ -113,6 +113,7 @@ const EditPost = ({
       description: yup.string().required("Description is required"),
     }),
     onSubmit: async (values) => {
+
       try {
         showLoadingIndicator()
 
@@ -121,6 +122,7 @@ const EditPost = ({
           coverImageUrl: values.coverImageUrl,
           content: values.content,
           description: values.description,
+          author: values.author,
         })
 
         if (result.type === "success") {
@@ -144,7 +146,7 @@ const EditPost = ({
       titleRef.current.focus()
     }
   }, [])
-if (user == null) return null;
+  if (user == null) return null;
   return (
     <div className="bg-white md:p-32 p-8">
       <form onSubmit={form.handleSubmit} className="space-y-20 pt-24">

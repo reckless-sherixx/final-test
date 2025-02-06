@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://backend-school-web.onrender.com/api/auth",
+    baseUrl: `${import.meta.env.VITE_BACKEND_URL}/auth`,
     credentials: "include"
   }),
   endpoints: (builder) => ({
