@@ -15,6 +15,7 @@ app.use(cors({
   origin: [
     'https://school-web-test-front.onrender.com',
     'http://localhost:5173',
+    "https://frontend-ism.vercel.app/"
   ],
   credentials: true,
 }));
