@@ -33,7 +33,14 @@ const bulkRegister = async (req, res) => {
         const username = generateUsername(row.name, row.surname, row.grade);
         const password = 'ISM2025';
 
-        const user = new User({ username, password, firstName: row.name, lastName: row.surname, grade: row.grade || 'Not Specified', role: row.role });
+        const user = new User({
+          username,
+          password,
+          name: row.name,        
+          surname: row.surname,  
+          grade: row.grade || 'Not Specified',
+          role: row.role || 'student'  
+      });
         await user.save();
         return { name: row.name, surname: row.surname, username, password, status: 'SUCCESS' };
 

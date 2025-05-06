@@ -1,24 +1,28 @@
-import { useState } from 'react'
-import { useDeleteUserMutation, useGetUserProfileQuery } from '../../../redux/features/auth/authapi'
+import { useState } from "react";
+import {
+  useDeleteUserMutation,
+  useGetUserProfileQuery,
+} from "../../../redux/features/auth/authapi";
 import { MdEdit } from "react-icons/md";
-import { useNavigate } from 'react-router-dom';
-import UpdateUserModel from './UpdateUserModel';
-import Modal from '@/components/Modal';
+import { useNavigate } from "react-router-dom";
+import UpdateUserModel from "./UpdateUserModel";
+import Modal from "@/components/Modal";
 import "./CreateUser.css";
-import axios from 'axios'
-import { useSelector } from 'react-redux';
+import axios from "axios";
+import { useSelector } from "react-redux";
 const ManageUsers = () => {
   const { user } = useSelector((state) => state.auth);
-  const currentLoggedUser = user
+  const currentLoggedUser = user;
   const [selectedUser, setSelectedUser] = useState(null);
-  const [file, setFile] = useState(null)
+  const [file, setFile] = useState(null);
   const [isModelOpen, setIsModelOpen] = useState();
   const [isExcelModelOpen, setIsExcelModelOpen] = useState(false);
   const { data, error, isLoading, refetch } = useGetUserProfileQuery();
   const [deleteUser] = useDeleteUserMutation();
-  const [users, setUsers] = useState([{ name: '', surname: '', grade: '', role: 'student' }]); // Liste des utilisateurs à créer
+  const [users, setUsers] = useState([
+    { name: "", surname: "", grade: "", role: "student" },
+  ]); // Liste des utilisateurs à créer
   const [showModal, setShowModal] = useState(false); // Pour contrôler l'affichage de la modal
-
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -28,7 +32,10 @@ const ManageUsers = () => {
     }
 
     // Validate file type
-    const allowedTypes = ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
+    const allowedTypes = [
+      "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ];
     if (!allowedTypes.includes(selectedFile.type)) {
       alert("Please upload a valid Excel file (.xls or .xlsx).");
       return;
@@ -46,17 +53,18 @@ const ManageUsers = () => {
     const formData = new FormData();
     formData.append("excelFile", file);
 
-
     try {
-
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/bulkRegister`, formData, {
-        withCredentials: true,
-      })
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/auth/bulkRegister`,
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
       alert("File uploaded successfully!");
       setFile(null);
-      setIsExcelModelOpen(false)
-      refetch()
-
+      setIsExcelModelOpen(false);
+      refetch();
     } catch (error) {
       console.error("Error uploading file:", error);
       alert("Failed to upload file. Please try again.");
@@ -66,10 +74,10 @@ const ManageUsers = () => {
     try {
       const response = await deleteUser(id).unwrap();
       alert("User deleted successfully.");
-      console.log("Repsonse", response)
+      console.log("Repsonse", response);
       refetch();
     } catch (error) {
-      console.error('Error deleting user:', error);
+      console.error("Error deleting user:", error);
     }
   };
 
@@ -84,10 +92,10 @@ const ManageUsers = () => {
   };
   const handleExcelModel = () => {
     setIsExcelModelOpen(true);
-  }
+  };
 
   const handleAddUserField = () => {
-    setUsers([...users, { username: '', grade: '', role: '' }]);
+    setUsers([...users, { username: "", grade: "", role: "" }]);
   };
 
   const handleUserChange = (index, field, value) => {
@@ -98,64 +106,101 @@ const ManageUsers = () => {
 
   const createMultipleUsers = async () => {
     try {
-      const multiUserData = handleCreateUsers();
-      if (!multiUserData) {
-        return "No User Data Found";
-      }
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/multiRegisterRoute`, multiUserData, {
-        withCredentials: true
-      })
-      refetch();
-      console.log("Resposne ", response)
-    } catch (error) {
-      throw new Error('Error creating users:', error);
-    }
+      const hasEmptyFields = users.some(
+        (user) => !user.name || !user.surname || !user.grade
+      );
 
-  }
+      if (hasEmptyFields) {
+        alert("Please fill in all required fields (name, surname, grade)");
+        return;
+      }
+
+      const multiUserData = handleCreateUsers();
+      if (!multiUserData || multiUserData.length === 0) {
+        alert("No user data found");
+        return;
+      }
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/auth/multiRegisterRoute`,
+        multiUserData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data) {
+        alert("Users created successfully!");
+        setShowModal(false);
+        refetch();
+      }
+    } catch (error) {
+      console.error("Error creating users:", error);
+      alert(
+        error.response?.data?.message ||
+          "Failed to create users. Please try again."
+      );
+    }
+  };
   const handleCreateUsers = () => {
-    const createdUsers = users.map(user => ({
-      username: `${user.name}${user.surname}${user.grade}`,
+    const createdUsers = users.map((user) => ({
+      name: user.name,
+      surname: user.surname,
       grade: user.grade,
-      role: user.role
+      role: user.role,
+      username: `${user.name}${user.surname}${user.grade}`, 
     }));
-    setUsers([{ name: '', surname: '', grade: '', role: 'student' }]);
+    setUsers([{ name: "", surname: "", grade: "", role: "student" }]);
     setShowModal(false);
     return createdUsers;
-
   };
 
   const closemodal = () => {
     setShowModal(false);
-    setUsers([{ name: '', surnname: '', grade: '', role: 'student' }]);
-  }
+    setUsers([{ name: "", surnname: "", grade: "", role: "student" }]);
+  };
 
   return (
     <>
-      {
-        isLoading && <p>Loading...</p>
-      }
+      {isLoading && <p>Loading...</p>}
       <section className="py-1 bg-blueGray-50">
         <div className="w-full  mb-12 xl:mb-0 px-4 mx-auto">
           <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
             <div className="rounded-t mb-0 px-4 py-3 border-0">
               <div className="flex flex-wrap items-center">
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                  <h3 className="font-semibold text-base text-blueGray-700">All Users</h3>
+                  <h3 className="font-semibold text-base text-blueGray-700">
+                    All Users
+                  </h3>
                 </div>
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                  <button className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">See all</button>
-                </div>                <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                  <button className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button"
+                  <button
+                    className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                  >
+                    See all
+                  </button>
+                </div>{" "}
+                <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
+                  <button
+                    className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
                     onClick={handleExcelModel}
-                  >Upload Excel Sheet</button>
+                  >
+                    Upload Excel Sheet
+                  </button>
                 </div>
-
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
                   <button
                     className="bg-[#1E73EE] text-white active:bg-[#1E73BE] text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
                     onClick={() => setShowModal(true)}
-                  >Create users</button>
+                  >
+                    Create users
+                  </button>
                 </div>
               </div>
             </div>
@@ -183,52 +228,59 @@ const ManageUsers = () => {
                 </thead>
 
                 <tbody>
-                  {
-                    data?.users && data.users.map((currentuser, index) => (<tr key={index}>
-                      <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 ">
-                        {index + 1}
-                      </th>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
-                        {currentuser?.username}
-                      </td>
-                      <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        {currentuser?.role}
-                      </td>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        <button onClick={() => handleEdit(currentuser)} className='hover:text-blue-700'>
-                          <span className='flex gap-1 items-center justify-center'>
-                            <MdEdit /> Edit
-                          </span>
-                        </button>
-                      </td>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-
-                        <button
-                          className='bg-red-500 text-white active:bg-red-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none'
-                          onClick={() => {
-                            // Check if the current user is an admin or a moderator with valid permissions
-                            if (user.role === 'admin' && (currentuser.role !== 'admin') ||
-                              (user.role === 'moderator' && (currentuser.role === 'student' || currentuser.role === 'creator'))) {
-
-                              if (window.confirm('Are you sure you want to delete this User?')) {
-                                handleDelete(currentuser.id);
+                  {data?.users &&
+                    data.users.map((currentuser, index) => (
+                      <tr key={index}>
+                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 ">
+                          {index + 1}
+                        </th>
+                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
+                          {currentuser?.username}
+                        </td>
+                        <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                          {currentuser?.role}
+                        </td>
+                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                          <button
+                            onClick={() => handleEdit(currentuser)}
+                            className="hover:text-blue-700"
+                          >
+                            <span className="flex gap-1 items-center justify-center">
+                              <MdEdit /> Edit
+                            </span>
+                          </button>
+                        </td>
+                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                          <button
+                            className="bg-red-500 text-white active:bg-red-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none"
+                            onClick={() => {                      
+                              if (
+                                (user.role === "admin" &&
+                                  currentuser.role !== "admin") ||
+                                (user.role === "moderator" &&
+                                  (currentuser.role === "student" ||
+                                    currentuser.role === "creator"))
+                              ) {
+                                if (
+                                  window.confirm(
+                                    "Are you sure you want to delete this User?"
+                                  )
+                                ) {
+                                  handleDelete(currentuser.id);
+                                }
+                              } else {
+                                alert(
+                                  "You don't have permission to delete this user."
+                                );
                               }
-
-                            } else {
-                              alert("You don't have permission to delete this user.");
-                            }
-                          }}
-                        >
-                          Delete
-                        </button>
-
-                      </td>
-                    </tr>))
-                  }
-
-
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
-
               </table>
             </div>
           </div>
@@ -240,55 +292,69 @@ const ManageUsers = () => {
             {users.map((currentUser, index) => (
               <div key={index} className="cr-user-input">
                 <input
-                  className='cr-input'
+                  className="cr-input"
                   type="text"
                   placeholder="Name"
                   value={currentUser.name}
-                  onChange={(e) => handleUserChange(index, 'name', e.target.value)}
+                  onChange={(e) =>
+                    handleUserChange(index, "name", e.target.value)
+                  }
                 />
                 <input
-                  className='cr-input'
+                  className="cr-input"
                   type="text"
                   value={currentUser.surname}
                   placeholder="Surname"
-                  onChange={(e) => handleUserChange(index, 'surname', e.target.value)}
+                  onChange={(e) =>
+                    handleUserChange(index, "surname", e.target.value)
+                  }
                 />
 
                 <input
-                  className='cr-input'
+                  className="cr-input"
                   type="text"
                   value={currentUser.grade}
                   placeholder="Grade"
-                  onChange={(e) => handleUserChange(index, 'grade', e.target.value)}
+                  onChange={(e) =>
+                    handleUserChange(index, "grade", e.target.value)
+                  }
                 />
 
                 <select
                   className="cr-input"
                   value={currentUser.role}
-                  onChange={(e) => handleUserChange(index, 'role', e.target.value)}
+                  onChange={(e) =>
+                    handleUserChange(index, "role", e.target.value)
+                  }
                 >
-                  {user && user.role === 'admin' ? (
+                  {user && user.role === "admin" ? (
                     <>
                       <option value="admin">Admin</option>
                       <option value="moderator">Moderator</option>
                       <option value="creator">Creator</option>
                       <option value="student">Student</option>
                     </>
-                  ) : user && user.role === 'moderator' ? (
+                  ) : user && user.role === "moderator" ? (
                     <>
                       <option value="creator">Creator</option>
                       <option value="student">Student</option>
                     </>
                   ) : null}
                 </select>
-
               </div>
             ))}
           </div>
-          <button className='cr-button' onClick={handleAddUserField}>+</button>
-          <button className='cr-button' onClick={createMultipleUsers}>Create</button>
+          <button className="cr-button" onClick={handleAddUserField}>
+            +
+          </button>
+          <button className="cr-button" onClick={createMultipleUsers}>
+            Create
+          </button>
         </Modal>
-        <Modal isOpen={isExcelModelOpen} onClose={() => setIsExcelModelOpen(false)}>
+        <Modal
+          isOpen={isExcelModelOpen}
+          onClose={() => setIsExcelModelOpen(false)}
+        >
           <h2>Upload Excel File</h2>
           <form onSubmit={handleFileSubmit}>
             <div className="cr-user-input">
@@ -309,11 +375,15 @@ const ManageUsers = () => {
           </form>
         </Modal>
       </section>
-      {
-        isModelOpen && <UpdateUserModel user={selectedUser} onClose={handleCloseModel} onRoleUpdate={refetch} />
-      }
+      {isModelOpen && (
+        <UpdateUserModel
+          user={selectedUser}
+          onClose={handleCloseModel}
+          onRoleUpdate={refetch}
+        />
+      )}
     </>
-  )
-}
+  );
+};
 
-export default ManageUsers
+export default ManageUsers;

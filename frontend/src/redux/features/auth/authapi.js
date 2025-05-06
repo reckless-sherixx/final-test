@@ -43,10 +43,10 @@ const authApi = createApi({
       invalidatesTags: ["User"],
     }),
     updateUserRole: builder.mutation({
-      query: ({ userId, role }) => ({
+      query: ({ userId, role, name, surname, grade, username }) => ({
         url: `/users/${userId}`,
-        method: "PUT",
-        body: { role },
+        method: 'PUT',
+        body: { role, name, surname, grade, username }
       }),
       invalidatesTags: ["User"],
     }),

@@ -69,7 +69,7 @@ router.post('/login', async (req, res) => {
     const token = await generateToken(user._id)
     console.log("This is token", token)
     const options = {
-      httpOnly: true, // enable this only when u have https
+      httpOnly: true, 
       secure: true,
       sameSite: true
     }
@@ -129,20 +129,32 @@ router.delete('/users/:id', async (req, res) => {
 })
 
 // Update a role for user
-router.put('/users/:id', async (req, res) => {
+router.put('/users/:id', verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const { role } = req.body;
-    const user = await User.findByIdAndUpdate(id, { role }, { new: true });
+    const { role, name, surname, grade, username } = req.body;
+    
+    const user = await User.findByIdAndUpdate(
+      id, 
+      { 
+        role,
+        name,
+        surname,
+        grade,
+        username
+      },
+      { new: true }
+    );
+
     if (!user) {
-      return res.status(404).send({ message: "User not found!" });
+      return res.status(404).send({ message: "User not found" });
     }
-    res.status(200).send({ message: "User Role updated successfully!", user });
+    
+    res.status(200).send({ message: "User updated successfully", user });
   } catch (error) {
-    console.error("Error Updating The Role.", error);
-    res.status(500).send({ message: "Error Updating Role!" });
+    res.status(500).send({ message: "Error updating user", error: error.message });
   }
-})
+});
 // Reset Password
 router.put('/reset-password/:id', verifyToken, async (req, res) => {
   try {
@@ -173,6 +185,7 @@ router.put('/reset-password/:id', verifyToken, async (req, res) => {
     })
   }
 })
+
 //Update
 //router.put('/users/password/:id', async (req, res) => {
 //  try {
