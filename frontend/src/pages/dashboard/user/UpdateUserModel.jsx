@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useUpdateUserRoleMutation } from '../../../redux/features/auth/authapi';
 
 const UpdateUserModel = ({user, onClose, onRoleUpdate}) => {
@@ -8,17 +8,59 @@ const UpdateUserModel = ({user, onClose, onRoleUpdate}) => {
     const [grade, setGrade] = useState(user?.grade || '');
     const [updateUserRole] = useUpdateUserRoleMutation();
 
+    const resetPasswordLink = `${import.meta.env.VITE_FRONTEND_URL}/reset-password`;
+
+    const handleCopyLink = () => {
+        navigator.clipboard.writeText(resetPasswordLink)
+            .then(() => {
+                alert('Reset link copied to clipboard!');
+            })
+            .catch(() => {
+                alert('Failed to copy link');
+            });
+    };
+
+
     const handleUpdateUser = async () => {
         try {
-            await updateUserRole({
+            let updateData = {
                 userId: user.id,
-                role: role,
-                name: name,
-                surname: surname,
-                grade: grade,
-                username: `${name}${surname}${grade}` // Generate new username based on updated fields
-            }).unwrap();
-            
+                role: role
+            };
+            const nameChanged = name !== user.name;
+            const surnameChanged = surname !== user.surname;
+            const gradeChanged = grade !== user.grade;
+            const roleChanged = role !== user.role;
+    
+            if (nameChanged || surnameChanged) {
+                if (!name.trim() || !surname.trim()) {
+                    alert("Both name and surname must be provided together");
+                    return;
+                }
+                updateData.name = name.trim();
+                updateData.surname = surname.trim();
+                updateData.username = `${name}${surname}${grade}`;
+            }
+            if (gradeChanged) {
+                if (!grade.trim()) {
+                    alert("Grade cannot be empty");
+                    return;
+                }
+                updateData.grade = grade.trim();
+                if (nameChanged || surnameChanged) {
+                    updateData.username = `${name}${surname}${grade}`;
+                } else {
+                    updateData.username = `${user.name}${user.surname}${grade}`;
+                }
+            }
+            if (roleChanged && !nameChanged && !surnameChanged && !gradeChanged) {
+                updateData = {
+                    userId: user.id,
+                    role: role
+                };
+            }
+    
+            await updateUserRole(updateData).unwrap();
             alert("User updated successfully");
             onRoleUpdate();
             onClose();
@@ -87,7 +129,28 @@ const UpdateUserModel = ({user, onClose, onRoleUpdate}) => {
                     </select>
                 </div>
 
-                <div className='flex justify-end space-x-4'>
+                <div className='mb-4 space-y-3'>
+                    <label className='block text-gray-700 text-sm mb-4' htmlFor='reset-link'>
+                        Reset Password Link:
+                    </label>
+                    <div className='flex items-center space-x-2'>
+                        <input 
+                            className='block w-full px-3 py-2 text-gray-700 border border-gray-300 rounded' 
+                            type='text' 
+                            value={resetPasswordLink}
+                            readOnly 
+                        />
+                        <button 
+                            onClick={handleCopyLink}
+                            className='px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 whitespace-nowrap'
+                            title='Copy to clipboard'
+                        >
+                            Copy Link
+                        </button>
+                    </div>
+                </div>
+
+                <div className='flex justify-between space-x-4 pt-5'>
                     <button 
                         className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600' 
                         onClick={handleUpdateUser}
