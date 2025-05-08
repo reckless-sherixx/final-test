@@ -54,10 +54,6 @@ const AdminNavigation = () => {
                 to: routes.dashboard_users,
                 text: "Users",
               },
-              {
-                to: routes.dashboard_deleted_comments,
-                text: "Deleted Comments",
-              },
             ] : []),
             {
               to: routes.dashboard_news_list,
