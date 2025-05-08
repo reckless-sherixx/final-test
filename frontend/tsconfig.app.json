@@ -28,5 +28,5 @@
 		"noUnusedLocals": false,
 		"allowJs": true
 	},
-	"include": ["src/**/*.tsx", "src/declaration.d.ts", "vite-env.d.ts"]
+	"include": ["src/**/*.tsx", "src/declaration.d.ts", "vite-env.d.ts", "src/pages/dashboard/DeletedComments/index.jsx"]
 }

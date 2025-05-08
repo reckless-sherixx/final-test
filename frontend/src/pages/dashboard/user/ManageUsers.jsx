@@ -377,10 +377,11 @@ const ManageUsers = () => {
       </section>
       {isModelOpen && (
         <UpdateUserModel
-          user={selectedUser}
-          onClose={handleCloseModel}
-          onRoleUpdate={refetch}
-        />
+        user={selectedUser}
+        currentLoggedUser={currentLoggedUser}
+        onClose={handleCloseModel}
+        onRoleUpdate={refetch}
+    />
       )}
     </>
   );
