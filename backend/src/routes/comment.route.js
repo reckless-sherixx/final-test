@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Comment = require('../model/comment.model.js');
 const Post = require('../model/post.model.js');
+const verifyToken = require('../middleware/verifyToken.js');
 
 // Create a Comment
 router.post('/post-comment', async (req, res) => {
@@ -40,20 +41,38 @@ router.get('/total-comments', async (req, res) => {
   }
 })
 
-router.delete('/delete-comment/:id', async (req, res) => {
+router.delete('/delete-comment/:id', verifyToken, async (req, res) => {
   try {
     const commentId = req.params.id;
+    const comment = await Comment.findById(commentId);
+    
+    if (!comment) {
+      return res.status(404).json({
+        message: "Comment not found"
+      });
+    }
+
+    // Allow admin and moderators to delete any comment
+    const isAdminOrModerator = ["admin", "moderator"].includes(req.user.role);
+    const isCommentOwner = comment.user.toString() === req.user._id.toString();
+
+    if (!isAdminOrModerator && !isCommentOwner) {
+      return res.status(403).json({
+        message: "Not authorized to delete this comment"
+      });
+    }
+
     await Comment.findByIdAndDelete(commentId);
     return res.status(200).json({
       message: "Comment Deleted Successfully"
-    })
+    });
   } catch (error) {
-    console.error("An Error Occured While Deleting Comment.", error);
+    console.error("An Error Occurred While Deleting Comment.", error);
     res.status(500).send({
       message: "An error occurred while deleting comment"
     });
   }
-})
+});
 
 
 module.exports = router;
