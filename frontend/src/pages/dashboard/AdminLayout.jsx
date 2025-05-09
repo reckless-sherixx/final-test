@@ -7,11 +7,9 @@ import { routes } from "@/router"
 const AdminLayout = () => {
   const { user, isLoggedIn } = useSelector((state) => state.auth);
 
-  if (!isLoggedIn || 
-    (user && user.role !== "admin" && user.role !== "moderator") || 
-    window.location.pathname === routes.dashboard_deleted_comments) {
-  return <Navigate to={routes.login} />;
-}
+  if (!isLoggedIn || (user && user.role !== "admin" && user.role !== "moderator")) {
+    return <Navigate to={routes.login} />;
+  }
 
   return (
     <div className="container mx-auto flex flex-col md:flex-row gap-16 items-start justify-start">

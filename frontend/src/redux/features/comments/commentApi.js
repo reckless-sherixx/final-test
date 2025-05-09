@@ -28,10 +28,33 @@ const commentApi = createApi({
         url: `/delete-comment/${id}`,
         method: 'DELETE',
       })
-    })
+    }),
+    getDeletedComments: builder.query({
+      query: () => '/deleted-comments',
+      transformResponse: (response) => response.deletedComments,
+      providesTags: ['Comments']
+    }),
+
+    permanentDeleteComment: builder.mutation({
+      query: (id) => ({
+        url: `/permanent-delete/${id}`,
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }),
+      invalidatesTags: ['Comments']
+    }),
   }),
 })
 
-export const { useGetCommentsQuery, useDeleteCommentMutation, usePostCommentMutation } = commentApi;
+export const {
+  useGetCommentsQuery,
+  useDeleteCommentMutation,
+  usePostCommentMutation,
+  useGetDeletedCommentsQuery,
+  usePermanentDeleteCommentMutation
+} = commentApi;
 
 export default commentApi;

@@ -1,7 +1,7 @@
-const mongoose  = require('mongoose');
+const mongoose = require('mongoose');
 
-const CommentSchema  = new mongoose.Schema({
-    comment:  {
+const CommentSchema = new mongoose.Schema({
+    comment: {
         type: String,
         required: true
     },
@@ -15,13 +15,20 @@ const CommentSchema  = new mongoose.Schema({
         ref: 'Post',
         required: true
     },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
+    deletedAt: {
+        type: Date,
+        default: null
+    },
     createdAt: {
         type: Date,
         default: Date.now
     }
-
 });
 
-const  Comment = mongoose.model('Comment', CommentSchema);
+const Comment = mongoose.model('Comment', CommentSchema);
 
 module.exports = Comment;

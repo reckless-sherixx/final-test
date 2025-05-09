@@ -52,7 +52,6 @@ router.delete('/delete-comment/:id', verifyToken, async (req, res) => {
       });
     }
 
-    // Allow admin and moderators to delete any comment
     const isAdminOrModerator = ["admin", "moderator"].includes(req.user.role);
     const isCommentOwner = comment.user.toString() === req.user._id.toString();
 
@@ -62,9 +61,13 @@ router.delete('/delete-comment/:id', verifyToken, async (req, res) => {
       });
     }
 
-    await Comment.findByIdAndDelete(commentId);
+    await Comment.findByIdAndUpdate(commentId, {
+      isDeleted: true,
+      deletedAt: new Date()
+    });
+
     return res.status(200).json({
-      message: "Comment Deleted Successfully"
+      message: "Comment moved to deleted section"
     });
   } catch (error) {
     console.error("An Error Occurred While Deleting Comment.", error);
@@ -74,5 +77,58 @@ router.delete('/delete-comment/:id', verifyToken, async (req, res) => {
   }
 });
 
+// Get deleted comments 
+router.get('/deleted-comments', verifyToken, async (req, res) => {
+  try {
+    const isAdminOrModerator = ["admin", "moderator"].includes(req.user.role);
+    
+    if (!isAdminOrModerator) {
+      return res.status(403).json({
+        message: "Not authorized to view deleted comments"
+      });
+    }
+
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    
+    const deletedComments = await Comment.find({
+      isDeleted: true,
+      deletedAt: { $gte: thirtyDaysAgo }
+    })
+    .populate('user', 'username')
+    .sort({ deletedAt: -1 });
+
+    return res.status(200).json({
+      deletedComments
+    });
+  } catch (error) {
+    console.error("Error fetching deleted comments:", error);
+    res.status(500).send({
+      message: "An error occurred while fetching deleted comments"
+    });
+  }
+});
+
+// Permanently delete comment 
+router.delete('/permanent-delete/:id', verifyToken, async (req, res) => {
+  try {
+    const isAdminOrModerator = ["admin", "moderator"].includes(req.user.role);
+    
+    if (!isAdminOrModerator) {
+      return res.status(403).json({
+        message: "Not authorized to permanently delete comments"
+      });
+    }
+
+    await Comment.findByIdAndDelete(req.params.id);
+    return res.status(200).json({
+      message: "Comment permanently deleted"
+    });
+  } catch (error) {
+    console.error("Error permanently deleting comment:", error);
+    res.status(500).send({
+      message: "An error occurred while permanently deleting comment"
+    });
+  }
+});
 
 module.exports = router;

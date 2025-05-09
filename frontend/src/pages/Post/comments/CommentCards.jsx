@@ -16,19 +16,18 @@ const CommentCards = ({ comments: initialComments }) => {
   const [comment, setComments] = useState(initialComments);
   const { refetch } = useFetchPostByIdQuery(id, { skip: !id });
 
+  useEffect(() => {
+    setComments(initialComments?.filter(c => !c.isDeleted));
+  }, [initialComments]);
+
   const canDeleteComment = (comment) => {
     if (!user) return false;
     
     const userRole = user.role?.toLowerCase();
     if (userRole === "admin" || userRole === "moderator") {
-      console.log("User is admin/moderator");
       return true;
     }
-
-    // If not admin/moderator, check if user owns the comment
-    const isOwner = comment?.user?._id === user._id;
-    console.log("Is comment owner:", isOwner);
-    return isOwner;
+    return comment?.user?._id === user._id;
   };
 
   const handleDeleteComment = async (comment) => {
@@ -49,9 +48,6 @@ const CommentCards = ({ comments: initialComments }) => {
       alert("Failed to delete the comment. Please try again.");
     }
   };
-  useEffect(() => {
-    refetch();
-  }, [comment]);
 
   if (!comment) return <div>Loading comments...</div>;
   return (
@@ -62,7 +58,7 @@ const CommentCards = ({ comments: initialComments }) => {
             <h3 className="text-lg font-medium">All Comments</h3>
             <div>
               {comment.map((item, index) => (
-                <div key={index} className="mt-4">
+                <div key={item._id} className="mt-4">
                   <div className="flex gap-4 items-center">
                     <Avatar username={item?.user?.username || ""} />
                     <div>
@@ -94,7 +90,6 @@ const CommentCards = ({ comments: initialComments }) => {
           <div className="text-lg font-medium">No Comments Found.</div>
         )}
       </div>
-      {/* Add Comment */}
       <PostAComment />
     </div>
   );

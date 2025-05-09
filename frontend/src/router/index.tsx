@@ -21,6 +21,7 @@ import ManageUsers from '@/pages/dashboard/user/ManageUsers';
 import DashboardPosts from '@/pages/dashboard/Posts';
 import DashboardActivity from '@/pages/dashboard/Activity';
 import Cas from '@/pages/dashboard/activities/underpages/CAS/cas';
+import DeletedComments from '@/pages/dashboard/DeletedComments';
 
 // Types
 import { Activity as TActivity, Post as TPost } from '@/types';
@@ -45,6 +46,7 @@ export const routes = {
   dashboard_users: '/dashboard/users',
   dashboard_news_list: '/dashboard/news',
   dashboard_activity: '/dashboard/activities/:slug',
+  dashboard_deleted_comments: '/dashboard/deleted-comments',
 };
 
 // API route definitions
@@ -114,6 +116,10 @@ const router = createBrowserRouter([
           { path: routes.dashboard_users, element: <ManageUsers /> },
           { path: routes.dashboard_news_list, element: <DashboardPosts /> },
           { path: routes.dashboard_activity, element: <DashboardActivity /> },
+          {
+            path: routes.dashboard_deleted_comments,
+            element: <DeletedComments />
+          },
         ],
       },
     ],
