@@ -146,7 +146,7 @@ const Navbar = () => {
 
           {(user && (user.role === "admin" || user.role === "moderator" || user.role === 'creator')) && (
             <li className='flex items-center gap-3'>
-              <Link to="/dashboard"><button className='bg-[#1E73BE] px-16 py-6 text-white rounded-sm'>Dashboard</button></Link>
+              <Link to="/dashboard"><button className='bg-[#1E73BE] px-16 py-6 text-white rounded-md'>Dashboard</button></Link>
             </li>
           )}
           {user && (

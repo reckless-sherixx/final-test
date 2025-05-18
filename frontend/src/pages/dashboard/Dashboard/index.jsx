@@ -40,19 +40,19 @@ const Dashboard = () => {
           <p>Here you can manage your posts, users, and other related data</p>
         </div>
         <div className='flex flex-col md:flex-row justify-between gap-32 pt-32'>
-          <div className='bg-indigo-100 py-24 w-full rounded-sm space-y-4 flex flex-col items-center'>
+          <div className='bg-indigo-100 rounded-md py-24 w-full space-y-4 flex flex-col items-center'>
             <FaUserFriends className='size-32 text-indigo-600'/>
             <p>{usersCount} Users</p>
           </div>
-          <div className='bg-red-100 py-24 w-full rounded-sm space-y-4 flex flex-col items-center'>
+          <div className='bg-red-100 py-24 w-full rounded-md space-y-4 flex flex-col items-center'>
             <LiaBlogSolid className='size-32 text-red-600'/>
             <p>{posts.length} Blogs</p>
           </div>
-          <div className='bg-lime-100 py-24 w-full rounded-sm space-y-4 flex flex-col items-center'>
+          <div className='bg-lime-100 py-24 w-full rounded-md space-y-4 flex flex-col items-center'>
             <RiAdminFill className='size-32 text-lime-600'/>
             <p>{adminCounts} Admin{adminCounts !==1 ? 's' : ''}</p>
           </div>
-          <div className='bg-orange-100 py-24 w-full rounded-sm space-y-4 flex flex-col items-center'>
+          <div className='bg-orange-100 py-24 w-full rounded-md space-y-4 flex flex-col items-center'>
             <FaComments  className='size-32 text-orange-600'/>
             <p>{comments?.totalComments} Comments</p>
           </div>

@@ -70,13 +70,13 @@ const CommentCards = ({ comments: initialComments }) => {
                       </p>
                     </div>
                   </div>
-                  <div className="text-gray-600 flex mt-5 border p-8">
-                    <p className="md:w-4/5">{item.comment}</p>
+                  <div className="text-gray-600 flex mt-5 border rounded-md p-8">
+                    <p className="md:w-4/5 rounded-md">{item.comment}</p>
 
                     {canDeleteComment(item) && (
                       <button
                         onClick={() => handleDeleteComment(item)}
-                        className="bg-red-400 py-3 px-3 rounded-md text-white"
+                        className="bg-red-400 py-3 px-3 rounded-lg text-white"
                       >
                         Delete Comment
                       </button>

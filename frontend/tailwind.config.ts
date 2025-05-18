@@ -19,19 +19,19 @@ const generateFontSize = () => {
   return fontSize
 }
 
-const generateBorderRadius = () => {
-  const max = 24
-  const borderRadius:{
-    [key:string]: string,
-  } = {}
+// const generateBorderRadius = () => {
+//   const max = 24
+//   const borderRadius:{
+//     [key:string]: string,
+//   } = {}
 
-  for (let i = 0; i <= max; i += 2) {
-    borderRadius[i] = pxToRem(i) + "rem"
-  }
-  borderRadius["full"] = "9999px"
+//   for (let i = 0; i <= max; i += 2) {
+//     borderRadius[i] = pxToRem(i) + "rem"
+//   }
+//   borderRadius["full"] = "9999px"
 
-  return borderRadius
-}
+//   return borderRadius
+// }
 
 const generateSpacing = () => {
   const max = 5000
@@ -55,7 +55,7 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    borderRadius: generateBorderRadius(),
+    // borderRadius: generateBorderRadius(),
     fontSize: generateFontSize(),
     spacing: generateSpacing(),
   },

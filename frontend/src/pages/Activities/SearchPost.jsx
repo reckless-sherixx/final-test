@@ -16,11 +16,11 @@ const SearchPost = ({ search, handleSearchChange, handleSearch }) => {
         onChange={handleSearchChange}
         onKeyDown={handleKeyDown}
         placeholder="Example Post Name"
-        className="py-8 px-16 mr-20 w-full bg-gray-50 focus:outline-none focus:border"
+        className="py-8 px-16 mr-20 w-full bg-gray-50 focus:outline-none focus:border rounded-xl"
       />
       <button
         onClick={handleSearch}
-        className="bg-gray-800 px-16 py-8 text-gray-100 rounded-lg"
+        className="bg-gray-800 px-16 py-8 text-gray-100 rounded-xl"
       >
         <IoSearch />
       </button>

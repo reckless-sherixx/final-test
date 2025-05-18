@@ -73,13 +73,13 @@ const AddPost = () => {
 
 
   return (
-    <div className='bg-white md:p-8 p-2'>
+    <div className='bg-white md:p-8 p-2 rounded-md'>
       <h2 className='text-2xl font-semibold'>Create a new Post</h2>
       <form onSubmit={handleSubmit} className='space-y-5 pt-8'>
         <div className='space-y-4'>
           <label className='font-semibold text-xl'>Post Title:</label>
           <input type="text" placeholder='Ex: Importance of STEM Education...' required 
-          className='w-full inline-block bg-gray-50 focus:outline-none px-5 py-3'
+          className='w-full rounded-lg inline-block bg-gray-50 focus:outline-none px-5 py-3'
           value={title}
           onChange={(e) => setTitle(e.target.value)} 
           ></input>
@@ -97,13 +97,13 @@ const AddPost = () => {
           </div>
 
           {/* Right Side */}
-          <div className='md:w-1/3 w-full border p-5 space-y-5'>
+          <div className='md:w-1/3 w-full rounded-md p-5 space-y-5'>
           <p className='text-xl font-semibold'>Choose Post Format</p>
           {/* For images */}
           <div className='space-y-4'>
           <label className='font-semibold'>Post Cover:</label>
           <input type="text" placeholder='https://unsplash.com/cover-image-of-post.png...' required 
-          className='w-full inline-block bg-gray-50 focus:outline-none px-5 py-3'
+          className='w-full inline-block rounded-md bg-gray-50 focus:outline-none px-5 py-3'
           value={coverImg}
           onChange={(e) => setCoverImg(e.target.value)} 
           ></input>
@@ -113,7 +113,7 @@ const AddPost = () => {
         <div className='space-y-4'>
           <label className='font-semibold'>Category:</label>
           <input type="text" placeholder='Technology/Education/etc...' required 
-          className='w-full inline-block bg-gray-50 focus:outline-none px-5 py-3'
+          className='w-full rounded-md inline-block bg-gray-50 focus:outline-none px-5 py-3'
           value={category}
           onChange={(e) => setCategory(e.target.value)} 
           ></input>
@@ -123,7 +123,7 @@ const AddPost = () => {
         <div className='space-y-4'>
           <label className='font-semibold'>Meta Description:</label>
           <textarea type="text" cols={4} rows={4} placeholder='Write your Post meta description' required 
-          className='w-full inline-block bg-gray-50 focus:outline-none px-5 py-3'
+          className='w-full rounded-md inline-block bg-gray-50 focus:outline-none px-5 py-3'
           value={metadesc}
           onChange={(e) => setMetadesc(e.target.value)} 
           ></textarea>

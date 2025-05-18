@@ -76,15 +76,15 @@ const Home = () => {
             <Link
               to={createSingleNewsRoute(post.id)}
               key={post.id}
-              className="group block overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
+              className="group block overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300"
             >
-              <div className="relative">
+              <div className="relative rounded-3xl">
                 <img
                   src={post.coverImageUrl}
-                  className="h-288 w-full object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
+                  className="h-288 w-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="p-20 bg-white">
-                  <h2 className="text-lg font-semibold text-gray-800 group-hover:text-[#1E73BE] transition-colors duration-300">
+                  <h2 className="text-lg font-semibold rounded-xl text-gray-800 group-hover:text-[#1E73BE] transition-colors duration-300">
                     {post?.title}
                   </h2>
                   <p className="text-sm text-gray-500 mt-8">

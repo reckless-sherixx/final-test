@@ -25,7 +25,7 @@ const Banner = () => {
         </p>
       </div>
 
-      <div className="md:w-1/2 w-full mx-auto">
+      <div className="md:w-1/2 w-full mx-auto md:rounded-md">
         <Swiper
           slidesPerView={1}
           spaceBetween={10}
@@ -58,7 +58,7 @@ const Banner = () => {
               <img
                 src={src}
                 alt=""
-                className="w-full lg:h-420 sm:h-384 h-320"
+                className="w-full lg:h-420 sm:h-384 h-320 md:rounded-md"
               />
             </SwiperSlide>
           ))}
