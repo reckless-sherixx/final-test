@@ -2,12 +2,22 @@ const express = require('express');
 const router = express.Router();
 const User = require('../model/user.model.js')
 const generateToken = require('../middleware/generateToken.js')
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 const isAdmin = require('../middleware/isAdmin.js');
 const verifyToken = require('../middleware/verifyToken.js');
 const bulkRegister = require('../controller/bulkRegister.js');
 const upload = require('../middleware/multerMiddleware.js');
-const { verify } = require('jsonwebtoken');
+const verifyToken = require('../middleware/verifyToken.js');
+const isAdmin = require('../middleware/isAdmin.js');
+const { 
+  generateResetUrl, 
+  validateResetToken,
+  resetPassword,
+  customizeResetLink,
+  getActiveResetTokens,
+  deleteResetToken
+} = require('../controller/ResetUrl.js');
+// const { verify } = require('jsonwebtoken');
 
 // Register a user
 router.post('/register', async (req, res) => {
@@ -185,6 +195,29 @@ router.put('/reset-password/:id', verifyToken, async (req, res) => {
     })
   }
 })
+
+
+
+
+// Generate password reset URL
+router.post('/generate', verifyToken, isAdmin, generateResetUrl);
+
+// Validate a reset token
+router.get('/validate/:token', validateResetToken);
+
+// Reset password using token
+router.post('/reset', resetPassword);
+
+// Create custom reset links (admin only)
+router.post('/customize', verifyToken, isAdmin, customizeResetLink);
+
+// Get all active reset tokens (admin only)
+router.get('/tokens', verifyToken, isAdmin, getActiveResetTokens);
+
+// Delete a specific reset token (admin only)
+router.delete('/token/:tokenId', verifyToken, isAdmin, deleteResetToken);
+
+module.exports = router;
 
 //Update
 //router.put('/users/password/:id', async (req, res) => {

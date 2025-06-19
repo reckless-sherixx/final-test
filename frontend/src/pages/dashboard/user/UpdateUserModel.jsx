@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useUpdateUserRoleMutation } from "../../../redux/features/auth/authapi";
+import { useNavigate } from "react-router-dom";
 
 const UpdateUserModel = ({
   user,
@@ -7,11 +8,21 @@ const UpdateUserModel = ({
   onClose,
   onRoleUpdate,
 }) => {
+   const navigate = useNavigate();
   const [role, setRole] = useState(user?.role);
   const [name, setName] = useState(user?.name || "");
   const [surname, setSurname] = useState(user?.surname || "");
   const [grade, setGrade] = useState(user?.grade || "");
   const [updateUserRole] = useUpdateUserRoleMutation();
+
+  const handleResetPassword = () => {
+    navigate(`/admin/reset-password/${user.id}`, { 
+      state: { 
+        userId: user.id,
+        username: user.username 
+      } 
+    });
+  };
 
   const canEditUser = () => {
     if (currentLoggedUser.role === "admin") {
@@ -189,7 +200,24 @@ const UpdateUserModel = ({
                         </button>
                     </div>
                 </div>
-            
+
+                
+             {currentLoggedUser.role === "admin" && (
+                <div className='mb-4 space-y-4'>
+                    <label className='block text-gray-700 text-sm mb-2'>
+                        Reset Password:
+                    </label>
+                    <button 
+                        onClick={handleResetPassword}
+                        className='px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded'
+                    >
+                        Reset User Password
+                    </button>
+                    <p className="text-xs text-gray-500 mt-1">
+                        Only administrators can reset user passwords
+                    </p>
+                </div>
+            )}
 
             <div className='flex justify-between space-x-4 pt-5'>
                 <button 

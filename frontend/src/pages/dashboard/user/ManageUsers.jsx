@@ -43,33 +43,39 @@ const ManageUsers = () => {
 
     setFile(selectedFile); // Update the state with the selected file
   };
+ 
+
   const handleFileSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!file) {
-      alert("Please select a file before submitting.");
-      return;
-    }
-    const formData = new FormData();
-    formData.append("excelFile", file);
+  if (!file) {
+    alert("Please select a file before submitting.");
+    return;
+  }
+  const formData = new FormData();
+  formData.append("excelFile", file);
 
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/auth/bulkRegister`,
-        formData,
-        {
-          withCredentials: true,
-        }
-      );
-      alert("File uploaded successfully!");
-      setFile(null);
-      setIsExcelModelOpen(false);
-      refetch();
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      alert("Failed to upload file. Please try again.");
-    }
-  };
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/auth/bulkRegister`,
+      formData,
+      {
+        withCredentials: true,
+      }
+    );
+    alert("File uploaded successfully!");
+    setFile(null);
+    setIsExcelModelOpen(false);
+    refetch();
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    // Provide more specific error message based on response
+    const errorMessage = error.response?.data?.message || "Failed to upload file. Please try again.";
+    alert(errorMessage);
+  }
+};
+
+
   const handleDelete = async (id) => {
     try {
       const response = await deleteUser(id).unwrap();

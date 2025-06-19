@@ -16,6 +16,13 @@ const bulkRegister = async (req, res) => {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
+    if (!fs.existsSync(req.file.path)) {
+      return res.status(404).json({ 
+        message: 'Upload failed - file not found',
+        path: req.file.path 
+      });
+    }
+
     const workbook = XLSX.readFile(req.file.path);
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const data = XLSX.utils.sheet_to_json(sheet);

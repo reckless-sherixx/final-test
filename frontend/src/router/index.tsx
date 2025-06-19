@@ -18,6 +18,7 @@ import AdminLayout from '@/pages/dashboard/AdminLayout';
 import Dashboard from '@/pages/dashboard/Dashboard';
 import ManageItems from '@/pages/dashboard/post/ManageItems';
 import ManageUsers from '@/pages/dashboard/user/ManageUsers';
+import ResetUserPassword from '@/pages/dashboard/user/ResetUserPasssword';
 import DashboardPosts from '@/pages/dashboard/Posts';
 import DashboardActivity from '@/pages/dashboard/Activity';
 import Cas from '@/pages/dashboard/activities/underpages/CAS/cas';
@@ -47,6 +48,7 @@ export const routes = {
   dashboard_news_list: '/dashboard/news',
   dashboard_activity: '/dashboard/activities/:slug',
   dashboard_deleted_comments: '/dashboard/deleted-comments',
+  dashboard_reset_user_password: '/admin/reset-password/:userId', // Added new route
 };
 
 // API route definitions
@@ -119,6 +121,11 @@ const router = createBrowserRouter([
           {
             path: routes.dashboard_deleted_comments,
             element: <DeletedComments />
+          },
+          // Added new route for resetting user passwords
+          {
+            path: routes.dashboard_reset_user_password,
+            element: <ResetUserPassword />
           },
         ],
       },
