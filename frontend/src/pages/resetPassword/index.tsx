@@ -47,8 +47,16 @@ const ResetPassword = () => {
       <button type="submit"
         className='w-full mt-5 bg-primary hover:bg-indigo-500 text-white font-medium py-3 rounded-md'
       >Submit</button>
+      <input
+        type="checkbox"
+        id="terms"
+        className="mr-2"
+        required
+      />
+      <label htmlFor="terms" className="text-sm text-gray-600">
+        Your password will be encrypted in MongoDB to ensure safety, the school and the developers of the website WILL NOT have access to your password
+      </label>
     </form>
-
 
   </div>);
 }
