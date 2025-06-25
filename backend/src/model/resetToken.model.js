@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const resetTokenSchema = new mongoose.Schema({
   userId: {
@@ -27,4 +27,4 @@ resetTokenSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 });
 
 const ResetToken = mongoose.model('ResetToken', resetTokenSchema);
 
-export default ResetToken;
+module.exports = ResetToken;

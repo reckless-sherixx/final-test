@@ -1,19 +1,9 @@
-import { Request, Response } from 'express';
-import User from '../model/user.model.js';
-import jwt from 'jsonwebtoken';
-import ResetToken from '../model/resetToken.model.js';
-
-// Extend Express Request interface to include role property
-declare global {
-  namespace Express {
-    interface Request {
-      role?: string;
-    }
-  }
-}
+const User = require('../model/user.model');
+const jwt = require('jsonwebtoken');
+const ResetToken = require('../model/resetToken.model');
 
 // Generate a reset token and URL for a specific user
-export const generateResetUrl = async (req: Request, res: Response) => {
+const generateResetUrl = async (req, res) => {
   try {
     const { userId } = req.body;
 
@@ -65,7 +55,7 @@ export const generateResetUrl = async (req: Request, res: Response) => {
 };
 
 // Validate a reset token
-export const validateResetToken = async (req: Request, res: Response) => {
+const validateResetToken = async (req, res) => {
   try {
     const { token } = req.params;
 
@@ -77,7 +67,7 @@ export const validateResetToken = async (req: Request, res: Response) => {
     }
 
     // Verify JWT token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default_secret') as { userId: string };
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default_secret');
     
     // Check if token exists in database
     const resetToken = await ResetToken.findOne({ 
@@ -122,7 +112,7 @@ export const validateResetToken = async (req: Request, res: Response) => {
 };
 
 // Update/Reset the password using token
-export const resetPassword = async (req: Request, res: Response) => {
+const resetPassword = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
 
@@ -134,7 +124,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     }
 
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default_secret') as { userId: string };
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default_secret');
     
     // Find token in database
     const resetToken = await ResetToken.findOne({ 
@@ -179,7 +169,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 };
 
 // For admins to edit/customize reset links
-export const customizeResetLink = async (req: Request, res: Response) => {
+const customizeResetLink = async (req, res) => {
   try {
     const { userId, expiry } = req.body;
     
@@ -239,8 +229,7 @@ export const customizeResetLink = async (req: Request, res: Response) => {
 };
 
 // Get all active reset tokens (for admin view)
-export const getActiveResetTokens = async (req: Request, res: Response) => {
-
+const getActiveResetTokens = async (req, res) => {
   try {
     if (req.role !== 'admin') {
       return res.status(403).json({
@@ -266,7 +255,7 @@ export const getActiveResetTokens = async (req: Request, res: Response) => {
 };
 
 // Delete a specific reset token
-export const deleteResetToken = async (req: Request, res: Response) => {
+const deleteResetToken = async (req, res) => {
   try {
     const { tokenId } = req.params;
     
@@ -290,4 +279,13 @@ export const deleteResetToken = async (req: Request, res: Response) => {
       message: 'Failed to delete reset token'
     });
   }
+};
+
+module.exports = {
+  generateResetUrl,
+  validateResetToken,
+  resetPassword,
+  customizeResetLink,
+  getActiveResetTokens,
+  deleteResetToken
 };

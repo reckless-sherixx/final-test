@@ -7,8 +7,8 @@ const isAdmin = require('../middleware/isAdmin.js');
 const verifyToken = require('../middleware/verifyToken.js');
 const bulkRegister = require('../controller/bulkRegister.js');
 const upload = require('../middleware/multerMiddleware.js');
-const verifyToken = require('../middleware/verifyToken.js');
-const isAdmin = require('../middleware/isAdmin.js');
+// const verifyToken = require('../middleware/verifyToken.js');
+// const isAdmin = require('../middleware/isAdmin.js');
 const { 
   generateResetUrl, 
   validateResetToken,
@@ -219,7 +219,6 @@ router.delete('/token/:tokenId', verifyToken, isAdmin, deleteResetToken);
 
 module.exports = router;
 
-//Update
 //router.put('/users/password/:id', async (req, res) => {
 //  try {
 //    const { id } = req.params;
